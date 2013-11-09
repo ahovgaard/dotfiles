@@ -82,17 +82,6 @@ set t_Co=256
 let g:CSApprox_attr_map = { 'bold' : 'bold', 'italic' : '', 'sp' : '' }
 colorscheme wombat
 
-" Highlight all characters past 81 columns
-augroup vimrc_autocmds
-  autocmd BufEnter * highlight OverLength ctermbg=darkgrey guibg=#592929
-  autocmd BufEnter * match OverLength /\%82v.*/
-augroup END
-
-" Highlight trailing whitespaces and tabs
-":au InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/jhjhj
-":au InsertLeave * match ExtraWhitespace /\s\+$/
-":autocmd BufWinEnter * match ExtraWhitespace /^\s* \s*\|\s\+$/
-
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Text, tab and indent related
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -175,10 +164,10 @@ endfunc
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Python
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-autocmd FileType python set makeprg=python\ -i\ %
-autocmd FileType python set tabstop=4 softtabstop=4 shiftwidth=4 expandtab
-autocmd FileType python set textwidth=79
-autocmd FileType python set colorcolumn=80
+autocmd FileType python setlocal makeprg=python\ -i\ %
+autocmd FileType python setlocal tabstop=4 softtabstop=4 shiftwidth=4 expandtab
+autocmd FileType python setlocal textwidth=79
+autocmd FileType python setlocal colorcolumn=80
 autocmd FileType python highlight ColorColumn ctermbg=black
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
