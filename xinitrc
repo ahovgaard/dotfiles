@@ -36,8 +36,20 @@ if (xrandr | grep "VGA1" | grep " connected"); then
   xrandr --output VGA1 --mode 1680x1050_60.00
 fi
 
-# Wallpaper
-feh --no-fehbg --bg-center ~/.bg.jpg
+# Disable screen blanking
+xset s off
+
+# Low battery warning
+while :
+do
+  if (acpi -b | awk '{print $4}' < 15); then
+    notify-send 'Low battery!' 'Battery is below 15%'
+    sleep 2m
+  fi
+done &
+
+# xflux (f.lux for X)
+xflux -l 55.676111 -g 12.568333
 
 # Start xmonad
 exec dbus-launch --exit-with-session xmonad
