@@ -43,4 +43,10 @@ alias la='ls --color=auto -a'
 alias ll='ls --color=auto -lh'
 alias grep='grep -n --color=auto'
 alias feh='feh --fullscreen --hide-pointer'
-alias mosml='rlwrap mosml'
+alias mosml='rlwrap mosml -P full'
+alias tmux='tmux -2'
+
+# Run 'startx' when logging into ttty1 and X isn't alrady running
+if [[ $(tty) = /dev/tty1 ]] && [[ -z "$DISPLAY" ]]; then
+  exec startx
+fi
