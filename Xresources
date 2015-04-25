@@ -1,0 +1,46 @@
+!
+! ~/.Xresources
+!
+
+URxvt.termName:     rxvt-unicode-256color
+URxvt.scrollBar:    false
+URxvt.xftAntialias: true
+URxvt.urgentOnBell: true
+URxvt.visualBell:   false
+
+! Font
+URxvt.font:         xft:DejaVu Sans Mono:pixelsize=12:antialias:true,\
+                    xft:DejaVu Sans Mono for Powerline:pixelsize=12:antialias:true
+
+! Colors
+URxvt*foreground:   #D7D0C7
+URxvt*background:   #151515
+
+! Black
+*color0:            #101010
+*color8:            #404040
+! Red
+*color1:            #E84F4F
+*color9:            #D23D3D
+! Green
+*color2:            #67B25F
+*color10:           #A5D79F
+! Yellow
+*color3:            #E1AA5D
+*color11:           #F39D21
+! Blue
+*color4:            #435E87
+*color12:           #587AA4
+! Magenta
+*color5:            #9B64FB
+*color13:           #8542FF
+! Cyan
+*color6:            #6D878D
+*color14:           #42717B
+! White
+*color7:            #DDDDDD
+*color15:           #DDDDDD
+
+! Cursor color
+URxvt*cursorColor:  #FF0000
+URxvt*cursorColor2: #000000
