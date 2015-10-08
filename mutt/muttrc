@@ -1,0 +1,170 @@
+#
+# ~/.mutt/muttrc
+#
+
+# basic options
+color status cyan default
+
+# directories and commands
+set alias_file   = ~/.mutt/alias
+set header_cache = ~/.mutt/cache/headers
+set mailcap_path = ~/.mutt/mailcap
+set signature    = ~/.mutt/akh.sig
+set tmpdir       = ~/.mutt/tmp
+set editor       = "vim -c 'set tw=80 ft=mail' -c 'set nocp' -c '+/^--.$/-1'"
+#set ispell              = "/usr/bin/aspell -e -c"                # use aspell as ispell
+#set imap_peek           = no                                     # Gmail mark as read
+set sleep_time          = 0             # instantaneous mailbox change
+
+# main options
+set mbox_type       = Maildir
+set folder          = ~/mail/gmail
+set spoolfile       = "+INBOX"
+set mbox            = "+archive"
+#set record          = "+sent"      # Gmail automatically saves sent email
+unset record                        # to +[Gmail]/Sent, so avoid duplicates
+set postponed       = "+drafts"
+set timeout         = 3             # idle time before scanning
+set mail_check      = 0             # minimum time between scans
+set sort_alias      = alias         # sort alias file by alias
+set reverse_alias                   # show names from alias file in index
+unset move                          # gmail does that
+set delete                          # don't ask, just do
+unset confirmappend                 # don't ask, just do!
+unset mark_old                      # read/new is good enough for me
+set beep_new                        # bell on new mails
+set pipe_decode                     # strip headers and eval mimes when piping
+set thorough_search                 # strip headers and eval mimes before searching
+set text_flowed     = yes           # no hard breaks in quoted text
+#unset help
+mailboxes +INBOX +archive +drafts +sent +spam +trash \
+          +commerce +exchange +finance +house +it +kdk +personal +travel +uni +work
+
+# index options
+set sort                = threads                       # sort index by threads
+set sort_aux            = reverse-last-date-received    # sort threads by decreasing date
+set uncollapse_jump                                     # don't collapse on an unread message
+set sort_re                                             # thread based on regex
+set reply_regexp        = "^(([Rr][Ee]?(\[[0-9]+\])?: *)?(\[[^]]+\] *)?)*"
+
+# pager options
+set pager_index_lines   = 10        # number of index lines to show
+set pager_context       = 5         # number of context lines to show
+set pager_stop                      # don't go to next message automatically
+set menu_scroll                     # scroll in menus
+set smart_wrap                      # don't split words
+set tilde                           # show tildes like in vim
+unset markers                       # no ugly plus signs
+set quote_regexp        = "^( {0,4}[>|:#%]| {0,4}[a-z0-9]+[>|]+)+"
+set status_on_top                                       # as you'd expect
+auto_view text/html                                     # view html automatically
+alternative_order text/plain text/enriched text/html    # save html for last
+auto_view text/calendar                                 # view ical files
+alternative_order text/plain text/html text/*
+
+# formats
+set date_format   = "%d/%m/%y at %I:%M%P"
+set index_format  = "%3C  %S   %D  •  %-25.25L %s %> %c"
+set pager_format  = "Reading message %C of %m %> %lL [%P]" # pager statusbar
+set folder_format = "%2C %t %N %8s %d %f"                  # mailbox list view
+set status_format = " %?M?%M/?%m Mails %?n?%n new, ?%?u?%u unread, ?%?p?%p drafts, ?%?t?%t +tagged, ?%?d?%d deleted, ?[%f %l]  %?b?%b unread messages. ?%>  %V  [%P]"
+set alias_format  = "%4n %t %-20a  %r"
+
+# composing mail
+set realname        = "Anders Kiel Hovgaard"
+set from            = "akhovg@gmail.com"
+set sendmail        = "msmtp -a gmail"
+set envelope_from                               # which from?
+set sig_dashes                                  # dashes before my sig... sweet
+set edit_headers                                # show headers when composing
+set fast_reply                                  # skip to compose when replying
+set fcc_attach                                  # save attachments with the body
+set mime_forward                                # forward attachments as part of body
+set mime_forward_rest                           # include attachments
+set forward_format      = "Fwd: %s"             # format for subject when forwarding
+set forward_decode                              # decode when forwarding
+set attribution         = "On %d, %n wrote:"    # set the attribution
+set reply_to                                    # reply to Reply to: field
+set reverse_name                                # reply as whomever it was to
+set include                                     # include message in replies
+set forward_quote                               # include message in forwards
+set print_command      = "muttprint"            # printerâ€¦
+
+# specify which headers to show and in which order
+ignore *
+unignore from: to: cc: date: subject: user-agent:
+hdr_order from: to: cc: date: subject: user-agent:
+
+# always sourced
+source $alias_file              # required for functionality
+source ~/.mutt/colors.muttrc    # source colors file
+source ~/.mutt/gpg.rc           # use GPG
+source ~/.mutt/sidebar.rc       # mutt sidebar configuration
+
+# mailing lists
+lists arch-announce@archlinux.org       # Arch announcements
+subscribe arch-announce@archlinux.org
+
+lists klust@dikumail.dk                 # BIO-DIKU/klust
+subscribe klust@dikumail.dk
+
+lists team@gallopsled.eu                # Gallopsled
+subscribe team@gallopsled.eu
+
+lists team@gallopsled.eu                # Pwnies
+subscribe team@gallopsled.eu
+
+# these just give me headaches
+bind index,pager \#     noop
+bind index i            noop
+
+# Key bindings ----------------------------------------------------------------
+bind pager q            exit
+bind pager /            search
+bind pager <up>         previous-line
+bind pager <down>       next-line
+bind pager k            previous-line
+bind pager j            next-line
+bind pager gg           top
+bind pager G            bottom
+bind index gg           first-entry
+bind index G            last-entry
+bind pager K            previous-undeleted
+bind pager J            next-undeleted
+bind index K            previous-unread
+bind index J            next-unread
+bind index W            clear-flag
+bind index w            set-flag
+bind index,pager R      group-reply
+bind attach <return>    view-mailcap
+bind compose p          pgp-menu
+
+# Macros ----------------------------------------------------------------------
+# sync immediately with mbsync
+macro index Z           "<shell-escape>mbsync -a<enter>"  "sync IMAP"
+
+# move to trash
+macro index,pager D     "<save-message>+trash<enter>"     "move to trash"
+
+# navigate folders
+macro index gi          "<change-folder> +INBOX<enter>"   "go to inbox"
+macro index ga          "<change-folder> +archive<enter>" "go to all mail"
+macro index gd          "<change-folder> +drafts<enter>"  "go to drafts"
+macro index gl          "<change-folder>?"                "go to label"
+
+# misc useful bindings
+#macro index \Cp         "<pipe-message>cat > ~/"          "save message as"
+macro index,pager <F5>  ":source ~/.mutt/muttrc\n"        "reload muttrc"
+macro compose Y         pfy                               "send mail without pgp"
+
+#macro index \Cr      "<tag-prefix><clear-flag>N"               "mark tagged messages as read"
+#macro index B        "<limit>~b "                              "search message bodies"
+#macro index,pager F  "<save-message>=GMail/Flagged<enter>"     "mark message as Flagged/Starred"
+#macro compose \Cg    "Fgpg --clearsign\ny"
+#macro compose \Cp    "Fgpg --clearsign\ny^T^Uapplication/pgp; format=text; x-action=sign\n"
+
+# View URLs -------------------------------------------------------------------
+#macro index,pager \Cu "<enter-command> set my_pdsave=\$pipe_decode<enter>\
+#    <enter-command> unset pipe_decode<enter>\
+#    <pipe-message>extract_url<enter>\
+#    <enter-command> set pipe_decode=\$my_pdsave<enter>" "get URLs"
