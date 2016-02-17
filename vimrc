@@ -5,49 +5,35 @@
 "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" vim-plug
+" Plugin management {{{1
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 call plug#begin('~/.vim/plugged')
 
-" A colorful, dark color scheme for Vim.
 Plug 'nanotech/jellybeans.vim'
-
-" A low-contrast Vim color scheme based on Seoul Colors.
-Plug 'junegunn/seoul256.vim'
-
-" FuzzyFinder : buffer/file/command/tag/etc explorer with fuzzy matching
-" L9 : Vim-script library required by FuzzyFinder
-Plug 'L9'
-Plug 'FuzzyFinder'
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+Plug 'tpope/vim-fugitive'
+"Plug 'kien/ctrlp.vim'
+"Plug 'benekastah/neomake'
+"Plug 'shiracamus/vim-syntax-x86-objdump-d'
+"Plug 'junegunn/vim-easy-align'
+"Plug 'junegunn/goyo.vim'
+"Plug 'majutsushi/tagbar'
+"Plug 'jalvesaq/vimcmdline'
+"Plug 'scrooloose/nerdtree'
 
 call plug#end()
 
+" General {{{1
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"Plugin 'taglist.vim'
-"Plugin 'mips.vim'
-"Plugin 'hexHighlight.vim'
-"Plugin 'VisIncr'
-"Plugin 'scrooloose/nerdtree'
-"Plugin 'DrTom/fsharp-vim'
-"Plugin 'scrooloose/syntastic'
-" A dark vim color scheme for 256-color terminals.
-"Plugin 'Lokaltog/vim-distinguished'
-" A colorful, dark color scheme for Vim.
-"Plugin 'nanotech/jellybeans.vim'
-" Elegant buffer explorer - takes very little screen space.
-"Plugin 'fholgado/minibufexpl.vim'
-" Markdown Vim Mode
-"Plugin 'plasticboy/vim-markdown'
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+set nocompatible  " be iMproved (removed from neovim)
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" General
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-set nocompatible  " be iMproved
+" Set <leader> key
+let mapleader = ","
+let maplocalleader = "\\"
 
-" Set lines of command line history
-set history=100
+" Fold on markers
+set foldmethod=marker
 
 " Set spell checking region to US English
 set spelllang=en_us
@@ -55,7 +41,7 @@ set spelllang=en_us
 nmap <silent> <leader>s :set spell!<CR>
 
 " Set to read automatically when a file is changed from the outside
-set autoread
+"set autoread
 
 " Set UTF-8 as standard encoding
 set encoding=utf8
@@ -63,20 +49,16 @@ set encoding=utf8
 " Use unix as the standard file format
 set ffs=unix,dos,mac
 
-" Set <leader> key
-let mapleader = ","
+""" C-n / C-p completion. The order of places to scan for completion:
+""" current buffer, buffers from other windows, other loaded buffers, tags
+""set complete=.,w,b,t
 
-" C-n / C-p completion. The order of places to scan for completion:
-" current buffer, buffers from other windows, other loaded buffers, tags
-set complete=.,w,b,t
-
-" Detect modelines in the first five or the last five lines of each file
+" Detect set commands in the first five or the last five lines of each file
 "set modelines=5
-" Prevent security exploits through modelines
-set modelines=0
+set nomodeline  " Prevent security exploits through modelines
 
 " Set default textwidth
-set textwidth=79
+"set textwidth=79
 
 " Make Vim more liberal about hidden buffers (buffers with unsaved changes that
 " are not shown in a window), i.e. allow hiding buffers without saving them.
@@ -87,30 +69,22 @@ inoremap <F1> <ESC>
 nnoremap <F1> <ESC>
 vnoremap <F1> <ESC>
 
-" Show highlighting groups for current word
-nmap <C-S-P> :call <SID>SynStack()<CR>
-function! <SID>SynStack()
-  if !exists("*synstack")
-    return
-  endif
-  echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
-endfunc
+" Backspace through newline and when entering insert mode
+set backspace=indent,eol,start
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" VIM user interface
+
+" VIM user interface {{{1
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Show line numbers
 set number
 
 " Highlighting of the current line
-set cul
-"hi CursorLine term=none cterm=none ctermbg=16
-"hi CursorLineNr term=bold ctermfg=Yellow gui=bold guifg=Yellow
+"set cul
 
 " Ignore case when searching, unless the pattern contains an uppercase letter
 set ignorecase
 set smartcase
-  
+
 " Hightlight search results
 set hlsearch
 
@@ -118,7 +92,7 @@ set hlsearch
 set incsearch
 
 " Command-line completion in enhanced mode
-"set wildmenu
+set wildmenu
 
 " Show information about current command
 set showcmd
@@ -129,8 +103,21 @@ set cpoptions+=$
 " Invisible characters when :set list
 set listchars=tab:▸\ ,eol:¬
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Colors and fonts
+"" Make the last window always have a status line (for vim-airline)
+"set laststatus=2
+
+" vim-airline unicode symbols (requires patched font)
+let g:airline_powerline_fonts = 1
+
+" Don't show seperators
+"let g:airline_left_sep=''
+"let g:airline_right_sep=''
+
+" airline tab line
+"let g:airline#extensions#tabline#enabled = 1
+
+
+" Colors and fonts {{{1
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Enable syntax highlighting
 syntax enable
@@ -138,38 +125,28 @@ syntax enable
 " Set 256 colors (terminal independent way)
 set t_Co=256
 
-" Set colorscheme using CSApprox script
-" (Make gvim-only colorschemes work transparently in terminal vim)
-"let g:CSApprox_attr_map = { 'bold' : 'bold', 'italic' : '', 'sp' : '' }
-"colorscheme wombat
-
-" seoul256 (dark):
-"   Range:   233 (darkest) ~ 239 (lightest)
-"   Default: 237
-"let g:seoul256_background = 233
-"colo seoul256
-
 colo jellybeans
 
 " Modifications:
 " highlight todo keyword black on yellow
 hi Todo ctermfg=16 ctermbg=11
-" highlight search results black on white
+" Highlight search results black on white
 hi Search ctermfg=16 ctermbg=15
 
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Text, tab and indent related
+" Text, tab and indent related {{{1
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Use spaces instead of tabs and keep them 2 spaces wide by default
 set tabstop=2 softtabstop=2 shiftwidth=2 expandtab
 
-filetype plugin indent on
-"set ai      " Auto indent
-"set si      " Smart indent
-set wrap    " Wrap lines
+""filetype plugin indent on
+""
+""set wrap    " Wrap lines
+
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Moving around, tabs, windows and buffers
+" Moving around, tabs, windows and buffers {{{1
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Treat long lines as break lines (useful when moving around in them)
 map j gj
@@ -181,100 +158,166 @@ map <C-k> <C-W>k
 map <C-h> <C-W>h
 map <C-l> <C-W>l
 
+
+" Shortcuts {{{1
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Shortcuts
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+nmap <leader>t :TagbarToggle<CR>
+
 map <F5> :make<CR>
 
 " The_NERD_tree - A really handy tree-structured filebrowser.
-"map <F3> :NERDTreeToggle <CR>
-
-" Taglist plugin: open the taglist window
-map <F2> :TlistOpen<CR>
+map <F3> :NERDTreeToggle<CR>
 
 " Turn off highlight search
 nmap <silent> ,n :nohls<CR>
 
-nmap <leader>s :set spell!<CR>
-
 " Yank all lines
-nmap ,y ggVG
+"nmap ,y ggVG
+"
+"" Create file with the name under the cursor (like the goto file, gf, command)
+""map <leader>gf :e <cfile><cr>
 
-" FuzzyFinder mappings
-map <leader>f :FufFileWithCurrentBufferDir **/<C-M>
-map <leader>b :FufBuffer<C-M>
+" Start interactive EasyAlign in visual mode (e.g. vip<Enter>)
+vmap <Enter> <Plug>(EasyAlign)
 
-" Create file with the name under the cursor (like the goto file, gf, command)
-map <leader>gf :e <cfile><cr>
+" Start interactive EasyAlign for a motion/text object (e.g. gaip)
+nmap ga <Plug>(EasyAlign)
 
+
+" Buffer management {{{1
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Mail (mutt)
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-autocmd BufRead,BufNewFile *mutt-* setfiletype mail
+" CtrlP mappings
+let g:ctrlp_map = '<leader>f'
+nmap <leader>b :CtrlPBuffer<cr>
+
+" CtrlP ignores
+let g:ctrlp_custom_ignore = {
+  \ 'dir':  '\v[\/](\.(git|hg|svn)|\_site)$',
+  \ 'file': '\v\.(exe|so|dll|o|class|png|jpg|jpeg|aux|bbl|blg|toc|pdf)$',
+\}
 
 
+" vimcmdline {{{1
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" LaTeX
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-if has("autocmd")
-  " Auto set ft=tex for .tex files, e.g. also ft=plaintex files
-  autocmd BufEnter,BufNewFile,BufRead *.tex setfiletype tex
-
-  " Mappings
-  autocmd FileType plaintex,tex map <leader>ll :! texBuild.sh compile<CR>
-  autocmd FileType plaintex,tex map <leader>lv :! texBuild.sh view<CR><CR>
-endif
+let cmdline_follow_colorscheme = 1
 
 
+" Syntastic {{{1
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" SML
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-autocmd FileType sml set makeprg=rlwrap\ mosml\ -P\ full\ '%'
-autocmd FileType sml set colorcolumn=80
-autocmd FileType sml highlight ColorColumn ctermbg=black
-autocmd BufEnter,BufNew *.sig set ft=sml
+"""set statusline+=%#warningmsg#
+"""set statusline+=%{SyntasticStatuslineFlag()}
+"""set statusline+=%*
+"""
+"""let g:syntastic_always_populate_loc_list = 1
+"""let g:syntastic_auto_loc_list = 1
+"""let g:syntastic_check_on_open = 1
+"""let g:syntastic_check_on_wq = 0
+"""
+"""let g:syntastic_ignore_files = ['\.tex$', '\.asm$']
 
-autocmd FileType sml setlocal splitbelow
-autocmd FileType sml map <F4> :call OpenInMosML()<CR>
 
-func! OpenInMosML()
-    " Expland the current file name to full path, the result is a String.
-    let currentFile = expand("%:p")
-    :new
-    :call conque_term#open('rlwrap mosml -P full')
-    :call conque_term#get_instance().writeln('use "' . currentFile . '";')
-endfunc
+" Language specific configurations {{{1
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Assembly {{{2
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+augroup ft_nasm
+  au!
+  au BufRead,BufNewFile *.asm set ft=nasm
+  au FileType nasm setlocal tabstop=4 softtabstop=4 shiftwidth=4 expandtab
+augroup END
 
-" Some syntax highlighting in lex / yacc
-autocmd BufEnter,BufNew *.grm set ft=sml
-autocmd BufEnter,BufNew *.grm syn region Comment start="/\*" end="\*/"
 
+" C/C++ {{{2
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Python
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-autocmd FileType python setlocal makeprg=python\ -i\ %
-autocmd FileType python setlocal tabstop=4 softtabstop=4 shiftwidth=4 expandtab
-autocmd FileType python setlocal colorcolumn=80
-autocmd FileType python highlight ColorColumn ctermbg=black
+augroup ft_cpp
+  au!
+  au FileType c,cpp setlocal ts=2 sts=2 sw=2 expandtab
+  au FileType c,cpp map <leader>cc :! make<CR>
+  au FileType c,cpp map <leader>cr :! make && make run<CR>
+augroup END
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Haskell
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-autocmd FileType haskell setlocal makeprg=ghci\ %
-autocmd FileType haskell setlocal tabstop=4 softtabstop=4 shiftwidth=4 expandtab
+set cino=N-s  " no indentation in namespaces
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" C/C++
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-if has("autocmd")
-  autocmd FileType c,cpp setlocal ts=4 sts=4 sw=4 expandtab
-  autocmd FileType c,cpp map <leader>cc :! make<CR>
-  autocmd FileType c,cpp map <leader>cr :! make && make run<CR>
-endif
+" C++ specific Syntastic settings
+"let g:syntastic_cpp_compiler = 'g++'
+"let g:syntastic_cpp_compiler_options = '-std=c++11 -Wall'
 
+"let g:neomake_cpp_gcc_maker = {
+"  \ 'exe':          'g++',
+"  \ 'args':         ['-fsyntax-only', '-std=c++11', '-Wall'],
+"  \ 'errorformat':  '%f:%l:%c: %m',
+"  \ }
+"let g:neomake_cpp_enabled_makers = ['gcc']
+
+
+" Erlang {{{2
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" MIPS
+augroup ft_erlang
+  au!
+  au FileType erlang setlocal ts=4 sts=4 sw=4 expandtab
+augroup END
+
+
+" Haskell {{{2
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-autocmd FileType asm setlocal textwidth=89
-autocmd FileType asm setlocal foldmethod=manual
-autocmd FileType asm setlocal syntax=mips
+let g:neomake_haskell_enabled_makers = ['hlint']
+
+let g:tagbar_type_haskell = {
+    \ 'ctagsbin'  : 'hasktags',
+    \ 'ctagsargs' : '-x -c -o-',
+    \ 'kinds'     : [
+        \  'm:modules:0:1',
+        \  'd:data: 0:1',
+        \  'd_gadt: data gadt:0:1',
+        \  't:type names:0:1',
+        \  'nt:new types:0:1',
+        \  'c:classes:0:1',
+        \  'cons:constructors:1:1',
+        \  'c_gadt:constructor gadt:1:1',
+        \  'c_a:constructor accessors:1:1',
+        \  'ft:function types:1:1',
+        \  'fi:function implementations:0:1',
+        \  'o:others:0:1'
+    \ ],
+    \ 'sro'        : '.',
+    \ 'kind2scope' : {
+        \ 'm' : 'module',
+        \ 'c' : 'class',
+        \ 'd' : 'data',
+        \ 't' : 'type'
+    \ },
+    \ 'scope2kind' : {
+        \ 'module' : 'm',
+        \ 'class'  : 'c',
+        \ 'data'   : 'd',
+        \ 'type'   : 't'
+    \ }
+\ }
+
+
+" Java {{{2
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+augroup ft_java
+  au!
+  au FileType java setlocal ts=4 sts=4 sw=4 expandtab
+augroup END
+
+
+" LaTeX {{{2
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+augroup ft_tex
+  au!
+  au FileType tex map <leader>ll :! texBuild.sh compile<CR>
+  au FileType tex map <leader>lv :! texBuild.sh view<CR><CR>
+  au FileType tex setlocal foldmethod=marker
+
+  syn match texGreek '\\eps\>' contained conceal cchar=ε
+augroup END
+
+
+" Python {{{2
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+augroup ft_python
+  au FileType python setlocal makeprg=python\ -i\ %
+  au FileType python setlocal ts=4 sts=4 sw=4 expandtab
+augroup END
