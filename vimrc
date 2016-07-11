@@ -13,7 +13,10 @@ Plug 'nanotech/jellybeans.vim'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'tpope/vim-fugitive'
-"Plug 'kien/ctrlp.vim'
+Plug 'benekastah/neomake'
+Plug 'morhetz/gruvbox'
+Plug 'raichoo/smt-vim'
+Plug 'ctrlpvim/ctrlp.vim'
 "Plug 'benekastah/neomake'
 "Plug 'shiracamus/vim-syntax-x86-objdump-d'
 "Plug 'junegunn/vim-easy-align'
@@ -21,6 +24,9 @@ Plug 'tpope/vim-fugitive'
 "Plug 'majutsushi/tagbar'
 "Plug 'jalvesaq/vimcmdline'
 "Plug 'scrooloose/nerdtree'
+
+Plug 'vim-pandoc/vim-pandoc'
+Plug 'vim-pandoc/vim-pandoc-syntax'
 
 call plug#end()
 
@@ -72,6 +78,9 @@ vnoremap <F1> <ESC>
 " Backspace through newline and when entering insert mode
 set backspace=indent,eol,start
 
+" Disable beeps
+set visualbell
+
 
 " VIM user interface {{{1
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -117,15 +126,21 @@ let g:airline_powerline_fonts = 1
 "let g:airline#extensions#tabline#enabled = 1
 
 
-" Colors and fonts {{{1
+" jolors and fonts {{{1
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Enable syntax highlighting
 syntax enable
 
 " Set 256 colors (terminal independent way)
-set t_Co=256
+"set t_Co=256
 
-colo jellybeans
+"let $NVIM_TUI_ENABLE_TRUE_COLOR=1
+
+colorscheme jellybeans
+"set background=dark
+"let g:gruvbox_italic=1  " enable italic text
+"colorscheme gruvbox
+"let g:gruvbox_contrast_dark='hard'
 
 " Modifications:
 " highlight todo keyword black on yellow
@@ -202,18 +217,9 @@ let g:ctrlp_custom_ignore = {
 let cmdline_follow_colorscheme = 1
 
 
-" Syntastic {{{1
+" Neomake {{{1
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"""set statusline+=%#warningmsg#
-"""set statusline+=%{SyntasticStatuslineFlag()}
-"""set statusline+=%*
-"""
-"""let g:syntastic_always_populate_loc_list = 1
-"""let g:syntastic_auto_loc_list = 1
-"""let g:syntastic_check_on_open = 1
-"""let g:syntastic_check_on_wq = 0
-"""
-"""let g:syntastic_ignore_files = ['\.tex$', '\.asm$']
+autocmd! BufWritePost * Neomake
 
 
 " Language specific configurations {{{1
@@ -242,12 +248,12 @@ set cino=N-s  " no indentation in namespaces
 "let g:syntastic_cpp_compiler = 'g++'
 "let g:syntastic_cpp_compiler_options = '-std=c++11 -Wall'
 
-"let g:neomake_cpp_gcc_maker = {
-"  \ 'exe':          'g++',
-"  \ 'args':         ['-fsyntax-only', '-std=c++11', '-Wall'],
-"  \ 'errorformat':  '%f:%l:%c: %m',
-"  \ }
-"let g:neomake_cpp_enabled_makers = ['gcc']
+let g:neomake_cpp_gcc_maker = {
+  \ 'exe':          'g++',
+  \ 'args':         ['-fsyntax-only', '-std=c++11', '-Wall'],
+  \ 'errorformat':  '%f:%l:%c: %m',
+  \ }
+let g:neomake_cpp_enabled_makers = ['gcc']
 
 
 " Erlang {{{2
@@ -307,9 +313,14 @@ augroup END
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 augroup ft_tex
   au!
-  au FileType tex map <leader>ll :! texBuild.sh compile<CR>
+  au FileType tex map <leader>ll :! latexmk -pdf<CR>
   au FileType tex map <leader>lv :! texBuild.sh view<CR><CR>
   au FileType tex setlocal foldmethod=marker
+  au FileType tex setlocal tw=79
+
+  " neomake config
+  "let g:neomake_tex_enabled_makers = ['lacheck']
+  let g:neomake_tex_enabled_makers = []
 
   syn match texGreek '\\eps\>' contained conceal cchar=ε
 augroup END
@@ -318,6 +329,21 @@ augroup END
 " Python {{{2
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 augroup ft_python
+  au!
   au FileType python setlocal makeprg=python\ -i\ %
   au FileType python setlocal ts=4 sts=4 sw=4 expandtab
 augroup END
+
+
+" SMT {{{2
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+augroup ft_smt
+  au!
+  au BufRead,BufNewFile *.rada set ft=smt
+augroup END
+
+" Pandoc {{{1
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let g:pandoc#folding#level = 2
+
+let g:pandoc#syntax#conceal#use = 0
