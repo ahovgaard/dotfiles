@@ -167,3 +167,6 @@ bindsym $mod+Shift+x exec ~/bin/lock.sh
 bindsym XF86AudioRaiseVolume exec amixer -q set Master 2dB+ unmute
 bindsym XF86AudioLowerVolume exec amixer -q set Master 2dB- unmute
 bindsym XF86AudioMute exec amixer -q set Master toggle
+
+# automatically start applications on i3 startup
+exec redshift &
