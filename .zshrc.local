@@ -1,0 +1,7 @@
+export PATH=$PATH:~/bin:~/.cabal/bin
+
+# feh fullscreen without cursor
+alias feh='feh --fullscreen --hide-pointer'
+
+# do not delete space before '|'
+ZLE_REMOVE_SUFFIX_CHARS=$' \t\n;&'

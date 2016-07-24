@@ -1,55 +1,58 @@
 #!/bin/sh
-#
-# ~/.xinitrc
-#
 
-if [ -d /etc/X11/xinit/xinitrc.d ]; then
-  for f in /etc/X11/xinit/xinitrc.d/*; do
-    [ -x "$f" ] && . "$f"
-  done
-  unset f
+userresources=$HOME/.Xresources
+usermodmap=$HOME/.Xmodmap
+sysresources=/etc/X11/xinit/.Xresources
+sysmodmap=/etc/X11/xinit/.Xmodmap
+
+# merge in defaults and keymaps
+if [ -f $sysresources ]; then
+    xrdb -merge $sysresources
 fi
 
-# Load ~/.Xresources file
-xrdb ~/.Xresources
+if [ -f $sysmodmap ]; then
+    xmodmap $sysmodmap
+fi
 
-# Run systemd as user instance
-/usr/lib/systemd/systemd --user &
+if [ -f "$userresources" ]; then
+    xrdb -merge "$userresources"
+fi
 
-# Autostart urxvt daemon
-urxvtd &
+if [ -f "$usermodmap" ]; then
+    xmodmap "$usermodmap"
+fi
 
-# Autostart dropboxd
-dropboxd &
+# start some nice programs
+if [ -d /etc/X11/xinit/xinitrc.d ] ; then
+ for f in /etc/X11/xinit/xinitrc.d/?*.sh ; do
+  [ -x "$f" ] && . "$f"
+ done
+ unset f
+fi
 
-# Map escape to caps lock, set the cursor and set us international layout
-setxkbmap -option caps:escape
+# autostart urxvt daemon and kill it when the X server is reset on log-out
+urxvtd -q -f -o
+
+# set the cursor
 xsetroot -cursor_name left_ptr
+
+# map escape to caps lock and set US international layout
+setxkbmap -option caps:escape
 setxkbmap -layout us -variant altgr-intl
 
-# Toggle ext monitor if connected
-if (xrandr | grep "VGA1" | grep " connected"); then
-  xrandr --output "LVDS1" --off --output "VGA1" --auto
-  xrandr --newmode "1680x1050_60.00" \
-  146.25 1680 1784 1960 2240  1050 1053 1059 1089 -hsync +vsync;
-  xrandr --addmode VGA1 1680x1050_60.00;
-  xrandr --output VGA1 --mode 1680x1050_60.00
-fi
+# set wallpaper
+sh ~/.fehbg
 
-# Disable screen blanking
-xset s off
+# disable PC speaker beep
+xset -b
 
-# Low battery warning
-while :
-do
-  if (acpi -b | awk '{print $4}' < 15); then
-    notify-send 'Low battery!' 'Battery is below 15%'
-    sleep 2m
-  fi
-done &
+# set up environment variables for fcitx
+export GTK_IM_MODULE=fcitx
+export QT_IM_MODULE=fcitx
+export XMODIFIERS=@im=fcitx
 
-# xflux (f.lux for X)
-xflux -l 55.676111 -g 12.568333
+# start fcitx
+fcitx > /dev/null 2>&1
 
-# Start xmonad
-exec dbus-launch --exit-with-session xmonad
+# start i3
+exec i3
