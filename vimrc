@@ -255,6 +255,7 @@ let g:neomake_cpp_gcc_maker = {
   \ }
 let g:neomake_cpp_enabled_makers = ['gcc']
 
+let g:neomake_c_enabled_makers = []
 
 " Erlang {{{2
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
