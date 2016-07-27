@@ -1,5 +1,6 @@
 #!/bin/bash
-SCREEN_WIDTH=$(xrandr | grep -Po --color=never "(?<=\ connected )[\d]+(?=x[\d]+)")
+SCREEN_WIDTH=$(xrandr --current | grep '*' | uniq | \
+               awk '{print $1}' | cut -d 'x' -f1)
 XPOS=600
 TRAY_WIDTH=35
 BAR_WIDTH=$(($SCREEN_WIDTH - $XPOS - $TRAY_WIDTH))
@@ -9,7 +10,7 @@ FONT='-*-terminus-*-r-normal-*-*-80-*-*-*-*-iso8859-*'
 #FONT="-*-fixed-medium-r-s*--12-87-*-*-*-*-iso10???-1"
 
 killall conky
-conky ~/.conkyrc | dzen2 -x $XPOS -ta r -w $BAR_WIDTH \
+conky | dzen2 -x $XPOS -ta r -w $BAR_WIDTH \
   -fn $FONT -fg '#ffffff' -bg '#000000' -h $HEIGHT  &
 
 killall trayer

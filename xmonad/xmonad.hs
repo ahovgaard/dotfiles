@@ -8,23 +8,24 @@ import XMonad
 import qualified XMonad.StackSet as W
 
 import XMonad.Actions.GridSelect
--- import XMonad.Actions.HelloWorld
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.ManageHelpers
 import XMonad.Hooks.SetWMName
 import XMonad.Hooks.UrgencyHook
+import XMonad.Layout.Combo
 import XMonad.Layout.LayoutBuilder
 import XMonad.Layout.LayoutHints
 import XMonad.Layout.NoBorders (smartBorders)
 import XMonad.Layout.ResizableTile
 import XMonad.Layout.Spacing
 import XMonad.Layout.Tabbed
+import XMonad.Layout.TwoPane
 import XMonad.Prompt
 import XMonad.Prompt.AppendFile
 import XMonad.Prompt.Shell
 import XMonad.Prompt.Window
-import XMonad.Util.EZConfig (additionalKeys, additionalKeysP)
+import XMonad.Util.EZConfig (additionalKeysP)
 import XMonad.Util.NamedScratchpad
 import XMonad.Util.Run (spawnPipe)
 import XMonad.Util.Scratchpad
@@ -51,55 +52,24 @@ main = do
     , manageHook         = manageDocks <+> myManageHook
 
     , workspaces         = myWorkspaces
-    , modMask            = myModMask
+    , modMask            = mod4Mask
     , borderWidth        = 2
 
     -- might fix problem with Java applications and non-reparenting WMs
-    , startupHook = setWMName "LG3D"
+    --, startupHook = setWMName "LG3D"
 
     -- the action to perform when the window set is changed
     , logHook            = myLogHook dzenLeftBar
-    } `additionalKeys` myKeys `additionalKeysP` myKeys2
+    } `additionalKeysP` myKeys
        where xmonadBar = "dzen2 -ta l -fn '"
                          ++ barFont
                          ++ "' -bg '#000000' -w 600 -h 16"
-
-
-myKeys2 = [ -- lock screen
-            ("M-S-z",   spawn "systemctl suspend & slock")
-
-            -- toggle touchpad and hide cursor
-          , ("M-S-x",   spawn "toggleTouchpad.sh")
-
-            -- toggle gaps for dock/panel/trayer
-          , ("M-S-b",   sendMessage ToggleStruts)
-
-            -- applications
-          , ("M-S-p",   spawn "gmrun")
-          , ("M-n",     namedScratchpadAction scratchpads "newsbeuter")
-          , ("M-f",     spawn "urxvtc -e ranger")
-          , ("M-a",     spawn "urxvtc -e mutt")
-
-            -- volume control
-          , ("<XF86AudioRaiseVolume>", spawn "amixer -q sset Master 2%+ unmute")
-          , ("<XF86AudioLowerVolume>", spawn "amixer -q sset Master 2%- unmute")
-          , ("<XF86AudioMute>",        spawn "amixer -q sset Master toggle")
-
-            -- prompts
-          , ("M-p p",   shellPrompt myXPConfig)
-          , ("M-/",     windowPromptGoto myXPConfig)
-
-            -- add a line to notes file from a prompt
-          , ("M-p n",   spawn ("echo -n '\n  * ' >> /home/akh/TODO.md") >>
-                        appendFilePrompt defaultXPConfig "/home/akh/TODO.md")
-          ]
 
 
 -------------------------------------------------------------------------------
 -- Misc. useful bindings
 -------------------------------------------------------------------------------
 myTerminal = "urxvtc"
-myModMask  = mod4Mask
 
 -------------------------------------------------------------------------------
 -- Colors, fonts and prompts
@@ -129,6 +99,9 @@ myXPConfig :: XPConfig
 myXPConfig = defaultXPConfig
   { searchPredicate = \query compl -> all (`isInfixOf` compl) (words query)
   , alwaysHighlight = True
+  , font    = "xft:DejaVu Sans Mono:pixelsize=14"-- barFont
+  , fgColor = "#FFFFFF"
+  , bgColor = "#000000"
   }
 
 -------------------------------------------------------------------------------
@@ -160,14 +133,17 @@ manageScratchPad = scratchpadManageHook (W.RationalRect l t w h)
 -------------------------------------------------------------------------------
 -- Layout hook
 -------------------------------------------------------------------------------
--- Automatically avoid struts on no sides of the screen ([]),
--- i.e. don't avoid struts by default.
---myLayoutHook = smartBorders $ avoidStrutsOn [] $ layoutHook defaultConfig
---myLayoutHook = smartBorders $ avoidStruts $ layoutHook defaultConfig
 myLayoutHook = smartBorders $ avoidStruts $
-                (ResizableTall 1 (3/100) (1/2) [])
-            ||| simpleTabbed
-            ||| Full
+                   verticalTile
+               ||| simpleTabbed
+               ||| Full
+  where verticalTile = smartSpacing 4 $ ResizableTall 1 (3/100) (1/2) []
+
+--                (ResizableTall 1 (3/100) (1/2) [])
+--            ||| simpleTabbed
+--            ||| Full
+--            ||| combineTwo (TwoPane 0.03 0.5) simpleTabbed simpleTabbed
+--
 --            ||| myMain
 --  where myMain = layoutN 1 (relBox 0 0 0.5 1) (Just $ relBox 0 0 1 1) Full
 --               $ layoutN 1 (relBox 0.5 0 1 0.5) (Just $ relBox 0.5 0 1 1) Full
@@ -183,18 +159,19 @@ myLogHook h = dynamicLogWithPP $ defaultPP
   , ppUrgent  = dzenColor colorRed   colorBlack . pad
   , ppWsSep   = " "
   , ppSep     = "  |  "
-  , ppLayout  = dzenColor colorWhite colorBlack
-                  .  (\x -> case x of "Tall"          -> tileIcon
-                                      "Full"          -> fullIcon
-                                      "Mirror Tall"   -> mirrorIcon
-                                      "ResizableTall" -> tileIcon
-                                      _               -> x)
+  , ppLayout  = dzenColor colorWhite colorBlack .
+                  (\x -> case x of
+                    "SmartSpacing 4 ResizableTall"  -> tileIcon
+                    "Tabbed Simplest"               -> tabbedIcon
+                    "Full"                          -> fullIcon
+                    _                               -> x)
   , ppTitle   = dzenColor colorWhite colorBlack . dzenEscape . take 50
   , ppHidden  = noScratchPad
   , ppOutput  = hPutStrLn h
   } where iconDir    = "/home/akh/.xmonad/dzen/icons/"
           icon s     = "^i(" ++ s ++ ")^ca()"
           tileIcon   = icon $ iconDir ++ "stlarch/tile.xbm"
+          tabbedIcon = icon $ iconDir ++ "layout-tabbed.xbm"
           fullIcon   = icon $ iconDir ++ "stlarch/monocle.xbm"
           mirrorIcon = icon $ iconDir ++ "stlarch/bstack.xbm"
 
@@ -204,36 +181,57 @@ myLogHook h = dynamicLogWithPP $ defaultPP
 -------------------------------------------------------------------------------
 -- Keybindings
 -------------------------------------------------------------------------------
-myKeys = [ -- Toggle external HP monitor
-           ((0, xF86XK_Display), spawn "toggleHpMonitor.sh")
+myKeys = [ -- lock screen
+            ("M-S-z",   spawn "systemctl suspend & slock")
 
-           -- GridSelect
-         --, ((mod4Mask,               xK_g), goToSelected myGSConfig)
-         --, ((mod4Mask .|. shiftMask, xK_g), bringSelected myGSConfig)
+            -- toggle touchpad and hide cursor
+          , ("M-S-x",   spawn "toggleTouchpad.sh")
 
-           -- Scratchpad
-         , ((mod4Mask, xK_o), scratchPad)
+            -- toggle gaps for dock/panel/trayer
+          , ("M-S-b",   sendMessage ToggleStruts)
 
+            -- applications
+          , ("M-S-p",   spawn "gmrun")
+          , ("M-n",     namedScratchpadAction scratchpads "newsbeuter")
+          , ("M-f",     spawn "urxvtc -e ranger")
+          , ("M-a",     spawn "urxvtc -e mutt")
 
-           -- Screenshot
-         , ((0, xK_Print), spawn "scrot")
+            -- volume control
+          , ("<XF86AudioRaiseVolume>",  spawn "amixer -q sset Master 2%+ unmute")
+          , ("<XF86AudioLowerVolume>",  spawn "amixer -q sset Master 2%- unmute")
+          , ("<XF86AudioMute>",         spawn "amixer -q sset Master toggle")
 
-           -- Restart xmonad and dzen2
-         , ((mod4Mask, xK_q),
-             spawn $ "if type xmonad; "
-                  ++ "then xmonad --recompile && "
-                  ++      "killall dzen2 && "
-                  ++      "xmonad --restart; "
-                  ++ "else xmessage xmonad not in \\$PATH: \"$PATH\"; fi")
+            -- toggle external monitor
+          , ("<XF86Display>",           spawn "toggleHpMonitor.sh")
 
-           -- Vertical resizing with ResizableTall layout
-         , ((mod4Mask, xK_u), sendMessage MirrorShrink)
-         , ((mod4Mask, xK_i), sendMessage MirrorExpand)
+            -- scratchpad
+          , ("M-o",       scratchPad)
 
-           -- Misc silly stuff
-         -- , ((mod4Mask .|. shiftMask, xK_h), helloWorld)
+            -- GridSelect
+          , ("M-g",       goToSelected myGSConfig)
+          , ("M-S-g",     bringSelected myGSConfig)
 
-         ]
+            -- prompts
+          , ("M-p p",     shellPrompt myXPConfig)
+          , ("M-/",       windowPromptGoto myXPConfig)
+
+            -- print screen
+          , ("<Print>",   spawn "scrot")
+
+            -- vertical resizing with ResizableTall layout
+          , ("M-u",       sendMessage MirrorShrink)
+          , ("M-i",       sendMessage MirrorExpand)
+
+            -- add a line to notes file from a prompt
+          , ("M-p n",   spawn ("echo -n '\n  * ' >> /home/akh/TODO.md") >>
+                        appendFilePrompt defaultXPConfig "/home/akh/TODO.md")
+            -- Restart xmonad and dzen2
+          --, ("M-q", spawn $ "if type xmonad; "
+          --               ++ "then xmonad --recompile && "
+          --               ++      "killall dzen2 && "
+          --               ++      "xmonad --restart; "
+          --               ++ "else xmessage xmonad not in \\$PATH: \"$PATH\"; fi")
+          ]
   where scratchPad = scratchpadSpawnActionTerminal myTerminal
 
 
