@@ -47,12 +47,19 @@ sh ~/.fehbg
 xset -b
 
 # set up environment variables for fcitx
-export GTK_IM_MODULE=fcitx
-export QT_IM_MODULE=fcitx
-export XMODIFIERS=@im=fcitx
+#export GTK_IM_MODULE=fcitx
+#export QT_IM_MODULE=fcitx
+#export XMODIFIERS=@im=fcitx
 
 # start fcitx
-fcitx > /dev/null 2>&1
+#fcitx > /dev/null 2>&1
 
-# start i3
+# MPD daemon start (if no other user instance exists)
+#[ ! -s ~/.config/mpd/pid ] && mpd
+
+# redshift
+killall redshift-gtk
+redshift-gtk &
+
+# start window manager
 exec i3
