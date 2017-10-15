@@ -17,12 +17,14 @@ URxvt.keysym.M-Delete:  perl:matcher:list
 URxvt.colorUL:          #4682B4
 
 ! Font
-URxvt.font:             xft:DejaVu Sans Mono for Powerline:pixelsize=12,\
+URxvt.font:             xft:DejaVu Sans Mono:pixelsize=12,\
+                        xft:FontAwesome,\
                         xft:IPAGothic
 
 ! Colors
 URxvt*foreground:       #D7D0C7
 URxvt*background:       #151515
+!URxvt*background:       #000000
 
 ! Black
 *color0:                #101010
