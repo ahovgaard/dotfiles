@@ -5,8 +5,7 @@
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
 
-#PS1='[\u@\h \W]\$ '
-PS1='\[\e[0;32m\]\u\[\e[m\] \[\e[1;34m\]\w\[\e[m\] \[\e[1;32m\]\$\[\e[m\] \[\e[1;37m\]'
+PS1='[\u@\h \W]\$ '
 
 # Code syntax coloring in less (requires the source-highlight package).
 export LESSOPEN="| /usr/bin/source-highlight-esc.sh %s"
@@ -28,11 +27,9 @@ man() {
 # General environment variables
 export EDITOR=vim
 
-# Add "~/bin" to the $PATH shell variable
-export PATH="${PATH}:~/bin"
-
-# Add "/opt/mosml/bin" to the $PATH shell variable
-export PATH="${PATH}:/opt/mosml/bin"
+# Additions to the $PATH environment variable
+export PATH=$PATH:~/bin
+export PATH=$PATH:~/.local/bin
 
 # Git bash tab completion
 source /usr/share/git/completion/git-completion.bash
@@ -43,7 +40,6 @@ alias la='ls --color=auto -a'
 alias ll='ls --color=auto -lh'
 alias grep='grep -n --color=auto'
 alias feh='feh --fullscreen --hide-pointer'
-alias mosml='rlwrap mosml -P full'
 alias tmux='tmux -2'
 
 # Run 'startx' when logging into ttty1 and X isn't alrady running
