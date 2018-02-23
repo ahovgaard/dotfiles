@@ -57,17 +57,13 @@ bindsym $mod+Shift+space floating toggle
 # change focus between tiling / floating windows
 bindsym $mod+space focus mode_toggle
 
-# split in horizontal orientation
+# split in horizontal/vertical orientation
 bindsym $mod+u split h
-
-# split in vertical orientation
 bindsym $mod+v split v
 
-# focus the parent container
-bindsym $mod+i focus parent
-
-# focus the child container
-bindsym $mod+d focus child
+# focus the parent/child container
+bindsym $mod+o focus parent
+bindsym $mod+i focus child
 
 set $workspace1 1
 set $workspace2 2
@@ -187,16 +183,6 @@ bar {
     bindsym button4 nop
     bindsym button5 nop
 }
-
-#bar {
-#    output DP1
-#    tray_output DP1
-#
-#    status_command i3blocks -c ~/.config/i3/i3blocks.conf
-#    mode dock
-#    modifier $mod
-#    font pango:Icons 8
-#}
 
 bar {
     output DP1
