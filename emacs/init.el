@@ -1,12 +1,8 @@
-;; ----------------------------------------------------------------------------
-;; Package management
-;; ----------------------------------------------------------------------------
-
 (require 'package)
+(setq package-enable-at-startup nil)
 (add-to-list 'package-archives
-	     '("melpa" . "https://melpa.org/packages/") t)
+             '("melpa" . "https://melpa.org/packages/") t)
 (package-initialize)
-;(package-refresh-contents)
 
 ;; auto-install use-package
 (unless (package-installed-p 'use-package)
@@ -19,121 +15,55 @@
 (require 'diminish)       ;; if you use :diminish
 (require 'bind-key)       ;; if you use any :bind variant
 
+(server-start)
 
-;; ----------------------------------------------------------------------------
-;; Modular text editing
-;; ----------------------------------------------------------------------------
+;; load files in 'elisp' directory
+(add-to-list 'load-path (expand-file-name "elisp" user-emacs-directory))
 
-;; evil-mode
-(use-package evil
-  :ensure t
-  :diminish undo-tree-mode
-  :init    ;; execute the following before package is loaded
-  (setq evil-want-C-u-scroll t)
-  (use-package evil-leader
-    :ensure t
-    :init (global-evil-leader-mode)
-    :config
-    (evil-leader/set-leader ",")
-    (evil-leader/set-key "x" 'helm-M-x))
-  :config  ;; execute after package is loaded
-  (evil-mode 1)
-  (define-key evil-ex-map "b " 'helm-mini)
-  (define-key evil-ex-map "e " 'helm-find-files))
+(require 'init-core)
+(require 'init-evil)
+(require 'init-powerline)
+(require 'init-theme)
+(require 'init-syntax-checking)
+(require 'init-version-control)
 
-; jump over long wrapped lines with j and k
-(define-key evil-motion-state-map
-  (kbd "<remap> <evil-next-line>") #'evil-next-visual-line)
-(define-key evil-motion-state-map
-  (kbd "<remap> <evil-previous-line>") #'evil-previous-visual-line)
-(define-key evil-operator-state-map
-  (kbd "<remap> <evil-next-line>") #'evil-next-line)
-(define-key evil-operator-state-map
-  (kbd "<remap> <evil-previous-line>") #'evil-previous-line)
-
-;; esc quits
-;;(define-key minibuffer-local-map
-;;  [escape] 'minibuffer-keyboard-quit)
-;;(define-key minibuffer-local-ns-map
-;;  [escape] 'minibuffer-keyboard-quit)
-;;(define-key minibuffer-local-completion-map
-;;  [escape] 'minibuffer-keyboard-quit)
-;;(define-key minibuffer-local-must-match-map
-;;  [escape] 'minibuffer-keyboard-quit)
-;;(define-key minibuffer-local-isearch-map
-;;  [escape] 'minibuffer-keyboard-quit)
-
-;; scrolling other window using vim-like key bindings
-;; (defun my-scroll-up-other-window ()
-;;   (interactive)
-;;   (scroll-other-window '-))
-;;(define-key evil-normal-state-map
-;;  (kbd "C-S-d") 'scroll-other-window)
-;;(define-key evil-normal-state-map
-;;  (kbd "C-S-u") 'my-scroll-up-other-window)
-
-
-;; ----------------------------------------------------------------------------
-;; Basic configuration
-;; ----------------------------------------------------------------------------
-
-;; use spaces instead of tabs
-(setq-default indent-tabs-mode nil)
-
-;; confirm when exiting emacs
-(setq confirm-kill-emacs 'y-or-n-p)
-
-;; unique buffer names
-(require 'uniquify)
-(setq uniquify-buffer-name-style 'post-forward
-      uniquify-separator " • ")
-
-;; custom variables set by emacs
-(setq custom-file (expand-file-name "custom.el" user-emacs-directory))
-(load custom-file)
-
-;; emacs backup files
-(setq backup-directory-alist `(("." . "~/.saves")))
-
-;; dired
-(setq dired-listing-switches "-alh")
-
-;; use newline at the end of file
-(setq require-final-newline t)
-
-
-;; ----------------------------------------------------------------------------
-;; General text editing configuration
-;; ----------------------------------------------------------------------------
-
-(use-package multiple-cursors
-  :ensure t)
-(global-set-key (kbd "C->") 'mc/mark-next-like-this)
 
 
 ;; ----------------------------------------------------------------------------
 ;; Various essential packages
 ;; ----------------------------------------------------------------------------
 
-;; helm
+
+;; try out a package
+(use-package try
+  :ensure t)
+
+;; avy: jumping to visible text using a char-based decision tree
+(use-package avy
+  :ensure t
+  :commands (avy-goto-word-1))
+
+;;; helm
 (use-package helm
   :ensure t
   :diminish helm-mode
-  :init
-
-  ;; Changes the helm prefix key
-  (global-set-key (kbd "C-c h") 'helm-command-prefix)
-  (global-unset-key (kbd "C-x c"))
 
   :config
   (require 'helm)
   (require 'helm-files)
   (require 'helm-config)
 
+  ;; changes the helm prefix key
+  (global-set-key (kbd "C-c h") 'helm-command-prefix)
+  (global-unset-key (kbd "C-x c"))
+
   (bind-key "<tab>" 'helm-execute-persistent-action helm-map)
   (bind-key [escape] 'helm-keyboard-quit helm-map)
 
   (helm-mode 1)
+
+  (global-set-key (kbd "C-c h g") 'helm-google-suggest)
+  (global-unset-key (kbd "C-c h C-c g"))
 
   (defun spacemacs//hide-cursor-in-helm-buffer ()
     "Hide the cursor in helm buffers."
@@ -141,69 +71,152 @@
       (setq cursor-in-non-selected-windows nil)))
   (add-hook 'helm-after-initialize-hook 'spacemacs//hide-cursor-in-helm-buffer)
 
+  (setq helm-split-window-in-side-p t)
+
   :bind (("C-x b" . helm-mini)
-	 ("C-x C-f" . helm-find-files)
-	 ("M-x" . helm-M-x))
-  )
-
-;;(global-set-key (kbd "C-c h g") 'helm-google-suggest)
-;;(global-unset-key (kbd "C-c h C-c g"))
-
+         ("C-x C-f" . helm-find-files)
+         ("M-x" . helm-M-x)))
 
 ;; org-mode
 (use-package org-mode
   :bind (("C-c l" . org-store-link)
          ("C-c a" . org-agenda))
   :init
+  ;; org-capture
+  (setq org-directory "~/org")
+  (setq org-default-notes-file (concat org-directory "/notes.org"))
+  (define-key global-map "\C-cc" 'org-capture)
+
+  (setq org-src-fontify-natively t)
+  (use-package org-bullets
+    :ensure t
+    :init
+    (add-hook 'org-mode-hook (lambda () (org-bullets-mode t))))
+
   (setq org-log-done t)
-  (setq org-agenda-files (list "~/org/index.org"
+  (setq org-agenda-files (list "~/org/notes.org"
                                "~/uni/thesis/thesis.org")))
 
-;; magit
-(use-package magit
-  :ensure t
-  :init
-  (global-set-key (kbd "C-x g") 'magit-status))
 
 ;; which-key
 (use-package which-key
   :ensure t
-  :init
+  :config
   (which-key-mode)
-  :diminish which-key-mode  ;; hide from mode-line
+  (setq which-key-sort-order #'which-key-prefix-then-key-order
+        which-key-sort-uppercase-first nil)
+  (set-face-attribute 'which-key-local-map-description-face nil :weight 'bold)
+  :diminish which-key-mode)  ;; hide from mode-line
+
+;; company-mode: complete anything
+(use-package company
+  :ensure t
+  :init
+  (add-hook 'after-init-hook 'global-company-mode)
+  :config
+  (setq company-idle-delay 0.5)  ;; default is 0.5
+  (setq company-selection-wrap-around t)
+  (define-key company-active-map [tab] 'company-complete)
+  (define-key company-active-map (kbd "C-n") 'company-select-next)
+  (define-key company-active-map (kbd "C-p") 'company-select-previous))
+
+;; swiper
+(use-package swiper
+  :ensure t
+  ;; use swiper in place of the default incremental search
+  :bind ("C-s" . swiper)
+  :config
+  (progn
+    ;; exit with escape
+    (define-key ivy-minibuffer-map [escape] 'minibuffer-keyboard-quit)
+    (define-key swiper-map [escape] 'minibuffer-keyboard-quit)))
+
+
+(use-package counsel
+  :ensure t)
+
+(use-package general
+  :ensure t
+  :config
+  ;; named prefix key
+  (general-define-key
+   :states '(normal visual insert emacs)
+   :prefix "SPC"
+   :non-normal-prefix "M-SPC"
+
+   "/"  '(counsel-ag :wich-key "ag")
+
+   ;; keybindings
+   "wh" 'evil-window-left
+   "wl" 'evil-window-right
+   "wj" 'evil-window-down
+   "wk" 'evil-window-up
+
+   "ws" 'evil-window-split
+   "wv" 'evil-window-vsplit
+
+   "wo" 'delete-other-windows
+
+   "wH" 'evil-window-move-far-left
+   "wL" 'evil-window-move-far-right
+   "wJ" 'evil-window-move-very-bottom
+   "wK" 'evil-window-move-very-top
+
+   "f"  '(:ignore t :which-key "Files")
+   "fd" '(counsel-git :which-key "find in git repo")
+
+   "p" 'hydra-projectile/body
+   )
   )
 
 
-;; ----------------------------------------------------------------------------
-;; Interface and themes
-;; ----------------------------------------------------------------------------
 
-;; set a default font
-;;(when (member "DejaVu Sans Mono" (font-family-list))
-;;  (set-default-font "DejaVu Sans Mono")
-;;  (set-face-attribute 'default nil :height 110))
+(use-package projectile
+  :ensure t)
 
-;; interface
-(setq initial-scratch-message "")
-(setq inhibit-startup-message t)
-(setq column-number-mode t)         ;; display the current column number
-(blink-cursor-mode 0)
-(tool-bar-mode 0)
-(scroll-bar-mode 0)
+(use-package helm-projectile
+  :ensure t)
 
-;; line numbers
-;;(global-linum-mode t)
-(add-hook 'prog-mode-hook 'linum-mode)
+(use-package helm-ag
+  :ensure t)
 
-;; theme; other decent themes:
-;;  - ample-theme
-;;  - color-theme-sanityinc-tomorrow
-;;  - ample-zen-theme
-;;  - gruvbox
-;;(use-package ample-theme
-;;  :ensure t
-;;  :init
-;;  (load-theme 'ample))
+(use-package hydra
+  :ensure t)
+
+(defhydra hydra-projectile
+  (:color teal :hint nil)
+  "
+     PROJECTILE: %(projectile-project-root)
+
+  ^Find File^        ^Search/Tags^        ^Buffers^       ^Cache^                    ^Project^
+  ^---------^        ^-----------^        ^-------^       ^-----^                    ^-------^
+  _f_: file          _a_: ag              _i_: Ibuffer    _c_: cache clear           _p_: switch proj
+  _F_: file dwim     _g_: update gtags    _b_: switch to  _x_: remove known project
+  _C-f_: file pwd    _o_: multi-occur   _s-k_: Kill all   _X_: cleanup non-existing
+  _r_: recent file   ^ ^                  ^ ^             _z_: cache current
+  _d_: dir
+"
+  ("a"   helm-projectile-ag)
+  ("b"   helm-projectile-switch-to-buffer)
+  ("c"   projectile-invalidate-cache)
+  ("d"   projectile-find-dir)
+  ("f"   projectile-find-file)
+  ("F"   projectile-find-file-dwim)
+  ("C-f" projectile-find-file-in-directory)
+  ("g"   ggtags-update-tags)
+  ("s-g" ggtags-update-tags)
+  ("i"   projectile-ibuffer)
+  ("K"   projectile-kill-buffers)
+  ("s-k" projectile-kill-buffers)
+  ("m"   projectile-multi-occur)
+  ("o"   projectile-multi-occur)
+  ("p"   projectile-switch-project)
+  ("r"   projectile-recentf)
+  ("x"   projectile-remove-known-project)
+  ("X"   projectile-cleanup-known-projects)
+  ("z"   projectile-cache-current-file)
+  ("q"   nil "cancel" :color blue)
+  ("<escape>" keyboard-escape-quit "" :exit t))
 
 
 ;; ----------------------------------------------------------------------------
@@ -217,6 +230,7 @@
 ;; Twelf
 (setq twelf-root "/opt/twelf/")
 (load (concat twelf-root "emacs/twelf-init.el"))
+;; (twelf-font-create-face 'twelf-font-fvar-face 'default "SpringGreen")
 
 ;; CUDA
 (use-package cuda-mode
@@ -235,10 +249,10 @@
 ;;(add-hook 'LaTeX-mode-hook 'flyspell-mode)
 ;;(add-hook 'LaTeX-mode-hook 'LaTeX-math-mode)
 
-;;(add-hook 'LaTeX-mode-hook 'turn-on-reftex)
-;;(setq reftex-plug-into-AUCTeX t)
+(add-hook 'LaTeX-mode-hook 'turn-on-reftex)
+(setq reftex-plug-into-AUCTeX t)
 
-;;(add-hook 'LaTeX-mode-hook 'auto-fill-mode)
+(add-hook 'LaTeX-mode-hook 'auto-fill-mode)
 
 
 ;; Haskell
@@ -246,10 +260,10 @@
   :ensure t
   :config
   ;; spell checking of strings and comments
-  (add-hook 'haskell-mode-hook 'flyspell-prog-mode)
+  ;;(add-hook 'haskell-mode-hook 'flyspell-prog-mode)
 
   ;; flycheck
-  (add-hook 'haskell-mode-hook 'flycheck-mode)
+  ;; (add-hook 'haskell-mode-hook 'flycheck-mode)
 
   ;; interactive haskell
   (add-hook 'haskell-mode-hook 'interactive-haskell-mode)
@@ -272,7 +286,7 @@
     "ia" 'haskell-align-imports)
 
   (evil-leader/set-key-for-mode 'haskell-mode    ;; compilation and REPL
-    "cl" 'haskell-process-load-or-reload
+    "cl" 'haskell-process-load-file
     "cc" 'haskell-compile
     "cb" 'haskell-interactive-bring
     "ct" 'haskell-process-do-type
@@ -281,9 +295,53 @@
 ;;(define-key interactive-haskell-mode-map
 ;;  (kbd "M-.") 'haskell-mode-goto-loc)
 
-;;(setq haskell-tags-on-save t)
+(setq haskell-tags-on-save t)
 
 ;; (define-key haskell-mode-map (kbd "M-.") 'haskell-mode-jump-to-def)
 
 ;; hybrid GHCi/tags go to defintion
 ;;(define-key haskell-mode-map (kbd "gd") 'haskell-mode-jump-to-def-or-tag)
+
+
+;;;; Intero
+;;(use-package intero
+;;  :ensure t
+;;  :diminish haskell-mode
+;;  :diminish intero-mode " λ"
+;;  :init
+;;  (evil-define-key '(insert normal) intero-mode-map
+;;    (kbd "M-.") 'intero-goto-definition)
+;;  :config
+;;  (add-hook 'haskell-mode-hook 'intero-mode))
+
+
+;; Markdown
+(use-package markdown-mode
+  :ensure t)
+
+;; Python
+(use-package jedi
+  :ensure t
+  :init
+  (add-hook 'python-mode-hook 'jedi:setup)
+  (add-hook 'python-mode-hook 'jedi:ac-setup))
+
+
+;; notmuch
+(autoload 'notmuch "notmuch" "notmuch mail" t)
+
+(define-key notmuch-show-mode-map "j" 'next-line)
+(define-key notmuch-show-mode-map "k" 'previous-line)
+(define-key notmuch-search-mode-map "j" 'next-line)
+(define-key notmuch-search-mode-map "k" 'previous-line)
+
+
+;; ----------------------------------------------------------------------------
+;; Miscellaneous functions
+;; ----------------------------------------------------------------------------
+
+;; Predicate that tests if the currect line is empty (ignoring whitespace).
+(defun current-line-empty-p ()
+  (save-excursion
+    (beginning-of-line)
+    (looking-at "[[:space:]]*$")))
