@@ -1,5 +1,10 @@
 (use-package tex
-  :ensure auctex)
+  :ensure auctex
+  :config
+  (setq font-latex-fontify-script nil)
+
+  (add-hook 'LaTeX-mode-hook
+            (lambda () (set-fill-column 80))))
 
 (setq TeX-auto-save t)
 (setq TeX-parse-self t)
