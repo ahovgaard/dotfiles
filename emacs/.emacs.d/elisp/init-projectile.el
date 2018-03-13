@@ -1,48 +1,32 @@
 (use-package projectile
-  :ensure t)
+  :ensure t
+  :commands (helm-projectile-switch-project
+             helm-projectile-find-file)
 
-(use-package helm-projectile
-  :ensure t)
+  :init
+  (use-package helm-projectile
+    :ensure t)
 
-(use-package helm-ag
-  :ensure t)
+  (setq projectile-sort-order 'recentf
+        projectile-switch-project-action 'helm-projectile-find-file
+        projectile-enable-caching t
+        projectile-cache-file (concat cache-directory
+                                      "projectile.cache")
+        projectile-known-projects-file (concat cache-directory
+                                               "projectile-bookmarks.eld"))
+  (general-define-key
+   :states '(normal visual insert emacs)
+   :prefix "SPC"
+   :non-normal-prefix "M-SPC"
+   "p"  '(:ignore t :which-key "projectile")
+   "pp" 'helm-projectile-switch-project
+   "pf" 'helm-projectile-find-file
+   "pb" 'helm-projectile-switch-to-buffer
+   "pk" 'projectile-kill-buffers)
 
-(use-package hydra
-  :ensure t)
-
-(defhydra hydra-projectile
-  (:color teal :hint nil)
-  "
-     PROJECTILE: %(projectile-project-root)
-
-  ^Find File^        ^Search/Tags^        ^Buffers^       ^Cache^                    ^Project^
-  ^---------^        ^-----------^        ^-------^       ^-----^                    ^-------^
-  _f_: file          _a_: ag              _i_: Ibuffer    _c_: cache clear           _p_: switch proj
-  _F_: file dwim     _g_: update gtags    _b_: switch to  _x_: remove known project
-  _C-f_: file pwd    _o_: multi-occur   _s-k_: Kill all   _X_: cleanup non-existing
-  _r_: recent file   ^ ^                  ^ ^             _z_: cache current
-  _d_: dir
-"
-  ("a"   helm-projectile-ag)
-  ("b"   helm-projectile-switch-to-buffer)
-  ("c"   projectile-invalidate-cache)
-  ("d"   projectile-find-dir)
-  ("f"   projectile-find-file)
-  ("F"   projectile-find-file-dwim)
-  ("C-f" projectile-find-file-in-directory)
-  ("g"   ggtags-update-tags)
-  ("s-g" ggtags-update-tags)
-  ("i"   projectile-ibuffer)
-  ("K"   projectile-kill-buffers)
-  ("s-k" projectile-kill-buffers)
-  ("m"   projectile-multi-occur)
-  ("o"   projectile-multi-occur)
-  ("p"   projectile-switch-project)
-  ("r"   projectile-recentf)
-  ("x"   projectile-remove-known-project)
-  ("X"   projectile-cleanup-known-projects)
-  ("z"   projectile-cache-current-file)
-  ("q"   nil "cancel" :color blue)
-  ("<escape>" keyboard-escape-quit "" :exit t))
+  :config
+  (projectile-global-mode)
+  (setq projectile-completion-system 'helm)
+  (helm-projectile-on))
 
 (provide 'init-projectile)

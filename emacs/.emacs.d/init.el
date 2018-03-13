@@ -38,16 +38,20 @@
 (when (file-exists-p custom-file)
   (load custom-file))
 
+(defconst cache-directory
+  (expand-file-name (concat user-emacs-directory ".cache/"))
+  "Storage area for persistent files")
+
 ;; -------------------------------------------------------------------
 ;; Load configs for specific features and modes
 ;; -------------------------------------------------------------------
 
 (require 'init-core)
 (require 'init-evil)
+(require 'init-general)
 (require 'init-mode-line)
 (require 'init-theme)
 (require 'init-helm)
-(require 'init-general)
 
 (require 'init-misc)
 (require 'init-syntax-checking)
