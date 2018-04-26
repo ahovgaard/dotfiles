@@ -2,21 +2,20 @@
 ;; Modular text editing with Evil
 ;; -------------------------------------------------------------------
 
-;; evil-mode
 (use-package evil
   :ensure t
   :diminish undo-tree-mode
 
-  :init    ;; execute the following before package is loaded
+  :init  ;; execute the following before package is loaded
   (setq evil-want-C-u-scroll t)
-  (use-package evil-leader
-    :ensure t
-    :init (global-evil-leader-mode)
-    :config
-    (evil-leader/set-leader ",")
-    (evil-leader/set-key "x" 'helm-M-x)
-    (evil-leader/set-key "f" 'helm-find-files)
-    (evil-leader/set-key "b" 'helm-mini))
+  (setq evil-want-abbrev-expand-on-insert-exit nil)
+
+  (general-define-key
+   :states '(normal visual)
+   :prefix ","
+   "x" 'helm-M-x
+   "f" 'helm-find-files
+   "b" 'helm-mini)
 
   :config  ;; execute after package is loaded
   (evil-mode 1)
@@ -59,5 +58,10 @@
 (evil-set-initial-state 'term-mode 'normal)
 ;;(evil-define-key 'normal term-raw-map (kbd "C-c") 'term-send-raw)
 (evil-define-key 'insert term-raw-map (kbd "C-c") 'term-send-raw)
+
+(use-package evil-surround
+  :ensure t
+  :config
+  (global-evil-surround-mode 1))
 
 (provide 'init-evil)
