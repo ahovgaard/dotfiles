@@ -61,6 +61,7 @@ rofi.color-urgent:      #fdf6e3,#dc322f,#eee8d5,#dc322f,#fdf6e3
 rofi.color-active:      #fdf6e3,#268bd2,#eee8d5,#268bd2,#fdf6e3
 rofi.color-window:      #fdf6e3,#002b36
 rofi.separator-style:   dash
+rofi.show-icons:        true
 
 ! Emacs (takes effect before any frame is displayed)
 Emacs.menuBar:              off

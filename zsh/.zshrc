@@ -21,6 +21,7 @@ setopt COMPLETE_ALIASES
 alias ls='ls --color=auto'
 alias l='ls -lh'
 alias la='ls -lah'
+alias ec='emacsclient -nc'
 
 # extended glob syntax
 setopt extendedglob

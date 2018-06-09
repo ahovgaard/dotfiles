@@ -205,16 +205,19 @@ bindsym $mod+slash exec rofi -show window
 # screen lock
 bindsym $mod+Shift+x exec ~/bin/lock.sh
 
-# bindsym XF86AudioRaiseVolume exec amixer -q set Master 2dB+ unmute
-bindsym XF86AudioRaiseVolume exec "amixer -q set Master 2dB+ unmute && pkill -RTMIN+10 i3blocks"
-bindsym XF86AudioLowerVolume exec "amixer -q set Master 2dB- unmute && pkill -RTMIN+10 i3blocks"
-bindsym XF86AudioMute        exec "amixer -q set Master toggle && pkill -RTMIN+10 i3blocks"
+bindsym XF86AudioRaiseVolume exec "amixer -q set Master 2%+ unmute"
+bindsym XF86AudioLowerVolume exec "amixer -q set Master 2%- unmute"
+bindsym XF86AudioMute        exec "amixer -q set Master toggle"
 
 # toggle touchpad and cursor hiding
 bindsym XF86TouchpadToggle exec ~/bin/toggle_touchpad.sh
 
 # toggle external monitors
 bindsym XF86Display exec ~/bin/monitors.sh
+
+# handle pdfpc floating window on second monitor properly
+for_window [ title="^pdfpc - present" ] border none floating enable
+for_window [ title="^DS PDF" ] border none floating enable
 
 # automatically start applications on i3 startup
 # exec_always --no-startup-id $HOME/.config/polybar/launch.sh
