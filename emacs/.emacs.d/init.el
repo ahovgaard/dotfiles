@@ -61,9 +61,12 @@
 (require 'init-company)
 (require 'init-swiper)
 (require 'init-projectile)
+(require 'init-mail)
+(require 'init-pdf)
 
 (require 'init-futhark)
 (require 'init-twelf)
 (require 'init-haskell)
 (require 'init-tex)
 (require 'init-python)
+(require 'init-pg)

@@ -1,17 +1,17 @@
-;; try out a package
+;; Try out a package.
 (use-package try
   :ensure t)
 
 (use-package markdown-mode
   :ensure t)
 
-;; predicate that tests if the currect line is empty (ignoring whitespace)
+;; Predicate that tests if the currect line is empty (ignoring whitespace).
 (defun current-line-empty-p ()
   (save-excursion
     (beginning-of-line)
     (looking-at "[[:space:]]*$")))
 
-;; delete the current file
+;; Delete the current file.
 (defun delete-this-file ()
   "Delete the current file, and kill the buffer."
   (interactive)
@@ -36,5 +36,11 @@
 
 (global-set-key [remap fill-paragraph]
                 #'endless/fill-or-unfill)
+
+;; Folding
+(use-package evil-vimish-fold
+  :ensure t
+  :config
+  (evil-vimish-fold-mode 1))
 
 (provide 'init-misc)
