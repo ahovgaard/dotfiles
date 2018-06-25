@@ -1,20 +1,27 @@
-(use-package org-mode
-  :bind (("C-c l" . org-store-link)
-         ("C-c a" . org-agenda))
+(setq org-directory "~/org")
+(setq org-default-notes-file (concat org-directory "/notes.org"))
+
+(setq org-src-fontify-natively t)
+
+(use-package org-bullets
+  :ensure t
   :init
-  ;; org-capture
-  (setq org-directory "~/org")
-  (setq org-default-notes-file (concat org-directory "/notes.org"))
-  (define-key global-map "\C-cc" 'org-capture)
+  (add-hook 'org-mode-hook (lambda () (org-bullets-mode t))))
 
-  (setq org-src-fontify-natively t)
-  (use-package org-bullets
-    :ensure t
-    :init
-    (add-hook 'org-mode-hook (lambda () (org-bullets-mode t))))
+(setq org-log-done t)
+(setq org-agenda-files (list "~/org/notes.org"
+                             "~/uni/thesis/thesis.org"))
 
-  (setq org-log-done t)
-  (setq org-agenda-files (list "~/org/notes.org"
-                               "~/uni/thesis/thesis.org")))
+(add-hook 'org-mode-hook 'auto-fill-mode)
+
+(general-define-key
+ :states '(normal visual insert emacs)
+ :prefix "SPC"
+ :non-normal-prefix "M-SPC"
+
+ "o"  '(:ignore t :which-key "org")
+ "oa" 'org-agenda
+ "oc" 'org-capture
+ "ol" 'org-store-link)
 
 (provide 'init-org)
