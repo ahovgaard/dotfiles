@@ -1,4 +1,3 @@
-/url/cache
 /.emacs.desktop
 /auto-save-list
 /network-security.data
@@ -27,12 +26,10 @@ site-lisp/package/
 /var
 /.sqli_history
 /frame-restore-parameters
-/.achievements
 /.bookmarks.el
 /history
 /helm-adaptive-history
 /thumbs/
-/emms/
 /.smex-items
 /image-dired/
 /eshell
@@ -42,12 +39,12 @@ site-lisp/package/
 /ditaa*.jar
 /ido.last
 /recentf
-/viper
 /projectile-bookmarks.eld
 /anaconda-mode/
-/.historian
-/.uptimes.el
-/rake.cache
-/plantuml.jar
-/magithub
-/vimish-fold
+vimish-fold
+.projectile
+places
+elisp/PG
+bookmarks
+.python-environments
+.cache
