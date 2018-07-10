@@ -69,3 +69,12 @@ setprompt() {
   RPROMPT=$'${vcs_info_msg_0_}'
 }
 setprompt
+
+#------------------------------
+# Other
+#------------------------------
+
+# Exercism.io completion
+if [ -f ~/.config/exercism/exercism_completion.zsh ]; then
+  . ~/.config/exercism/exercism_completion.zsh
+fi
