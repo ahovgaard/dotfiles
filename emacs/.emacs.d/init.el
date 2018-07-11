@@ -49,9 +49,9 @@
 (require 'init-core)
 (require 'init-evil)
 (require 'init-general)
-(require 'init-mode-line)
 (require 'init-theme)
 (require 'init-helm)
+(require 'init-mode-line)
 
 (require 'init-misc)
 (require 'init-syntax-checking)
