@@ -1,4 +1,5 @@
 (use-package smart-mode-line
+  :ensure t
   :commands sml/setup
   :demand t
   :init
