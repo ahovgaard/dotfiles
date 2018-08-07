@@ -78,3 +78,5 @@ setprompt
 if [ -f ~/.config/exercism/exercism_completion.zsh ]; then
   . ~/.config/exercism/exercism_completion.zsh
 fi
+
+export ERL_AFLAGS="-kernel shell_history enabled" 
