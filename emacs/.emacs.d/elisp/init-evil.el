@@ -64,4 +64,9 @@
   :config
   (global-evil-surround-mode 1))
 
+(use-package evil-visualstar
+  :ensure t
+  :config
+  (global-evil-visualstar-mode))
+
 (provide 'init-evil)
