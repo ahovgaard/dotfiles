@@ -50,7 +50,6 @@
 (require 'init-evil)
 (require 'init-general)
 (require 'init-theme)
-(require 'init-helm)
 (require 'init-mode-line)
 
 (require 'init-misc)
@@ -59,7 +58,7 @@
 (require 'init-which-key)
 (require 'init-org)
 (require 'init-company)
-(require 'init-swiper)
+(require 'init-ivy)
 (require 'init-projectile)
 (require 'init-mail)
 (require 'init-pdf)
@@ -70,3 +69,4 @@
 (require 'init-tex)
 (require 'init-python)
 (require 'init-pg)
+(require 'init-elixir)

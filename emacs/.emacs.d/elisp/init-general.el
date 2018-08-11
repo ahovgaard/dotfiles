@@ -6,8 +6,6 @@
  :prefix "SPC"
  :non-normal-prefix "M-SPC"
 
- "/"  '(counsel-ag :wich-key "ag")
-
  ;; keybindings
  "wh" 'evil-window-left
  "wl" 'evil-window-right
@@ -24,11 +22,11 @@
  "wJ" 'evil-window-move-very-bottom
  "wK" 'evil-window-move-very-top
 
- "bb" 'helm-mini
+ "bb" 'ivy-switch-buffer
  "bk" 'kill-buffer
 
  "f"  '(:ignore t :which-key "Files")
- "fd" '(counsel-git :which-key "find in git repo")
+ "fd" '(counsel-git :which-key "counsel-git: find in git repo")
  )
 
 (provide 'init-general)

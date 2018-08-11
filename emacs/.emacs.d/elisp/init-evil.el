@@ -9,13 +9,6 @@
   :init  ;; execute the following before package is loaded
   (setq evil-want-C-u-scroll t)
   (setq evil-want-abbrev-expand-on-insert-exit nil)
-
-  (general-define-key
-   :states '(normal visual)
-   :prefix ","
-   "x" 'helm-M-x
-   "f" 'helm-find-files
-   "b" 'helm-mini)
   (setq evil-want-integration nil)
 
   :config  ;; execute after package is loaded
@@ -33,8 +26,8 @@
            (save-excursion (back-to-indentation) (point))
            (point))))))
 
-  (define-key evil-ex-map "b " 'helm-mini)
-  (define-key evil-ex-map "e " 'helm-find-files)
+  (define-key evil-ex-map "b " 'ivy-switch-buffer)
+  (define-key evil-ex-map "e " 'counsel-find-file)
 
   (define-key evil-normal-state-map "g]" 'helm-etags-select))
 
