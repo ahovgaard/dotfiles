@@ -16,6 +16,7 @@
    "x" 'helm-M-x
    "f" 'helm-find-files
    "b" 'helm-mini)
+  (setq evil-want-integration nil)
 
   :config  ;; execute after package is loaded
   (evil-mode 1)
@@ -58,6 +59,12 @@
 (evil-set-initial-state 'term-mode 'normal)
 ;;(evil-define-key 'normal term-raw-map (kbd "C-c") 'term-send-raw)
 (evil-define-key 'insert term-raw-map (kbd "C-c") 'term-send-raw)
+
+(use-package evil-collection
+  :after evil
+  :ensure t
+  :config
+  (evil-collection-init))
 
 (use-package evil-surround
   :ensure t
