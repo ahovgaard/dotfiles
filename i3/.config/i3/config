@@ -41,7 +41,7 @@ bindsym $mod+Shift+k move up
 bindsym $mod+Shift+l move right
 
 # enter fullscreen mode for the focused container
-bindsym $mod+f fullscreen toggle
+#bindsym $mod+f fullscreen toggle
 
 # fullscreen mode spanning all available outputs
 bindsym $mod+Shift+f fullscreen toggle global
@@ -195,7 +195,7 @@ bar {
 }
 
 
-bindsym $mod+b bar mode toggle
+#bindsym $mod+b bar mode toggle
 
 
 # key bindings
