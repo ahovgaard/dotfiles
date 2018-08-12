@@ -1,7 +1,7 @@
 ;; interface
 (setq initial-scratch-message "")
 (setq inhibit-startup-message t)
-(setq column-number-mode t)         ;; display the current column number
+(setq column-number-mode t)
 (blink-cursor-mode 0)
 (tool-bar-mode 0)
 (scroll-bar-mode 0)

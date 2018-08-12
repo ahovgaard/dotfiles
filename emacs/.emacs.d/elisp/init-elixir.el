@@ -4,7 +4,6 @@
 (general-define-key
  :states '(normal visual)
  :keymaps 'alchemist-mode-map
- "gd" 'alchemist-goto-definition-at-point
- )
+ "gd" 'alchemist-goto-definition-at-point)
 
 (provide 'init-elixir)

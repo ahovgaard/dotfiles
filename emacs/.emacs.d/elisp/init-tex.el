@@ -23,6 +23,7 @@
 
 (general-define-key
  :states '(normal visual insert emacs)
+ :keymaps 'LaTeX-mode-map
  :prefix "SPC"
  :non-normal-prefix "M-SPC"
 
