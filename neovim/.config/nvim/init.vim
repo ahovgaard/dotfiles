@@ -9,35 +9,33 @@
 " Specify a directory for plugins
 call plug#begin('~/.local/share/nvim/plugged')
 
-" Color themes
 Plug 'nanotech/jellybeans.vim'
-
 Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
 
-" Fuzzy finding
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --bin' }
-Plug 'junegunn/fzf.vim'
-
-" Haskell
-Plug 'neovimhaskell/haskell-vim'  " Basics (better syntax highlighting etc.)
-
-Plug 'parsonsmatt/intero-neovim'
-
-"Plug 'eagletmt/neco-ghc'
-
-" Asynchronous Lint Engine
-Plug 'w0rp/ale'
-
-" Status line
-Plug 'itchyny/lightline.vim'
-
-" Completion
-"Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-
-" Version control
-Plug 'airblade/vim-gitgutter'
-
-call plug#end()  " Initialize plugin system
+call plug#end()  " Update &runtimepath and initialize plugin system
+ 
+" " Fuzzy finding
+" Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --bin' }
+" Plug 'junegunn/fzf.vim'
+ 
+" " Haskell
+" Plug 'neovimhaskell/haskell-vim'  " Basics (better syntax highlighting etc.)
+ 
+" Plug 'parsonsmatt/intero-neovim'
+ 
+" "Plug 'eagletmt/neco-ghc'
+ 
+" " Asynchronous Lint Engine
+" Plug 'w0rp/ale'
+ 
+" " Status line
+" Plug 'itchyny/lightline.vim'
+ 
+" " Completion
+" "Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+ 
+" " Version control
+" Plug 'airblade/vim-gitgutter'
 
 "Plug 'vim-airline/vim-airline'
 "Plug 'vim-airline/vim-airline-themes'
@@ -53,6 +51,8 @@ call plug#end()  " Initialize plugin system
 "Plug 'walkie/twelf-vim'
 "Plug 'vim-pandoc/vim-pandoc'
 "Plug 'vim-pandoc/vim-pandoc-syntax'
+"Plug 'jalvesaq/vimcmdline'
+"Plug 'scrooloose/nerdtree'
 "
 "Plug 'autozimu/LanguageClient-neovim', { 'do': ':UpdateRemotePlugins' }
 
@@ -60,9 +60,6 @@ call plug#end()  " Initialize plugin system
 " General {{{1
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 set nocompatible  " be iMproved (removed from neovim)
-
-" Enable filytype detection and loading of plugin and indentation settings
-filetype plugin indent on
 
 " Set <leader> key
 let mapleader = ","
@@ -73,6 +70,8 @@ set foldmethod=marker
 
 " Set spell checking region to US English
 set spelllang=en_us
+" Toggle spell checking on and off with ,s
+"nmap <silent> <leader>s :set spell!<CR>
 
 " Toggle spell checking on and off with ,s
 nmap <silent> <leader>s :set spell!<CR>
@@ -95,7 +94,7 @@ set complete=.,w,b,t
 set nomodeline  " Prevent security exploits through modelines
 
 " Set default textwidth
-set textwidth=78
+set textwidth=80
 
 " Make Vim more liberal about hidden buffers (buffers with unsaved changes that
 " are not shown in a window), i.e. allow hiding buffers without saving them.
@@ -196,6 +195,9 @@ set tabstop=2 softtabstop=2 shiftwidth=2 expandtab
 set autoindent  " Indent according to previous line
 set smarttab
 
+" Enable filytype detection and loading of plugin and indentation settings
+filetype plugin indent on
+
 "set wrap    " Wrap lines
 
 
@@ -230,7 +232,6 @@ let g:fzf_action = {
   \ 'ctrl-v': 'vsplit' }
 
 let g:fzf_layout = { 'down': '~40%' }  " fzf layout
-
 
 " Closing buffers
 function! BufferDelete()
@@ -274,6 +275,19 @@ nmap <silent> <leader>q :call BufferDelete()<CR>
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let g:ale_linters = {}
 let g:ale_fixers = {}
+
+
+" Buffer management {{{1
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"" CtrlP mappings
+"let g:ctrlp_map = '<leader>f'
+"nmap <leader>b :CtrlPBuffer<cr>
+"
+"" CtrlP ignores
+"let g:ctrlp_custom_ignore = {
+"  \ 'dir':  '\v[\/](\.(git|hg|svn)|\_site)$',
+"  \ 'file': '\v\.(exe|so|dll|o|class|png|jpg|jpeg|aux|bbl|blg|toc|pdf)$',
+"\}
 
 
 " Language specific configurations {{{1
