@@ -12,6 +12,14 @@ call plug#begin('~/.local/share/nvim/plugged')
 Plug 'nanotech/jellybeans.vim'
 Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
 
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf.vim'
+
+Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+
 Plug 'elixir-editors/vim-elixir'
 Plug 'slashmili/alchemist.vim'
 
@@ -23,16 +31,14 @@ call plug#end()  " Update &runtimepath and initialize plugin system
 set nocompatible  " be iMproved (removed from neovim)
 
 " Set <leader> key
-let mapleader = ","
-let maplocalleader = "\\"
+let mapleader = ','
+let maplocalleader = '\\'
 
 " Fold on markers
 set foldmethod=marker
 
 " Set spell checking region to US English
 set spelllang=en_us
-" Toggle spell checking on and off with ,s
-"nmap <silent> <leader>s :set spell!<CR>
 
 " Toggle spell checking on and off with ,s
 nmap <silent> <leader>s :set spell!<CR>
@@ -94,6 +100,9 @@ set hlsearch
 " Incremental search
 set incsearch
 
+" Stop highlighting on enter
+map <CR> :noh<CR>
+
 " Command-line completion in enhanced mode
 set wildignore+=*\\tmp\\*,*.swp,*.swo,*.zip,.git,.cabal-sandbox
 set wildmode=longest,list,full
@@ -112,7 +121,7 @@ set listchars=tab:▸\ ,eol:¬
 set noshowmode  " Unnecessary when using statusline
 
 " Make the last window always have a status line (for vim-airline)
-"set laststatus=2
+set laststatus=2
 
 " vim-airline unicode symbols (requires patched font)
 "let g:airline_powerline_fonts = 1
@@ -131,7 +140,7 @@ set noshowmode  " Unnecessary when using statusline
 syntax on
 
 " Set 256 colors (terminal independent way)
-"set t_Co=256
+set t_Co=256
 
 "let $NVIM_TUI_ENABLE_TRUE_COLOR=1
 
@@ -182,7 +191,7 @@ set splitright     " Open new windows right of the current window.
 let g:netrw_liststyle = 3
 
 " Fuzzy finding files, buffers, etc.
-nmap <leader>f :Files<CR>
+nnoremap <leader>f :Files<CR>
 nmap <leader>b :Buffers<CR>
 nmap <leader>t :Tags<CR>
 
@@ -193,6 +202,13 @@ let g:fzf_action = {
   \ 'ctrl-v': 'vsplit' }
 
 let g:fzf_layout = { 'down': '~40%' }  " fzf layout
+
+if has('nvim')
+  aug fzf_setup
+    au!
+    au TermOpen term://*FZF tnoremap <silent> <buffer><nowait> <esc> <c-c>
+  aug END
+end
 
 " Closing buffers
 function! BufferDelete()
@@ -206,3 +222,26 @@ function! BufferDelete()
 endfunction
 
 nmap <silent> <leader>q :call BufferDelete()<CR>
+
+
+" Uncategorized {{{1
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Use deoplete.
+let g:deoplete#enable_at_startup = 1
+
+if has('nvim')
+  tnoremap <expr> <esc> &filetype == 'fzf' ? "\<esc>" : "\<c-\>\<c-n>"
+  " tnoremap <Esc> <C-\><C-n>
+  tnoremap <C-v><Esc> <Esc>
+endif
+
+
+" Language specific configurations {{{1
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Elixir {{{2
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" let g:alchemist_compile_basepath = '/app/proj/'
+" let g:alchemist#elixir_erlang_src = '/usr/local/share/src'
+if exists("$COMPILE_BASEPATH")
+  let g:alchemist_compile_basepath = $COMPILE_BASEPATH
+endif

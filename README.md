@@ -1,4 +1,4 @@
-To use `stow` to easily setup symbolic links: 
+To use `stow` to easily setup symbolic links:
 
 ```bash
 cd dotfiles
