@@ -9,16 +9,17 @@
 " Specify a directory for plugins
 call plug#begin('~/.local/share/nvim/plugged')
 
-Plug 'nanotech/jellybeans.vim'
-Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
-
-Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
+Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 
-Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+Plug 'nanotech/jellybeans.vim'
+
+Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
+
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
 
 Plug 'elixir-editors/vim-elixir'
 Plug 'slashmili/alchemist.vim'
@@ -81,6 +82,9 @@ set visualbell
 " Backup
 "set backup
 
+" Use deoplete.
+let g:deoplete#enable_at_startup = 1
+
 
 " VIM user interface {{{1
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -133,6 +137,7 @@ set laststatus=2
 " airline tab line
 "let g:airline#extensions#tabline#enabled = 1
 
+nnoremap <F3> :NERDTreeToggle<CR>
 
 " Colors and fonts {{{1
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -168,8 +173,6 @@ set smarttab
 " Enable filytype detection and loading of plugin and indentation settings
 filetype plugin indent on
 
-"set wrap    " Wrap lines
-
 
 " Moving around, tabs, windows, buffers, and files  {{{1
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -192,6 +195,7 @@ let g:netrw_liststyle = 3
 
 " Fuzzy finding files, buffers, etc.
 nnoremap <leader>f :Files<CR>
+nnoremap <leader>F :History<CR>
 nmap <leader>b :Buffers<CR>
 nmap <leader>t :Tags<CR>
 
@@ -224,24 +228,97 @@ endfunction
 nmap <silent> <leader>q :call BufferDelete()<CR>
 
 
-" Uncategorized {{{1
+" Terminal {{{1
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Use deoplete.
-let g:deoplete#enable_at_startup = 1
-
 if has('nvim')
   tnoremap <expr> <esc> &filetype == 'fzf' ? "\<esc>" : "\<c-\>\<c-n>"
   " tnoremap <Esc> <C-\><C-n>
   tnoremap <C-v><Esc> <Esc>
 endif
 
+augroup TerminalStuff
+  au!
+  autocmd TermOpen * setlocal nonumber norelativenumber
+augroup END
 
-" Language specific configurations {{{1
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Elixir {{{2
+" Add color to the terminal cursor.
+if has('nvim')
+  " highlight! link TermCursor Cursor
+  highlight! TermCursorNC guibg=red guifg=white ctermbg=1 ctermfg=15
+endif
+
+
+" Elixir {{{1
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " let g:alchemist_compile_basepath = '/app/proj/'
 " let g:alchemist#elixir_erlang_src = '/usr/local/share/src'
 if exists("$COMPILE_BASEPATH")
   let g:alchemist_compile_basepath = $COMPILE_BASEPATH
 endif
+
+
+" Erlang {{{2
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+augroup ft_erlang
+  au!
+  au FileType erlang setlocal ts=4 sts=4 sw=4 expandtab
+augroup END
+
+
+" Python {{{1
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+augroup ft_python
+  au!
+  au FileType python setlocal makeprg=python\ -i\ %
+  au FileType python setlocal ts=4 sts=4 sw=4 expandtab
+augroup END
+
+
+" LaTeX {{{1
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+augroup ft_tex
+  au!
+  au FileType tex map <leader>ll :! latexmk -pdf<CR>
+  "au FileType tex map <leader>ll :! latexmk -xelatex<CR>
+  au FileType tex map <leader>lv :! texBuild.sh view<CR><CR>
+  au FileType tex setlocal foldmethod=marker
+  au FileType tex setlocal tw=79
+
+  " neomake config
+  "let g:neomake_tex_enabled_makers = ['lacheck']
+  "let g:neomake_tex_enabled_makers = []
+
+  syn match texGreek '\\eps\>' contained conceal cchar=ε
+augroup END
+
+
+" Assembly {{{1
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+augroup ft_nasm
+  au!
+  au BufRead,BufNewFile *.asm set ft=nasm
+  au FileType nasm setlocal tabstop=4 softtabstop=4 shiftwidth=4 expandtab
+augroup END
+
+
+" C/C++ {{{1
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+augroup ft_cpp
+  au!
+  au FileType c,cpp setlocal ts=4 sts=4 sw=4 expandtab
+  au FileType c,cpp map <leader>cc :! make<CR>
+  au FileType c,cpp map <leader>cr :! make && make run<CR>
+augroup END
+
+set cino=N-s  " no indentation in namespaces
+
+" C++ specific Syntastic settings
+"let g:syntastic_cpp_compiler = 'g++'
+"let g:syntastic_cpp_compiler_options = '-std=c++11 -Wall'
+
+"let g:neomake_cpp_gcc_maker = {
+"  \ 'exe':          'g++',
+"  \ 'args':         ['-fsyntax-only', '-std=c++14', '-Wall'],
+"  \ 'errorformat':  '%f:%l:%c: %m',
+"  \ }
+"let g:neomake_cpp_enabled_makers = ['gcc']
