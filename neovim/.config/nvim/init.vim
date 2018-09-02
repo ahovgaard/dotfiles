@@ -57,9 +57,8 @@ set ffs=unix,dos,mac
 " current buffer, buffers from other windows, other loaded buffers, tags
 set complete=.,w,b,t
 
-" Detect set commands in the first five or the last five lines of each file
-"set modelines=5
-set nomodeline  " Prevent security exploits through modelines
+" Prevent security exploits through modelines.
+set nomodeline
 
 " Set default textwidth
 set textwidth=80
@@ -85,6 +84,9 @@ set visualbell
 " Use deoplete.
 let g:deoplete#enable_at_startup = 1
 
+" Use system clipboard
+set clipboard+=unnamedplus
+
 
 " VIM user interface {{{1
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -94,14 +96,10 @@ set number
 " Highlighting of the current line
 set cursorline
 
-" Ignore case when searching, unless the pattern contains an uppercase letter
+" Increamental, smart search with highlighting
 set ignorecase
 set smartcase
-
-" Hightlight search results
 set hlsearch
-
-" Incremental search
 set incsearch
 
 " Stop highlighting on enter
@@ -121,21 +119,11 @@ set cpoptions+=$
 " Invisible characters when :set list
 set listchars=tab:▸\ ,eol:¬
 
-" Show mode (insert / replace / visual) in bottom line
-set noshowmode  " Unnecessary when using statusline
+" Do not show mode in bottom line.
+set noshowmode
 
 " Make the last window always have a status line (for vim-airline)
 set laststatus=2
-
-" vim-airline unicode symbols (requires patched font)
-"let g:airline_powerline_fonts = 1
-
-" Don't show seperators
-"let g:airline_left_sep=''
-"let g:airline_right_sep=''
-
-" airline tab line
-"let g:airline#extensions#tabline#enabled = 1
 
 nnoremap <F3> :NERDTreeToggle<CR>
 
@@ -198,11 +186,12 @@ nnoremap <leader>f :Files<CR>
 nnoremap <leader>F :History<CR>
 nmap <leader>b :Buffers<CR>
 nmap <leader>t :Tags<CR>
+nmap <leader>x :Command<CR>
 
 " fzf config
 let g:fzf_action = {
   \ 'ctrl-t': 'tab split',
-  \ 'ctrl-x': 'split',
+  \ 'ctrl-s': 'split',
   \ 'ctrl-v': 'vsplit' }
 
 let g:fzf_layout = { 'down': '~40%' }  " fzf layout
@@ -232,8 +221,9 @@ nmap <silent> <leader>q :call BufferDelete()<CR>
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 if has('nvim')
   tnoremap <expr> <esc> &filetype == 'fzf' ? "\<esc>" : "\<c-\>\<c-n>"
+  tnoremap <M-[> <Esc>
   " tnoremap <Esc> <C-\><C-n>
-  tnoremap <C-v><Esc> <Esc>
+  " tnoremap <C-v><Esc> <Esc>
 endif
 
 augroup TerminalStuff
