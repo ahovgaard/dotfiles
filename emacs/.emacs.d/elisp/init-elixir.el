@@ -1,5 +1,8 @@
 (use-package alchemist
-  :ensure t)
+  :ensure t
+  :config
+  (add-hook 'elixir-mode-hook #'(lambda () (toggle-truncate-lines 0))))
+
 
 (general-define-key
  :states '(normal visual)
