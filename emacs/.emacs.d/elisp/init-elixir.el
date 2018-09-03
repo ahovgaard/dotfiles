@@ -9,4 +9,8 @@
  :keymaps 'alchemist-mode-map
  "gd" 'alchemist-goto-definition-at-point)
 
+;; erlang
+(use-package erlang
+  :ensure t)
+
 (provide 'init-elixir)
