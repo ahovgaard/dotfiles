@@ -22,17 +22,22 @@
   (define-key haskell-mode-map (kbd "<f8>")
     'haskell-navigate-imports)
 
-  (evil-leader/set-key-for-mode 'haskell-mode    ;; managing imports
-    "if" 'haskell-mode-format-imports
-    "is" 'haskell-sort-imports
-    "ia" 'haskell-align-imports)
+  (general-define-key
+   :states '(normal visual)
+   :keymaps 'haskell-mode-map
+   :prefix "SPC m"
 
-  (evil-leader/set-key-for-mode 'haskell-mode    ;; compilation and REPL
-    "cl" 'haskell-process-load-file
-    "cc" 'haskell-compile
-    "cb" 'haskell-interactive-bring
-    "ct" 'haskell-process-do-type
-    "ci" 'haskell-process-do-info))
+   "if" 'haskell-mode-format-imports  ;; managing imports
+   "is" 'haskell-sort-imports
+   "ia" 'haskell-align-imports
+
+   "cl" 'haskell-process-load-file    ;; compilation and REPL
+   "cc" 'haskell-compile
+   "cb" 'haskell-interactive-bring
+   "ct" 'haskell-process-do-type
+   "ci" 'haskell-process-do-info
+   )
+  )
 
 ;;(define-key interactive-haskell-mode-map
 ;;  (kbd "M-.") 'haskell-mode-goto-loc)

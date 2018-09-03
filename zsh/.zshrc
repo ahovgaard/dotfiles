@@ -22,6 +22,11 @@ alias ls='ls --color=auto'
 alias l='ls -lh'
 alias la='ls -lah'
 alias ec='emacsclient -nc'
+alias vim='nvim'
+
+if type "nvim" > /dev/null; then
+  alias vim='nvim'
+fi
 
 # extended glob syntax
 setopt extendedglob
@@ -80,3 +85,5 @@ if [ -f ~/.config/exercism/exercism_completion.zsh ]; then
 fi
 
 export ERL_AFLAGS="-kernel shell_history enabled" 
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh

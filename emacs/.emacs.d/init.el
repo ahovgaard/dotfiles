@@ -1,9 +1,5 @@
 ;; -*- lexical-binding: t -*-
 
-;; -------------------------------------------------------------------
-;; Initial setup
-;; -------------------------------------------------------------------
-
 (require 'package)
 (setq package-enable-at-startup nil)
 (add-to-list 'package-archives
@@ -42,31 +38,21 @@
   (expand-file-name (concat user-emacs-directory ".cache/"))
   "Storage area for persistent files")
 
-;; -------------------------------------------------------------------
-;; Load configs for specific features and modes
-;; -------------------------------------------------------------------
-
 (require 'init-core)
 (require 'init-evil)
-(require 'init-general)
 (require 'init-theme)
-(require 'init-helm)
 (require 'init-mode-line)
-
 (require 'init-misc)
-(require 'init-syntax-checking)
-(require 'init-version-control)
-(require 'init-which-key)
+(require 'init-coding)
+
 (require 'init-org)
-(require 'init-company)
-(require 'init-swiper)
-(require 'init-projectile)
 (require 'init-mail)
 (require 'init-pdf)
+(require 'init-term)
 
 (require 'init-futhark)
 (require 'init-twelf)
 (require 'init-haskell)
 (require 'init-tex)
 (require 'init-python)
-(require 'init-pg)
+(require 'init-elixir)

@@ -42,7 +42,13 @@ alias grep='grep -n --color=auto'
 alias feh='feh --fullscreen --hide-pointer'
 alias tmux='tmux -2'
 
+if type "nvim" > /dev/null; then
+  alias vim='nvim'
+fi
+
 # Run 'startx' when logging into ttty1 and X isn't alrady running
 if [[ $(tty) = /dev/tty1 ]] && [[ -z "$DISPLAY" ]]; then
   exec startx
 fi
+
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash

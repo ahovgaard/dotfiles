@@ -9,35 +9,32 @@
   :init  ;; execute the following before package is loaded
   (setq evil-want-C-u-scroll t)
   (setq evil-want-abbrev-expand-on-insert-exit nil)
-
-  (general-define-key
-   :states '(normal visual)
-   :prefix ","
-   "x" 'helm-M-x
-   "f" 'helm-find-files
-   "b" 'helm-mini)
+  ;;(setq evil-want-integration nil)
 
   :config  ;; execute after package is loaded
   (evil-mode 1)
 
-  ;; ugly fix to get vim behavior of C-u in insert mode
-  (define-key evil-insert-state-map (kbd "C-u")
-    (lambda ()
-      (interactive)
-      (if (looking-back "^" 0)
-          (backward-delete-char 1)
-        (if (current-line-empty-p)
-            (evil-delete (point-at-bol) (point))
-          (evil-delete
-           (save-excursion (back-to-indentation) (point))
-           (point))))))
+  (define-key evil-ex-map "b " 'ivy-switch-buffer)
+  (define-key evil-ex-map "e " 'counsel-find-file)
 
-  (define-key evil-ex-map "b " 'helm-mini)
-  (define-key evil-ex-map "e " 'helm-find-files)
+  )
 
-  (define-key evil-normal-state-map "g]" 'helm-etags-select))
+;;  ;; ugly fix to get vim behavior of C-u in insert mode
+;;  (define-key evil-insert-state-map (kbd "C-u")
+;;    (lambda ()
+;;      (interactive)
+;;      (if (looking-back "^" 0)
+;;          (backward-delete-char 1)
+;;        (if (current-line-empty-p)
+;;            (evil-delete (point-at-bol) (point))
+;;          (evil-delete
+;;           (save-excursion (back-to-indentation) (point))
+;;           (point))))))
+;;
+;;
+;;  (define-key evil-normal-state-map "g]" 'helm-etags-select))
 
-; jump over long wrapped lines with j and k
+;; jump over long wrapped lines with j and k
 (define-key evil-motion-state-map
   (kbd "<remap> <evil-next-line>") #'evil-next-visual-line)
 (define-key evil-motion-state-map
@@ -55,9 +52,15 @@
 ;; (add-hook 'python-mode-hook #'(lambda () (modify-syntax-entry ?_ "w")))
 
 ;; try to make ansi-term behave better
-(evil-set-initial-state 'term-mode 'normal)
-;;(evil-define-key 'normal term-raw-map (kbd "C-c") 'term-send-raw)
-(evil-define-key 'insert term-raw-map (kbd "C-c") 'term-send-raw)
+;;(evil-set-initial-state 'term-mode 'normal)
+;;;;(evil-define-key 'normal term-raw-map (kbd "C-c") 'term-send-raw)
+;;(evil-define-key 'insert term-raw-map (kbd "C-c") 'term-send-raw)
+
+;;(use-package evil-collection
+;;  :after evil
+;;  :ensure t
+;;  :config
+;;  (evil-collection-init))
 
 (use-package evil-surround
   :ensure t
@@ -68,5 +71,91 @@
   :ensure t
   :config
   (global-evil-visualstar-mode))
+
+;; unbind SPC in dired mode
+;;(evil-define-key 'normal dired-mode-map (kbd "SPC") nil)
+
+
+(use-package counsel
+  :ensure t
+  :diminish counsel-mode
+  :config
+  (counsel-mode 1)
+  ;; add `recentf-mode` and bookmarks to `ivy-switch-buffer`
+  (setq ivy-use-virtual-buffers t)
+  ;; number of result lines to display
+  (setq ivy-height 10)
+  ;; make the prompt line selectable
+  (setq ivy-use-selectable-prompt t)
+  ;; exit with escape
+  (define-key ivy-minibuffer-map [escape] 'minibuffer-keyboard-quit)
+  (define-key swiper-map [escape] 'minibuffer-keyboard-quit)
+  ;; use swiper in place of the default incremental search
+  (define-key evil-normal-state-map (kbd "C-s") 'swiper))
+
+(use-package general
+  :ensure t
+  :after evil
+  :config
+
+  ;; global keybindings
+  (general-define-key
+   :states '(normal visual insert emacs)
+   :prefix "SPC"
+   :non-normal-prefix "M-SPC"
+
+   "w"  '(:ignore t :which-key "windows")
+   "wh" 'evil-window-left
+   "wl" 'evil-window-right
+   "wj" 'evil-window-down
+   "wk" 'evil-window-up
+
+   "ws" 'evil-window-split
+   "wv" 'evil-window-vsplit
+
+   "wo" 'delete-other-windows
+
+   "wH" 'evil-window-move-far-left
+   "wL" 'evil-window-move-far-right
+   "wJ" 'evil-window-move-very-bottom
+   "wK" 'evil-window-move-very-top
+
+   "b"  '(:ignore t :which-key "buffers")
+   "bb" 'ivy-switch-buffer
+   "bk" 'kill-buffer
+
+   "f"  '(:ignore t :which-key "files")
+   "fd" 'counsel-git
+
+   "/"  'counsel-ag
+   )
+  (general-define-key
+   :states '(normal visual)
+   :prefix ","
+   "x" 'counsel-M-x
+   "f" 'counsel-find-file
+   "b" 'ivy-switch-buffer
+   )
+  )
+
+(use-package which-key
+  :ensure t
+  :diminish which-key-mode
+  :config
+  (which-key-mode)
+  (setq which-key-sort-order #'which-key-prefix-then-key-order
+        which-key-sort-uppercase-first nil)
+  (set-face-attribute 'which-key-local-map-description-face nil :weight 'bold))
+
+(use-package neotree
+  :ensure t
+  :bind ([f8] . neotree-toggle)
+  :config
+  (setq neo-theme (if (display-graphic-p) 'icons 'arrow))
+  (setq neo-smart-open t)
+  (evil-define-key 'normal neotree-mode-map (kbd "TAB") 'neotree-enter)
+  (evil-define-key 'normal neotree-mode-map (kbd "SPC") 'neotree-quick-look)
+  (evil-define-key 'normal neotree-mode-map (kbd "q") 'neotree-hide)
+  (evil-define-key 'normal neotree-mode-map (kbd "RET") 'neotree-enter))
 
 (provide 'init-evil)
