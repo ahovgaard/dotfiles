@@ -1,6 +1,8 @@
 (use-package flycheck
   :ensure t)
 
+(global-flycheck-mode)
+
 (use-package magit
   :ensure t
   :defer t
