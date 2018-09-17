@@ -138,10 +138,6 @@ set t_Co=256
 "let $NVIM_TUI_ENABLE_TRUE_COLOR=1
 
 colorscheme jellybeans
-"set background=dark
-"let g:gruvbox_italic=1  " enable italic text
-"colorscheme gruvbox
-"let g:gruvbox_contrast_dark='hard'
 
 " Modifications:
 " highlight todo keyword black on yellow
@@ -234,7 +230,7 @@ augroup END
 " Add color to the terminal cursor.
 if has('nvim')
   " highlight! link TermCursor Cursor
-  highlight! TermCursorNC guibg=red guifg=white ctermbg=1 ctermfg=15
+  highlight! TermCursorNC guibg=red guifg=white ctermbg=4 ctermfg=15
 endif
 
 
