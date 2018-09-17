@@ -199,7 +199,7 @@ bar {
 
 
 # key bindings
-bindsym $mod+p exec rofi -show run
+bindsym $mod+Shift+p exec rofi -show run
 bindsym $mod+slash exec rofi -show window
 
 # screen lock
