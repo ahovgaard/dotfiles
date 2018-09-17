@@ -2,68 +2,81 @@
 ! ~/.Xresources
 !
 
-URxvt.termName:         rxvt-unicode-256color
-URxvt.scrollBar:        false
-URxvt.xftAntialias:     true
-URxvt.urgentOnBell:     true
-URxvt.visualBell:       false
+URxvt.termName:           rxvt-unicode-256color
+URxvt.scrollBar:          false
+URxvt.xftAntialias:       true
+URxvt.urgentOnBell:       true
+URxvt.visualBell:         false
+
+! Scrollback position
+URxvt*scrollTtyOutput:    false
+URxvt*scrollWithBuffer:   true
+URxvt*scrollTtyKeypress:  true
+
+! Scrollback buffer in secondary window
+URxvt.secondaryScreen:    1
+URxvt.secondaryScroll:    0
 
 ! Handling URLs
-URxvt.perl-ext-common:  default,matcher
-URxvt.url-launcher:     /usr/bin/chromium
-URxvt.matcher.button:   1
-URxvt.keysym.C-Delete:  perl:matcher:last
-URxvt.keysym.M-Delete:  perl:matcher:list
-URxvt.colorUL:          #4682B4
+URxvt.perl-ext-common:    default,matcher,resize-font
+URxvt.url-launcher:       /usr/bin/chromium
+URxvt.matcher.button:     1
+URxvt.keysym.C-Delete:    perl:matcher:last
+URxvt.keysym.M-Delete:    perl:matcher:list
+URxvt.colorUL:            #4682B4
 
 ! Font
-URxvt.font:             xft:DejaVu Sans Mono:pixelsize=13,\
-                        xft:FontAwesome,\
-                        xft:IPAGothic
+URxvt.font:               xft:DejaVu Sans Mono:pixelsize=13,\
+                          xft:FontAwesome,\
+                          xft:IPAGothic
+
+URxvt.keysym.C-plus:      resize-font:bigger
+URxvt.keysym.C-equal:     resize-font:reset
+URxvt.keysym.C-question:  resize-font:show
 
 ! Colors
-URxvt*foreground:       #D7D0C7
-URxvt*background:       #151515
-!URxvt*background:       #000000
+URxvt*foreground:         #D7D0C7
+URxvt*background:         #151515
+!URxvt*background:         #000000
 
 ! Black
-*color0:                #101010
-*color8:                #404040
+*color0:                  #101010
+*color8:                  #404040
 ! Red
-*color1:                #E84F4F
-*color9:                #D23D3D
+*color1:                  #E84F4F
+*color9:                  #D23D3D
 ! Green
-*color2:                #67B25F
-*color10:               #A5D79F
+*color2:                  #67B25F
+*color10:                 #A5D79F
 ! Yellow
-*color3:                #E1AA5D
-*color11:               #F39D21
+*color3:                  #E1AA5D
+*color11:                 #F39D21
 ! Blue
-*color4:                #435E87
-*color12:               #587AA4
+*color4:                  #435E87
+*color12:                 #587AA4
 ! Magenta
-*color5:                #9B64FB
-*color13:               #8542FF
+*color5:                  #9B64FB
+*color13:                 #8542FF
 ! Cyan
-*color6:                #6D878D
-*color14:               #42717B
+*color6:                  #6D878D
+*color14:                 #42717B
 ! White
-*color7:                #DDDDDD
-*color15:               #DDDDDD
+*color7:                  #DDDDDD
+*color15:                 #DDDDDD
 
 ! Cursor color
-URxvt*cursorColor:      #FF0000
-URxvt*cursorColor2:     #000000
+URxvt*cursorColor:        #FF0000
+URxvt*cursorColor2:       #000000
 
 ! ROFI Color theme
-rofi.color-normal:      #fdf6e3,#002b36,#eee8d5,#586e75,#eee8d5
-rofi.color-urgent:      #fdf6e3,#dc322f,#eee8d5,#dc322f,#fdf6e3
-rofi.color-active:      #fdf6e3,#268bd2,#eee8d5,#268bd2,#fdf6e3
-rofi.color-window:      #fdf6e3,#002b36
-rofi.separator-style:   dash
-rofi.show-icons:        true
+rofi.color-normal:        #fdf6e3,#002b36,#eee8d5,#586e75,#eee8d5
+rofi.color-urgent:        #fdf6e3,#dc322f,#eee8d5,#dc322f,#fdf6e3
+rofi.color-active:        #fdf6e3,#268bd2,#eee8d5,#268bd2,#fdf6e3
+rofi.color-window:        #fdf6e3,#002b36
+rofi.separator-style:     dash
+rofi.show-icons:          true
 
 ! Emacs (takes effect before any frame is displayed)
-Emacs.menuBar:              off
-Emacs.toolBar:              off
-Emacs.verticalScrollBars:   off
+Emacs.menuBar:            off
+Emacs.toolBar:            off
+Emacs.verticalScrollBars: off
