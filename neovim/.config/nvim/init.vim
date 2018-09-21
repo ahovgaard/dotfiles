@@ -87,6 +87,15 @@ let g:deoplete#enable_at_startup = 1
 " Use system clipboard
 set clipboard+=unnamedplus
 
+" Remove trailing whitespace on save
+fun! <SID>StripTrailingWhitespaces()
+    let l = line(".")
+    let c = col(".")
+    %s/\s\+$//e
+    call cursor(l, c)
+endfun
+
+autocmd BufWritePre * :call <SID>StripTrailingWhitespaces()
 
 " VIM user interface {{{1
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
