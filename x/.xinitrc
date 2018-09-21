@@ -40,31 +40,33 @@ xsetroot -cursor_name left_ptr
 setxkbmap -option caps:escape
 setxkbmap -layout us -variant altgr-intl
 
-# set wallpaper
-sh ~/.fehbg
-
 # disable PC speaker beep
 xset -b
 
-# set up environment variables for fcitx
-#export GTK_IM_MODULE=fcitx
-#export QT_IM_MODULE=fcitx
-#export XMODIFIERS=@im=fcitx
+if [ $(hostname) == 't520-arch' ]; then
+  # set wallpaper
+  sh ~/.fehbg
 
-# start fcitx
-#fcitx > /dev/null 2>&1
+  # set up environment variables for fcitx
+  #export GTK_IM_MODULE=fcitx
+  #export QT_IM_MODULE=fcitx
+  #export XMODIFIERS=@im=fcitx
 
-# MPD daemon start (if no other user instance exists)
-#[ ! -s ~/.config/mpd/pid ] && mpd
+  # start fcitx
+  #fcitx > /dev/null 2>&1
 
-# redshift
-killall redshift-gtk
-redshift-gtk &
+  # MPD daemon start (if no other user instance exists)
+  #[ ! -s ~/.config/mpd/pid ] && mpd
 
-# gnome keyring
-dbus-update-activation-environment --systemd DISPLAY
-eval $(/usr/bin/gnome-keyring-daemon --start --components=pkcs11,secrets,ssh)
-export SSH_AUTH_SOCK
+  # redshift
+  killall redshift-gtk
+  redshift-gtk &
+
+  # gnome keyring
+  dbus-update-activation-environment --systemd DISPLAY
+  eval $(/usr/bin/gnome-keyring-daemon --start --components=pkcs11,secrets,ssh)
+  export SSH_AUTH_SOCK
+fi
 
 # start window manager
 exec i3
