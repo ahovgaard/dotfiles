@@ -40,6 +40,9 @@ xsetroot -cursor_name left_ptr
 setxkbmap -option caps:escape
 setxkbmap -layout us -variant altgr-intl
 
+setxkbmap -option ctrl:menu_rctrl
+setxkbmap -option ctrl:swap_rwin_rctl
+
 # disable PC speaker beep
 xset -b
 
