@@ -9,7 +9,7 @@
   :init  ;; execute the following before package is loaded
   (setq evil-want-C-u-scroll t)
   (setq evil-want-abbrev-expand-on-insert-exit nil)
-  ;;(setq evil-want-integration nil)
+  (setq evil-want-keybinding nil)  ;; required by evil-colleciton
 
   :config  ;; execute after package is loaded
   (evil-mode 1)
@@ -56,11 +56,11 @@
 ;;;;(evil-define-key 'normal term-raw-map (kbd "C-c") 'term-send-raw)
 ;;(evil-define-key 'insert term-raw-map (kbd "C-c") 'term-send-raw)
 
-;;(use-package evil-collection
-;;  :after evil
-;;  :ensure t
-;;  :config
-;;  (evil-collection-init))
+(use-package evil-collection
+  :ensure t
+  :after evil
+  :config
+  (evil-collection-init '(term help man package-menu)))
 
 (use-package evil-surround
   :ensure t

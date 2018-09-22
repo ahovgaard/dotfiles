@@ -1,9 +1,12 @@
-(setq multi-term-program "/bin/zsh")
+(when (require 'multi-term nil t)
+  (global-set-key (kbd "<f5>") 'multi-term)
+  (global-set-key (kbd "<C-next>") 'multi-term-next)
+  (global-set-key (kbd "<C-prior>") 'multi-term-prev)
+  (setq multi-term-buffer-name "term"
+        multi-term-program "/bin/zsh"
+        term-buffer-maximum-size 4096))
 
-(add-hook 'term-mode-hook
-          (lambda ()
-            (setq term-buffer-maximum-size 10000)
-            (add-to-list 'term-bind-key-alist '("M-[" . multi-term-prev))
-            (add-to-list 'term-bind-key-alist '("M-]" . multi-term-next))))
+(evil-collection-define-key 'insert 'term-raw-map
+  (kbd "C-c") 'term-send-raw)
 
 (provide 'init-term)

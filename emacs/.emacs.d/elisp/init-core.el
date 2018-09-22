@@ -56,4 +56,7 @@
 ;; cleanup whitespace on save
 (add-hook 'before-save-hook 'whitespace-cleanup)
 
+;; scroll one line at a time
+(setq scroll-conservatively 10000)
+
 (provide 'init-core)
