@@ -37,10 +37,4 @@
 (global-set-key [remap fill-paragraph]
                 #'endless/fill-or-unfill)
 
-;; Folding
-(use-package evil-vimish-fold
-  :ensure t
-  :config
-  (evil-vimish-fold-mode 1))
-
 (provide 'init-misc)
