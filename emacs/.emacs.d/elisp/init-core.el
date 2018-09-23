@@ -13,7 +13,7 @@
   (set-face-attribute 'default nil :height 100))
 
 ;; line numbers
-(add-hook 'prog-mode-hook 'linum-mode)
+;(add-hook 'prog-mode-hook 'linum-mode)
 
 ;; highlight matching brackets
 (show-paren-mode 1)
