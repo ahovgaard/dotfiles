@@ -15,9 +15,7 @@
   (evil-mode 1)
 
   (define-key evil-ex-map "b " 'ivy-switch-buffer)
-  (define-key evil-ex-map "e " 'counsel-find-file)
-
-  )
+  (define-key evil-ex-map "e " 'counsel-find-file))
 
 ;;  ;; ugly fix to get vim behavior of C-u in insert mode
 ;;  (define-key evil-insert-state-map (kbd "C-u")
@@ -30,9 +28,6 @@
 ;;          (evil-delete
 ;;           (save-excursion (back-to-indentation) (point))
 ;;           (point))))))
-;;
-;;
-;;  (define-key evil-normal-state-map "g]" 'helm-etags-select))
 
 ;; jump over long wrapped lines with j and k
 (define-key evil-motion-state-map
@@ -51,10 +46,13 @@
 ;; a word constituent rather than a symbol constituent, for some mode:
 ;; (add-hook 'python-mode-hook #'(lambda () (modify-syntax-entry ?_ "w")))
 
-;; try to make ansi-term behave better
-;;(evil-set-initial-state 'term-mode 'normal)
-;;;;(evil-define-key 'normal term-raw-map (kbd "C-c") 'term-send-raw)
-;;(evil-define-key 'insert term-raw-map (kbd "C-c") 'term-send-raw)
+;; make escape exit
+(define-key minibuffer-local-map [escape] 'minibuffer-keyboard-quit)
+(define-key minibuffer-local-ns-map [escape] 'minibuffer-keyboard-quit)
+(define-key minibuffer-local-completion-map [escape] 'minibuffer-keyboard-quit)
+(define-key minibuffer-local-must-match-map [escape] 'minibuffer-keyboard-quit)
+(define-key minibuffer-local-isearch-map [escape] 'minibuffer-keyboard-quit)
+(global-set-key [escape] 'evil-exit-emacs-state)
 
 (use-package evil-collection
   :after evil
@@ -71,10 +69,6 @@
   :ensure t
   :config
   (global-evil-visualstar-mode))
-
-;; unbind SPC in dired mode
-;;(evil-define-key 'normal dired-mode-map (kbd "SPC") nil)
-
 
 (use-package counsel
   :ensure t
@@ -122,7 +116,8 @@
 
    "b"  '(:ignore t :which-key "buffers")
    "bb" 'ivy-switch-buffer
-   "bk" 'kill-buffer
+   "bB" 'ibuffer
+   "bd" 'kill-current-buffer
 
    "f"  '(:ignore t :which-key "files")
    "fd" 'counsel-git
@@ -157,5 +152,10 @@
   (evil-define-key 'normal neotree-mode-map (kbd "SPC") 'neotree-quick-look)
   (evil-define-key 'normal neotree-mode-map (kbd "q") 'neotree-hide)
   (evil-define-key 'normal neotree-mode-map (kbd "RET") 'neotree-enter))
+
+(use-package default-text-scale
+  :ensure t
+  :config
+  (default-text-scale-mode 1))
 
 (provide 'init-evil)
