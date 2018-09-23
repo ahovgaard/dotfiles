@@ -46,7 +46,6 @@
 (require 'init-coding)
 
 (require 'init-org)
-(require 'init-mail)
 (require 'init-pdf)
 (require 'init-term)
 
