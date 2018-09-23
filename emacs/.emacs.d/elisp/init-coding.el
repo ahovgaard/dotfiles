@@ -8,6 +8,10 @@
   :defer t
   :init
   (global-set-key (kbd "C-x g") 'magit-status)
+  (general-define-key
+   :states '(normal visual)
+   :prefix "SPC"
+   "xg" 'magit-status)
   :config
   (setq magit-completing-read-function 'ivy-completing-read))
 
@@ -49,5 +53,9 @@
   (define-key company-active-map [tab] 'company-complete)
   (define-key company-active-map (kbd "C-n") 'company-select-next)
   (define-key company-active-map (kbd "C-p") 'company-select-previous))
+
+(use-package counsel-etags
+  :ensure t)
+(require 'counsel-etags)
 
 (provide 'init-coding)

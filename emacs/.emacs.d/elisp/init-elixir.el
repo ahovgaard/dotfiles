@@ -1,20 +1,17 @@
-(use-package alchemist
-  :ensure t
-  :config
-  (add-hook 'elixir-mode-hook #'(lambda () (toggle-truncate-lines 0))))
+(use-package elixir-mode
+  :ensure t)
 
 (general-define-key
  :states '(normal visual)
- :keymaps 'alchemist-mode-map
- "gd" 'alchemist-goto-definition-at-point)
+ :keymaps 'elixir-mode-map
+ "g]" 'counsel-etags-find-tag-at-point)
 
-(eval-after-load 'flycheck
-  '(flycheck-credo-setup))
-(add-hook 'elixir-mode-hook 'flycheck-mode)
+; (eval-after-load 'flycheck
+;   '(flycheck-credo-setup))
+; (add-hook 'elixir-mode-hook 'flycheck-mode)
+;
+; (setq flycheck-elixir-credo-strict t)
 
-(setq flycheck-elixir-credo-strict t)
-
-;; erlang
 (use-package erlang
   :ensure t)
 

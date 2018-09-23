@@ -57,10 +57,10 @@
 ;;(evil-define-key 'insert term-raw-map (kbd "C-c") 'term-send-raw)
 
 (use-package evil-collection
-  :ensure t
   :after evil
+  :ensure t
   :config
-  (evil-collection-init '(term help man package-menu)))
+  (evil-collection-init))
 
 (use-package evil-surround
   :ensure t
