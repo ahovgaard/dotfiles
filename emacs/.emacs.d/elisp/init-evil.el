@@ -95,6 +95,7 @@
   ;; global keybindings
   (general-define-key
    :states '(normal visual insert emacs)
+   :keymaps 'override
    :prefix "SPC"
    :non-normal-prefix "M-SPC"
 

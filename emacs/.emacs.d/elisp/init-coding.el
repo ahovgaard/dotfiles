@@ -10,6 +10,7 @@
   (global-set-key (kbd "C-x g") 'magit-status)
   (general-define-key
    :states '(normal visual)
+   :keymaps 'override
    :prefix "SPC"
    "xg" 'magit-status)
   :config
@@ -33,6 +34,7 @@
 
   (general-define-key
    :states '(normal visual insert emacs)
+   :keymaps 'override
    :prefix "SPC"
    :non-normal-prefix "M-SPC"
    "p"  '(:ignore t :which-key "projectile")
