@@ -40,9 +40,6 @@ xsetroot -cursor_name left_ptr
 setxkbmap -option caps:escape
 setxkbmap -layout us -variant altgr-intl
 
-setxkbmap -option ctrl:menu_rctrl
-setxkbmap -option ctrl:swap_rwin_rctl
-
 # disable PC speaker beep
 xset -b
 
@@ -69,6 +66,10 @@ if [ $(hostname) == 't520-arch' ]; then
   dbus-update-activation-environment --systemd DISPLAY
   eval $(/usr/bin/gnome-keyring-daemon --start --components=pkcs11,secrets,ssh)
   export SSH_AUTH_SOCK
+
+elif [ $(hostname) == 'zdk02-4g43' ]; then
+  setxkbmap -option ctrl:menu_rctrl
+  setxkbmap -option ctrl:swap_rwin_rctl
 fi
 
 # start window manager
