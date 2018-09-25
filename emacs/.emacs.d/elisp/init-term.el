@@ -10,4 +10,13 @@
 (evil-collection-define-key 'insert 'term-raw-map
   (kbd "C-c") 'term-send-raw)
 
+(general-define-key
+ :states '(normal visual)
+ :keymaps 'override
+ :prefix "SPC"
+ "t"  '(:ignore t :which-key "terminal")
+ "tt" 'multi-term
+ "tn" 'multi-term-next
+ "tp" 'multi-term-prev)
+
 (provide 'init-term)
