@@ -62,15 +62,15 @@ if [ $(hostname) == 't520-arch' ]; then
   killall redshift-gtk
   redshift-gtk &
 
-  # gnome keyring
-  dbus-update-activation-environment --systemd DISPLAY
-  eval $(/usr/bin/gnome-keyring-daemon --start --components=pkcs11,secrets,ssh)
-  export SSH_AUTH_SOCK
-
 elif [ $(hostname) == 'zdk02-4g43' ]; then
   setxkbmap -option ctrl:menu_rctrl
   setxkbmap -option ctrl:swap_rwin_rctl
 fi
+
+# gnome keyring
+dbus-update-activation-environment --systemd DISPLAY
+eval $(/usr/bin/gnome-keyring-daemon --start --components=pkcs11,secrets,ssh)
+export SSH_AUTH_SOCK
 
 # start window manager
 exec i3
