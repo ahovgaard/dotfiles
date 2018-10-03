@@ -126,7 +126,11 @@
    "f"  '(:ignore t :which-key "files")
    "fd" 'counsel-git
 
-   "/"  'counsel-ag
+   "/"  'swiper
+
+   "s"  '(:ignore t :which-key "search")
+   "sg" 'counsel-git-grep
+   "sa" 'counsel-ag
    )
   (general-define-key
    :states '(normal visual)
