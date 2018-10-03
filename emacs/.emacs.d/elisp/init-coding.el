@@ -25,10 +25,8 @@
   (setq projectile-completion-system 'ivy
         projectile-sort-order 'recentf
         projectile-enable-caching t
-        projectile-cache-file (concat cache-directory
-                                      "projectile.cache")
-        projectile-known-projects-file (concat cache-directory
-                                               "projectile-bookmarks.eld"))
+        projectile-cache-file (concat cache-directory "projectile.cache")
+        projectile-known-projects-file (concat cache-directory "projectile-bookmarks.eld"))
   ;; (define-key evil-normal-state-map (kbd "SPC p") 'projectile-command-map)
   (projectile-mode +1)
 

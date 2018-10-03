@@ -36,7 +36,7 @@
 
 (defconst cache-directory
   (expand-file-name (concat user-emacs-directory ".cache/"))
-  "Storage area for persistent files")
+  "Storage area for persistent files.")
 
 (require 'init-core)
 (require 'init-evil)

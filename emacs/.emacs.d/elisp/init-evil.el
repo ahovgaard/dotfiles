@@ -70,6 +70,9 @@
   :config
   (global-evil-visualstar-mode))
 
+;; smex is used by counsel to improve counsel-M-x
+(use-package smex :ensure t)
+
 (use-package counsel
   :ensure t
   :diminish counsel-mode
@@ -138,10 +141,15 @@
   :ensure t
   :diminish which-key-mode
   :config
-  (which-key-mode)
   (setq which-key-sort-order #'which-key-prefix-then-key-order
-        which-key-sort-uppercase-first nil)
-  (set-face-attribute 'which-key-local-map-description-face nil :weight 'bold))
+        which-key-sort-uppercase-first nil
+        which-key-add-column-padding 2
+        which-key-max-display-columns nil
+        which-key-min-display-lines 2)
+  ;; embolden local bindings
+  (set-face-attribute 'which-key-local-map-description-face nil :weight 'bold)
+  (which-key-setup-side-window-bottom)
+  (which-key-mode))
 
 (use-package neotree
   :ensure t
