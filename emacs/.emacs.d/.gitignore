@@ -30,7 +30,8 @@ site-lisp/package/
 /history
 /helm-adaptive-history
 /thumbs/
-/.smex-items
+/smex-items
+alchemist-project-settings.el
 /image-dired/
 /eshell
 /.cask/
