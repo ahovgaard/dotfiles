@@ -11,6 +11,7 @@ autoload -Uz compinit
 compinit
 # promptinit
 
+
 # prompt
 #prompt walters
 
@@ -35,7 +36,6 @@ setopt extendedglob
 # The following lines were added by compinstall
 zstyle :compinstall filename '/home/akh/.zshrc'
 # End of lines added by compinstall
-
 
 
 #------------------------------
@@ -87,3 +87,31 @@ fi
 export ERL_AFLAGS="-kernel shell_history enabled"
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+
+#------------------------------
+# Print bell character on long running commands
+#------------------------------
+
+autoload -Uz add-zsh-hook
+
+# duration in seconds after which a bell should be sent
+typeset -i LONGRUNTIME=60
+
+# function to save time at which a command was started
+save_starttime () {
+  starttime=$SECONDS
+}
+
+# function to print \a if the command took longer than LONGRUNTIME
+set_longrunning_alert () {
+  if ((LONGRUNTIME > 0 && SECONDS - starttime >= LONGRUNTIME)); then
+    print -n "\a"
+  fi
+}
+
+# run save_starttime before a command is executed
+add-zsh-hook preexec save_starttime
+
+# run set_longrunning_alert after a command finishes (before the prompt)
+add-zsh-hook precmd set_longrunning_alert
