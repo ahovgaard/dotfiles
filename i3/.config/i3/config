@@ -181,6 +181,7 @@ bar {
     output LVDS1  # laptop display
     output VGA1   # secondary monitor
     output DP-5
+    output eDP-1
 
     status_command i3status -c ~/.config/i3/i3status.conf
 
@@ -203,7 +204,6 @@ bar {
 
 #bindsym $mod+b bar mode toggle
 
-
 # key bindings
 bindsym $mod+Shift+p exec rofi -show run
 bindsym $mod+slash exec rofi -show window
@@ -224,9 +224,3 @@ bindsym XF86Display exec ~/bin/monitors.sh
 # handle pdfpc floating window on second monitor properly
 for_window [ title="^pdfpc - present" ] border none floating enable
 for_window [ title="^DS PDF" ] border none floating enable
-
-# automatically start applications on i3 startup
-# exec_always --no-startup-id $HOME/.config/polybar/launch.sh
-# exec redshift &
-
-exec monitors.sh
