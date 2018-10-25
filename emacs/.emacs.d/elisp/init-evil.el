@@ -14,6 +14,8 @@
   :config  ;; execute after package is loaded
   (evil-mode 1)
 
+  (fset 'evil-visual-update-x-selection 'ignore)
+
   (define-key evil-ex-map "b " 'ivy-switch-buffer)
   (define-key evil-ex-map "e " 'counsel-find-file))
 

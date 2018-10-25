@@ -41,7 +41,6 @@
 (require 'init-core)
 (require 'init-evil)
 (require 'init-theme)
-(require 'init-mode-line)
 (require 'init-misc)
 (require 'init-coding)
 

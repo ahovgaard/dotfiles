@@ -1,13 +1,14 @@
-(use-package flycheck
-  :ensure t)
+;;; init-coding -*- lexical-binding: t; -*-
 
-(global-flycheck-mode)
+(use-package flycheck
+  :ensure t
+  :config
+  (add-hook 'after-init-hook #'global-flycheck-mode))
 
 (use-package magit
   :ensure t
-  :defer t
+  :commands (magit-status magit-blame)
   :init
-  (global-set-key (kbd "C-x g") 'magit-status)
   (general-define-key
    :states '(normal visual)
    :keymaps 'override
@@ -16,8 +17,7 @@
   :config
   (setq magit-completing-read-function 'ivy-completing-read))
 
-(use-package evil-magit
-  :ensure t)
+(use-package evil-magit :ensure t)
 
 (use-package projectile
   :ensure t
