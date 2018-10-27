@@ -225,3 +225,6 @@ bindsym XF86Display exec ~/bin/monitors.sh
 # handle pdfpc floating window on second monitor properly
 for_window [ title="^pdfpc - present" ] border none floating enable
 for_window [ title="^DS PDF" ] border none floating enable
+
+# switch to external monitors if connected
+exec monitors.sh
