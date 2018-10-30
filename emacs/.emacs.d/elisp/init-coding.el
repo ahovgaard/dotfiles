@@ -58,4 +58,14 @@
   :ensure t)
 (require 'counsel-etags)
 
+(use-package docker
+  :ensure t
+  :commands docker
+  :init
+  (general-define-key
+   :states '(normal visual)
+   :keymaps 'override
+   :prefix "SPC"
+   "xd" 'docker))
+
 (provide 'init-coding)

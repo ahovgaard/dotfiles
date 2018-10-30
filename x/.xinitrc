@@ -67,6 +67,9 @@ elif [ $(hostname) == 'zdk02-4g43' ]; then
   setxkbmap -option ctrl:swap_rwin_rctl
 fi
 
+# start authentication agent
+lxpolkit &
+
 # gnome keyring
 dbus-update-activation-environment --systemd DISPLAY
 eval $(/usr/bin/gnome-keyring-daemon --start --components=pkcs11,secrets,ssh)

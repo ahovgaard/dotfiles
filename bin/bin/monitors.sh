@@ -15,7 +15,7 @@ else
 fi
 
 # toggle monitors if connected and not already toggled
-if [[ $(xrandr | grep $RIGHT) == *connected* ]] && [ ! -f $TOGGLE ]; then
+if [[ $(xrandr | grep $RIGHT) != *disconnected* ]] && [ ! -f $TOGGLE ]; then
   touch $TOGGLE
   xrandr --output $LAPTOP --off
   xrandr --output $LEFT --auto --output $RIGHT --auto --primary --right-of $LEFT
