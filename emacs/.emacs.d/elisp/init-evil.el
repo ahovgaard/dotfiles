@@ -92,6 +92,11 @@
   ;; use swiper in place of the default incremental search
   (define-key evil-normal-state-map (kbd "C-s") 'swiper))
 
+(use-package ivy-rich
+  :ensure t
+  :config
+  (ivy-rich-mode 1))
+
 (use-package general
   :ensure t
   :after evil
@@ -159,13 +164,26 @@
 
 (use-package neotree
   :ensure t
-  :bind ([f8] . neotree-toggle)
+  :bind ([f8] . neotree-project-dir)
   :config
+  (defun neotree-project-dir ()
+    "Open NeoTree using projectile project root."
+    (interactive)
+    (let ((project-dir (projectile-project-root))
+          (file-name (buffer-file-name)))
+      (neotree-toggle)
+      (if project-dir (if (neo-global--window-exists-p)
+                          (progn (neotree-dir project-dir)
+                                 (neotree-find file-name)))
+        (message "Could not find git project root."))))
+
   (setq neo-theme (if (display-graphic-p) 'icons 'arrow))
   (setq neo-smart-open t)
   (evil-define-key 'normal neotree-mode-map (kbd "TAB") 'neotree-enter)
   (evil-define-key 'normal neotree-mode-map (kbd "SPC") 'neotree-quick-look)
+  (evil-define-key 'normal neotree-mode-map (kbd "o") 'neotree-quick-look)
   (evil-define-key 'normal neotree-mode-map (kbd "q") 'neotree-hide)
+  (evil-define-key 'normal neotree-mode-map (kbd "A") 'neotree-stretch-toggle)
   (evil-define-key 'normal neotree-mode-map (kbd "RET") 'neotree-enter))
 
 (use-package default-text-scale
