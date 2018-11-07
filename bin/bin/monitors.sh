@@ -7,8 +7,8 @@ if [ $(hostname) == 't520-arch' ]; then
   RIGHT=DP1
 elif [ $(hostname) == 'zdk02-4g43' ]; then
   LAPTOP=eDP-1
-  LEFT=DP-6
-  RIGHT=DP-5
+  LEFT=DP-5
+  RIGHT=DP-4
 else
   echo "Unknown host"
   exit
@@ -25,8 +25,10 @@ else
   xrandr --output $LAPTOP --auto
 fi
 
-# set wallpaper again
-sh ~/.fehbg
+if [ $(hostname) == 't520-arch' ]; then
+  # set wallpaper again
+  sh ~/.fehbg
+fi
 
 # restart i3
 i3-msg restart
