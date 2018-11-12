@@ -162,6 +162,9 @@
   (which-key-setup-side-window-bottom)
   (which-key-mode))
 
+(use-package all-the-icons
+  :ensure t)
+
 (use-package neotree
   :ensure t
   :bind ([f8] . neotree-project-dir)
