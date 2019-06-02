@@ -43,6 +43,10 @@ setxkbmap -layout us -variant altgr-intl
 # disable PC speaker beep
 xset -b
 
+# redshift
+killall redshift-gtk
+redshift-gtk &
+
 if [ $(hostname) == 't520-arch' ]; then
   # set wallpaper
   sh ~/.fehbg
@@ -57,10 +61,6 @@ if [ $(hostname) == 't520-arch' ]; then
 
   # MPD daemon start (if no other user instance exists)
   #[ ! -s ~/.config/mpd/pid ] && mpd
-
-  # redshift
-  killall redshift-gtk
-  redshift-gtk &
 
 elif [ $(hostname) == 'zdk02-4g43' ]; then
   setxkbmap -option ctrl:menu_rctrl

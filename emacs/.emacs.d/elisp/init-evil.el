@@ -109,35 +109,37 @@
    :prefix "SPC"
    :non-normal-prefix "M-SPC"
 
-   "w"  '(:ignore t :which-key "windows")
-   "wh" 'evil-window-left
-   "wl" 'evil-window-right
-   "wj" 'evil-window-down
-   "wk" 'evil-window-up
+   "w"   '(:ignore t :which-key "windows")
+   "wh"  'evil-window-left
+   "wl"  'evil-window-right
+   "wj"  'evil-window-down
+   "wk"  'evil-window-up
 
-   "ws" 'evil-window-split
-   "wv" 'evil-window-vsplit
+   "ws"  'evil-window-split
+   "wv"  'evil-window-vsplit
 
-   "wo" 'delete-other-windows
+   "wo"  'delete-other-windows
 
-   "wH" 'evil-window-move-far-left
-   "wL" 'evil-window-move-far-right
-   "wJ" 'evil-window-move-very-bottom
-   "wK" 'evil-window-move-very-top
+   "wH"  'evil-window-move-far-left
+   "wL"  'evil-window-move-far-right
+   "wJ"  'evil-window-move-very-bottom
+   "wK"  'evil-window-move-very-top
 
-   "b"  '(:ignore t :which-key "buffers")
-   "bb" 'ivy-switch-buffer
-   "bB" 'ibuffer
-   "bd" 'kill-current-buffer
+   "x52" 'make-frame-command
 
-   "f"  '(:ignore t :which-key "files")
-   "fd" 'counsel-git
+   "b"   '(:ignore t :which-key "buffers")
+   "bb"  'ivy-switch-buffer
+   "bB"  'ibuffer
+   "bd"  'kill-current-buffer
 
-   "/"  'swiper
+   "f"   '(:ignore t :which-key "files")
+   "fd"  'counsel-git
 
-   "s"  '(:ignore t :which-key "search")
-   "sg" 'counsel-git-grep
-   "sa" 'counsel-ag
+   "/"   'swiper
+
+   "s"   '(:ignore t :which-key "search")
+   "sg"  'counsel-git-grep
+   "sa"  'counsel-ag
    )
   (general-define-key
    :states '(normal visual)
@@ -161,6 +163,9 @@
   (set-face-attribute 'which-key-local-map-description-face nil :weight 'bold)
   (which-key-setup-side-window-bottom)
   (which-key-mode))
+
+(use-package all-the-icons
+  :ensure t)
 
 (use-package neotree
   :ensure t
