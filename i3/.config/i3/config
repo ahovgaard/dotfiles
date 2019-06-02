@@ -208,6 +208,7 @@ bar {
 # key bindings
 bindsym $mod+Shift+p exec rofi -show run
 bindsym $mod+slash exec rofi -show window
+bindsym $mod+F8 exec rofi-pass
 
 # screen lock
 bindsym $mod+Shift+x exec ~/bin/lock.sh
