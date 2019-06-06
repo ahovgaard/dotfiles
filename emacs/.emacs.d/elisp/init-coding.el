@@ -71,4 +71,15 @@
 (use-package yaml-mode
   :ensure t)
 
+(use-package highlight-indent-guides
+  :ensure t
+  :diminish highlight-indent-guides
+  :init
+  (add-hook 'yaml-mode-hook 'highlight-indent-guides-mode)
+  :config
+  (setq highlight-indent-guides-method 'character))
+
+(use-package groovy-mode
+  :ensure t)
+
 (provide 'init-coding)
