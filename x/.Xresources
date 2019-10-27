@@ -27,7 +27,7 @@ URxvt.keysym.M-Delete:    perl:matcher:list
 URxvt.colorUL:            #4682B4
 
 ! Font
-URxvt.font:               xft:DejaVu Sans Mono:pixelsize=13,\
+URxvt.font:               xft:DejaVu Sans Mono:pixelsize=14,\
                           xft:FontAwesome,\
                           xft:IPAGothic
 
@@ -38,7 +38,6 @@ URxvt.keysym.C-question:  resize-font:show
 ! Colors
 URxvt*foreground:         #D7D0C7
 URxvt*background:         #151515
-!URxvt*background:         #000000
 
 ! Black
 *color0:                  #101010
@@ -68,6 +67,18 @@ URxvt*background:         #151515
 ! Cursor color
 URxvt*cursorColor:        #FF0000
 URxvt*cursorColor2:       #000000
+
+! DPI settings
+#ifdef SRVR_zdk02-4g43
+  Xft.dpi: 120
+#endif
+
+! Xft.autohint: 0
+! Xft.lcdfilter:  lcddefault
+! Xft.hintstyle:  hintfull
+! Xft.hinting: 1
+! Xft.antialias: 1
+! Xft.rgba: rgb
 
 ! ROFI Color theme
 rofi.color-normal:        #fdf6e3,#002b36,#eee8d5,#586e75,#eee8d5
