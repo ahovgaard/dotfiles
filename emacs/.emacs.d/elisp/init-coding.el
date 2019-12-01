@@ -76,6 +76,7 @@
   :diminish highlight-indent-guides
   :init
   (add-hook 'yaml-mode-hook 'highlight-indent-guides-mode)
+  (add-hook 'groovy-mode-hook 'highlight-indent-guides-mode)
   :config
   (setq highlight-indent-guides-method 'character))
 
@@ -94,5 +95,7 @@
 (use-package kubernetes-evil
   :ensure t
   :after kubernetes)
+
+(setq js-indent-level 2)
 
 (provide 'init-coding)
