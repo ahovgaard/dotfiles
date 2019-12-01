@@ -82,4 +82,17 @@
 (use-package groovy-mode
   :ensure t)
 
+;; Proof General and Coq
+(setq coq-compile-before-require t)
+
+;; Kubernetes
+(use-package kubernetes
+  :ensure t
+  :commands (kubernetes-overview))
+
+;; If you want to pull in the Evil compatibility package.
+(use-package kubernetes-evil
+  :ensure t
+  :after kubernetes)
+
 (provide 'init-coding)
