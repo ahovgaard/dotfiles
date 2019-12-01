@@ -196,4 +196,15 @@
   :config
   (default-text-scale-mode 1))
 
+;; libvterm
+(use-package vterm
+  :ensure t
+  :config
+  (setq vterm-max-scrollback 10000)
+
+  (evil-define-key 'insert vterm-mode-map (kbd "C-c")      #'vterm--self-insert)
+  (evil-define-key 'normal vterm-mode-map (kbd "i")        #'evil-insert-resume)
+  (evil-define-key 'normal vterm-mode-map (kbd "o")        #'evil-insert-resume)
+  (evil-define-key 'normal vterm-mode-map (kbd "<return>") #'evil-insert-resume))
+
 (provide 'init-evil)
