@@ -143,6 +143,7 @@
    )
   (general-define-key
    :states '(normal visual)
+   :keymaps 'override
    :prefix ","
    "x" 'counsel-M-x
    "f" 'counsel-find-file
@@ -206,5 +207,27 @@
   (evil-define-key 'normal vterm-mode-map (kbd "i")        #'evil-insert-resume)
   (evil-define-key 'normal vterm-mode-map (kbd "o")        #'evil-insert-resume)
   (evil-define-key 'normal vterm-mode-map (kbd "<return>") #'evil-insert-resume))
+
+(use-package eyebrowse
+  :ensure t
+  :config
+  (set-face-attribute 'eyebrowse-mode-line-active nil
+                      :underline t :bold t :foreground "gold")
+  (eyebrowse-setup-opinionated-keys)
+  ;(general-define-key
+  ; :states '(normal visual)
+  ; :keymaps 'override
+  ; "gt" 'eyebrowse-next-window-config
+  ; "gT" 'eyebrowse-prev-window-config)
+  )
+
+(use-package ibuffer-vc
+  :ensure t
+  :config
+  (add-hook 'ibuffer-hook
+    (lambda ()
+      (ibuffer-vc-set-filter-groups-by-vc-root)
+      (unless (eq ibuffer-sorting-mode 'alphabetic)
+        (ibuffer-do-sort-by-alphabetic)))))
 
 (provide 'init-evil)
