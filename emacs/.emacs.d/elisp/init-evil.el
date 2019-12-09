@@ -211,6 +211,7 @@
 (use-package eyebrowse
   :ensure t
   :config
+  (eyebrowse-mode t)
   (set-face-attribute 'eyebrowse-mode-line-active nil
                       :underline t :bold t :foreground "gold")
   (eyebrowse-setup-opinionated-keys)
