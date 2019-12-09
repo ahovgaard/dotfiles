@@ -215,12 +215,11 @@
   (set-face-attribute 'eyebrowse-mode-line-active nil
                       :underline t :bold t :foreground "gold")
   (eyebrowse-setup-opinionated-keys)
-  ;(general-define-key
-  ; :states '(normal visual)
-  ; :keymaps 'override
-  ; "gt" 'eyebrowse-next-window-config
-  ; "gT" 'eyebrowse-prev-window-config)
-  )
+  (general-define-key
+   :states '(normal visual)
+   :keymaps 'override
+   "gt" 'eyebrowse-next-window-config
+   "gT" 'eyebrowse-prev-window-config))
 
 (use-package ibuffer-vc
   :ensure t
