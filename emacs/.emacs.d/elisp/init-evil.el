@@ -19,6 +19,8 @@
   (define-key evil-ex-map "b " 'ivy-switch-buffer)
   (define-key evil-ex-map "e " 'counsel-find-file))
 
+(add-hook 'ivy-occur-grep-mode-hook (lambda () (setq truncate-lines t)))
+
 ;;  ;; ugly fix to get vim behavior of C-u in insert mode
 ;;  (define-key evil-insert-state-map (kbd "C-u")
 ;;    (lambda ()
@@ -74,6 +76,9 @@
 
 ;; smex is used by counsel to improve counsel-M-x
 (use-package smex :ensure t)
+
+;; used for doing wgrep on ivy results
+(use-package wgrep :ensure t)
 
 (use-package counsel
   :ensure t
