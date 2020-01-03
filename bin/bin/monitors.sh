@@ -6,9 +6,9 @@ if [ $(hostname) == 't520-arch' ]; then
   LEFT=VGA1
   RIGHT=DP1
 elif [ $(hostname) == 'zdk02-4g43' ]; then
-  LAPTOP=eDP-1
-  LEFT=DP-5
-  RIGHT=DP-4
+  LAPTOP=DP-3
+  LEFT=DP-6.1
+  RIGHT=DP-6.2
 else
   echo "Unknown host"
   exit
@@ -17,8 +17,14 @@ fi
 # toggle monitors if connected and not already toggled
 if [[ $(xrandr | grep $RIGHT) != *disconnected* ]] && [ ! -f $TOGGLE ]; then
   touch $TOGGLE
-  xrandr --output $LAPTOP --off
-  xrandr --output $LEFT --auto --output $RIGHT --auto --primary --right-of $LEFT
+
+  if [ $(hostname) == 'zdk02-4g43' ]; then
+    xrandr --output $LEFT --auto --output $RIGHT --auto --primary --right-of $LEFT \
+           --output $LAPTOP --right-of $RIGHT
+  elif [ $(hostname) == 't520-arch' ]; then
+    xrandr --output $LAPTOP --off
+    xrandr --output $LEFT --auto --output $RIGHT --auto --primary --right-of $LEFT
+  fi
 else
   rm -f $TOGGLE
   xrandr --output $LEFT --off --output $RIGHT --off
