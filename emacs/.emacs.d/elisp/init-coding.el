@@ -39,7 +39,8 @@
    "pp" 'projectile-switch-project
    "pf" 'projectile-find-file
    "pb" 'projectile-switch-to-buffer
-   "pk" 'projectile-kill-buffers)
+   "pk" 'projectile-kill-buffers
+   "pr" 'projectile-replace)
   )
 
 ;; company-mode: complete anything
@@ -52,7 +53,11 @@
   (setq company-selection-wrap-around t)
   (define-key company-active-map [tab] 'company-complete)
   (define-key company-active-map (kbd "C-n") 'company-select-next)
-  (define-key company-active-map (kbd "C-p") 'company-select-previous))
+  (define-key company-active-map (kbd "C-p") 'company-select-previous)
+  (push 'company-lsp company-backends))
+
+(use-package company-lsp
+  :ensure t)
 
 (use-package counsel-etags
   :ensure t)
@@ -97,5 +102,34 @@
   :after kubernetes)
 
 (setq js-indent-level 2)
+
+
+(use-package yasnippet)
+
+;;; LSP mode
+
+(use-package lsp-mode
+  :hook (elixir-mode . lsp)
+  :commands lsp
+  :config
+  (setq lsp-log-io t)
+  (general-define-key
+   :states '(normal visual)
+   :keymaps 'override
+   :prefix "SPC"
+   "l"  '(:ignore t :which-key "LSP")
+   "lh" 'lsp-describe-thing-at-point
+   "ld" 'lsp-find-definition)
+  )
+
+;; ;; optionally
+(use-package lsp-ui :commands lsp-ui-mode)
+(use-package company-lsp :commands company-lsp)
+(use-package lsp-ivy :commands company-lsp)
+;; (use-package helm-lsp :commands helm-lsp-workspace-symbol)
+;; (use-package lsp-treemacs :commands lsp-treemacs-errors-list)
+;; optionally if you want to use debugger
+;; (use-package dap-mode)
+;; (use-package dap-LANGUAGE) to load the dap adapter for your language
 
 (provide 'init-coding)
