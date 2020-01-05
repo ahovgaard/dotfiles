@@ -24,6 +24,8 @@ Plug 'vim-airline/vim-airline-themes'
 Plug 'elixir-editors/vim-elixir'
 Plug 'slashmili/alchemist.vim'
 
+Plug 'glacambre/firenvim', { 'do': { _ -> firenvim#install(0) } }
+
 call plug#end()  " Update &runtimepath and initialize plugin system
 
 
