@@ -46,7 +46,7 @@ bindsym $mod+Shift+k move up
 bindsym $mod+Shift+l move right
 
 # enter fullscreen mode for the focused container
-#bindsym $mod+f fullscreen toggle
+bindsym $mod+f fullscreen toggle
 
 # fullscreen mode spanning all available outputs
 bindsym $mod+Shift+f fullscreen toggle global
@@ -208,7 +208,7 @@ bar {
 #bindsym $mod+b bar mode toggle
 
 # key bindings
-bindsym $mod+Shift+p exec rofi -show run
+bindsym $mod+p exec rofi -show run
 bindsym $mod+slash exec rofi -show window
 bindsym $mod+F8 exec rofi-pass
 
