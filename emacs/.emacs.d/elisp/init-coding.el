@@ -104,7 +104,11 @@
 (setq js-indent-level 2)
 
 
-(use-package yasnippet)
+(use-package yasnippet
+  :ensure t)
+
+(use-package terraform-mode
+  :ensure t)
 
 ;;; LSP mode
 

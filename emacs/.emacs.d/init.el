@@ -35,7 +35,7 @@
   (load custom-file))
 
 (defconst cache-directory
-  (expand-file-name (concat user-emacs-directory ".cache/"))
+  (expand-file-name (concat user-emacs-directory "cache/"))
   "Storage area for persistent files.")
 
 (require 'init-core)
