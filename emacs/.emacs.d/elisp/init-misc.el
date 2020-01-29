@@ -3,7 +3,9 @@
   :ensure t)
 
 (use-package markdown-mode
-  :ensure t)
+  :ensure t
+  :config
+  (setq markdown-fontify-code-blocks-natively t))
 
 ;; Predicate that tests if the currect line is empty (ignoring whitespace).
 (defun current-line-empty-p ()
