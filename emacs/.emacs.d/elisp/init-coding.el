@@ -107,6 +107,9 @@
 (use-package yasnippet
   :ensure t)
 
+(use-package protobuf-mode
+  :ensure t)
+
 (use-package terraform-mode
   :ensure t)
 
