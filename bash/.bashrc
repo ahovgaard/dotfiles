@@ -30,6 +30,7 @@ export EDITOR=vim
 # Additions to the $PATH environment variable
 export PATH=$PATH:~/bin
 export PATH=$PATH:~/.local/bin
+export PATH=$PATH:~/.opam/default/bin
 
 # Git bash tab completion
 source /usr/share/git/completion/git-completion.bash

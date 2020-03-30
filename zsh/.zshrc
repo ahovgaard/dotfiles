@@ -115,3 +115,6 @@ add-zsh-hook preexec save_starttime
 
 # run set_longrunning_alert after a command finishes (before the prompt)
 add-zsh-hook precmd set_longrunning_alert
+
+# opam configuration
+test -r /home/akh/.opam/opam-init/init.zsh && . /home/akh/.opam/opam-init/init.zsh > /dev/null 2> /dev/null || true
