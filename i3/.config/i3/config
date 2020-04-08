@@ -212,12 +212,20 @@ bindsym $mod+p exec rofi -show run
 bindsym $mod+slash exec rofi -show window
 bindsym $mod+F8 exec rofi-pass
 
+# screenshots
+bindsym --release Print exec scrot 'screenshot_%Y%m%d_%H%M%S.png' -e 'mkdir -p ~/screenshots && mv $f ~/screenshots && xclip -selection clipboard -t image/png -i ~/screenshots/$f'
+bindsym --release Shift+Print exec scrot -s 'screenshot_%Y%m%d_%H%M%S.png' -e 'mkdir -p ~/screenshots && mv $f ~/screenshots && xclip -selection clipboard -t image/png -i ~/screenshots/$f'
+
 # screen lock
 bindsym $mod+Shift+x exec ~/bin/lock.sh
 
 bindsym XF86AudioRaiseVolume exec "amixer -q set Master 2%+ unmute"
 bindsym XF86AudioLowerVolume exec "amixer -q set Master 2%- unmute"
 bindsym XF86AudioMute        exec "amixer -q set Master toggle"
+
+# screen backlight
+bindsym XF86MonBrightnessUp exec "light -A 5"
+bindsym XF86MonBrightnessDown exec "light -U 5"
 
 # toggle touchpad and cursor hiding
 bindsym XF86TouchpadToggle exec ~/bin/toggle_touchpad.sh

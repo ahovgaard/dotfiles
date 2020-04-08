@@ -118,3 +118,18 @@ add-zsh-hook precmd set_longrunning_alert
 
 # opam configuration
 test -r /home/akh/.opam/opam-init/init.zsh && . /home/akh/.opam/opam-init/init.zsh > /dev/null 2> /dev/null || true
+
+#------------------------------
+# Window title
+#------------------------------
+
+set_title_pre () {
+  printf "\x1b]0;%s\x07" "$1";
+}
+
+set_title_post () {
+  printf "\x1b]0;%s\x07" "$PWD"
+}
+
+add-zsh-hook preexec set_title_pre
+add-zsh-hook precmd set_title_post
