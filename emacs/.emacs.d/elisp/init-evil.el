@@ -97,6 +97,7 @@
   ;; use swiper in place of the default incremental search
   (define-key evil-normal-state-map (kbd "C-s") 'swiper))
 
+;; More friendly interface for ivy/counsel.
 (use-package ivy-rich
   :ensure t
   :config
@@ -201,17 +202,6 @@
   :ensure t
   :config
   (default-text-scale-mode 1))
-
-;; libvterm
-(use-package vterm
-  :ensure t
-  :config
-  (setq vterm-max-scrollback 10000)
-
-  (evil-define-key 'insert vterm-mode-map (kbd "C-c")      #'vterm--self-insert)
-  (evil-define-key 'normal vterm-mode-map (kbd "i")        #'evil-insert-resume)
-  (evil-define-key 'normal vterm-mode-map (kbd "o")        #'evil-insert-resume)
-  (evil-define-key 'normal vterm-mode-map (kbd "<return>") #'evil-insert-resume))
 
 (use-package eyebrowse
   :ensure t
