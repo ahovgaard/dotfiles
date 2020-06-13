@@ -13,6 +13,7 @@ fi
 
 # Misc env vars
 export KUBECTX_IGNORE_FZF=1
+export QT_QPA_PLATFORMTHEME="qt5ct"
 
 if [ -z "$DISPLAY" ] && [ -n "$XDG_VTNR" ] && [ "$XDG_VTNR" -eq 1 ]; then
   exec startx
