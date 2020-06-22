@@ -88,6 +88,10 @@ export ERL_AFLAGS="-kernel shell_history enabled"
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
+# Fix for urxvt lines cut off on resize
+# https://bugs.launchpad.net/ubuntu/+source/rxvt-unicode/+bug/677425
+# https://superuser.com/questions/442589/xmonad-urxvt-issue-text-disappears-after-resizing
+for (( i=1; i<=$LINES; i++ )); do echo; done; clear
 
 #------------------------------
 # Print bell character on long running commands
