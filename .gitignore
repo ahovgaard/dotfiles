@@ -2,3 +2,6 @@
 /neovim/.config/nvim/spell/*
 /bin/bin/*
 TAGS
+/emacs/.emacs.d/cache/
+/emacs/.emacs.d/transient/
+/emacs/.emacs.d/.lsp-session-v1
