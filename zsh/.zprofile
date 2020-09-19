@@ -2,7 +2,7 @@
 # /etc/profile after sourcing ~/.zshenv. To prevent your $PATH being
 # overwritten, set it in ~/.zprofile.
 typeset -U path
-path=(~/bin ~/.local/bin ~/.opam/default/bin ~/.mix/escripts ~/repos/elixir-ls/release $path[@])
+path=(~/bin ~/.local/bin ~/.emacs.d/bin ~/.opam/default/bin ~/.mix/escripts ~/repos/elixir-ls/release $path[@])
 
 if [[ -v INSIDE_EMACS ]]; then
   export EDITOR="emacsclient"
