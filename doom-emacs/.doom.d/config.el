@@ -57,3 +57,6 @@
 
 ;; Projects
 (setq projectile-project-search-path '("~/repos/" "~/code/"))
+
+;; Key bindings
+(map! :leader "s g" #'counsel-git-grep)
