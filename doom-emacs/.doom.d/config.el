@@ -55,3 +55,6 @@
 
 ;; Projects
 (setq projectile-project-search-path '("~/repos/" "~/code/"))
+
+;; Theme
+(setq doom-theme 'monokai)
