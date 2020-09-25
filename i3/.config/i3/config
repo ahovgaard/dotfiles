@@ -211,6 +211,7 @@ bar {
 bindsym $mod+p exec rofi -show run
 bindsym $mod+slash exec rofi -show window
 bindsym $mod+F8 exec rofi-pass
+bindsym $mod+n exec "~/.emacs.d/bin/org-capture -k n"
 
 # screenshots
 bindsym --release Print exec scrot 'screenshot_%Y%m%d_%H%M%S.png' -e 'mkdir -p ~/screenshots && mv $f ~/screenshots && xclip -selection clipboard -t image/png -i ~/screenshots/$f'
@@ -232,6 +233,9 @@ bindsym XF86TouchpadToggle exec ~/bin/toggle_touchpad.sh
 
 # toggle external monitors
 bindsym XF86Display exec ~/bin/monitors.sh
+
+# open org capture window in floating mode
+for_window [title="doom-capture"] floating enable
 
 # handle pdfpc floating window on second monitor properly
 for_window [ title="^pdfpc - present" ] border none floating enable
