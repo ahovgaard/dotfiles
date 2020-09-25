@@ -5,6 +5,8 @@
   (add-hook 'org-mode-hook 'evil-org-mode)
   (add-hook 'evil-org-mode-hook
             (lambda () (evil-org-set-key-theme)))
+  (add-hook 'org-mode-hook
+            (lambda () (set-fill-column 80)))
   (require 'evil-org-agenda)
   (evil-org-agenda-set-keys))
 
@@ -32,6 +34,7 @@
  "o"  '(:ignore t :which-key "org")
  "oa" 'org-agenda
  "oc" 'org-capture
- "ol" 'org-store-link)
+ "ol" 'org-insert-link
+ "ov" 'org-toggle-inline-images)
 
 (provide 'init-org)
