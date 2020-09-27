@@ -3,11 +3,22 @@
 ;; Place your private configuration here! Remember, you do not need to run 'doom
 ;; sync' after modifying this file!
 
+;; Email address obfuscation - is this actually needed?
+(defun cons-email (domain tld name)
+  (concat name "@" domain "." tld))
+
+(defvar personal-mail (cons-email "ahovgaard" "dk" "me"))
+(defvar gmail-mail (cons-email "gmail" "com" "akhovg"))
+(defvar work-mail (cons-email "motorolasolutions" "com" "anders.hovgaard"))
+
+(defun work-pc? (work-val home-val)
+  (if (string-prefix-p "zdk" (system-name)) work-val home-val))
 
 ;; Some functionality uses this to identify you, e.g. GPG configuration, email
 ;; clients, file templates and snippets.
-(setq user-full-name "John Doe"
-      user-mail-address "john@doe.com")
+(setq user-full-name "Anders Kiel Hovgaard"
+      user-mail-address (work-pc? work-mail personal-mail))
+
 
 ;; Doom exposes five (optional) variables for controlling fonts in Doom. Here
 ;; are the three important ones:
@@ -65,5 +76,6 @@
 ;; Projects
 (setq projectile-project-search-path '("~/repos/" "~/code/"))
 
-;; Key bindings
+
+;; General key bindings
 (map! :leader "s g" #'counsel-git-grep)
