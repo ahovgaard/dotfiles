@@ -50,3 +50,4 @@
 ;(unpin! t)
 
 (package! monokai-theme)
+(package! protobuf-mode)
