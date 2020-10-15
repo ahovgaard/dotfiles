@@ -79,3 +79,8 @@
 
 ;; General key bindings
 (map! :leader "s g" #'counsel-git-grep)
+
+
+;; vterm configuration
+(after! vterm
+  (evil-define-key 'insert vterm-mode-map (kbd "C-c") #'vterm--self-insert))
