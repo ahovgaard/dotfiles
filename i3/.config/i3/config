@@ -220,8 +220,8 @@ bindsym --release Shift+Print exec scrot -s 'screenshot_%Y%m%d_%H%M%S.png' -e 'm
 # screen lock
 bindsym $mod+Shift+x exec ~/bin/lock.sh
 
-bindsym XF86AudioRaiseVolume exec "amixer -q set Master 2%+ unmute"
-bindsym XF86AudioLowerVolume exec "amixer -q set Master 2%- unmute"
+bindsym XF86AudioRaiseVolume exec "amixer -q set Master 4%+ unmute"
+bindsym XF86AudioLowerVolume exec "amixer -q set Master 4%- unmute"
 bindsym XF86AudioMute        exec "amixer -q set Master toggle"
 
 # screen backlight
