@@ -5,3 +5,4 @@ TAGS
 /emacs/.emacs.d/cache/
 /emacs/.emacs.d/transient/
 .lsp-session-*
+/emacs/.cache/
