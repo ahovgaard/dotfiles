@@ -65,6 +65,7 @@
 
 (after! org
   (setq org-startup-indented t
+        org-startup-folded t
         org-todo-keywords '((sequence "TODO(t)" "INPROGRESS(i)" "WAITING(w)" "|" "DONE(d)" "CANCELLED(c)"))))
 
 
