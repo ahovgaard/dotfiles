@@ -6,3 +6,4 @@ TAGS
 /emacs/.emacs.d/transient/
 .lsp-session-*
 /emacs/.cache/
+ghci_history
