@@ -1,11 +1,11 @@
 #!/bin/bash
 TOGGLE=/tmp/monitors_toggle
 
-if [ $(hostname) == 't520-arch' ]; then
+if [ "$(hostname)" == 't520-arch' ]; then
   LAPTOP=LVDS1
   LEFT=VGA1
   RIGHT=DP1
-elif [ $(hostname) == 'zdk02-4g43' ]; then
+elif [ "$(hostname)" == 'zdk02-4g43' ]; then
   LAPTOP=DP-3
   LEFT=DP-6.1
   RIGHT=DP-6.2
@@ -18,20 +18,15 @@ fi
 if [[ $(xrandr | grep $RIGHT) != *disconnected* ]] && [ ! -f $TOGGLE ]; then
   touch $TOGGLE
 
-  if [ $(hostname) == 'zdk02-4g43' ]; then
-    xrandr --output $LEFT --auto --output $RIGHT --auto --primary --right-of $LEFT \
-           --output $LAPTOP --right-of $RIGHT
-  elif [ $(hostname) == 't520-arch' ]; then
-    xrandr --output $LAPTOP --off
-    xrandr --output $LEFT --auto --output $RIGHT --auto --primary --right-of $LEFT
-  fi
+  xrandr --output $LAPTOP --off
+  xrandr --output $LEFT --auto --primary --output $RIGHT --auto --right-of $LEFT
 else
   rm -f $TOGGLE
   xrandr --output $LEFT --off --output $RIGHT --off
-  xrandr --output $LAPTOP --auto
+  xrandr --output $LAPTOP --auto --primary
 fi
 
-if [ $(hostname) == 't520-arch' ]; then
+if [ "$(hostname)" == 't520-arch' ]; then
   # set wallpaper again
   sh ~/.fehbg
 fi
