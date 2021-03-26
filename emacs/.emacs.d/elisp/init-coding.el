@@ -113,26 +113,29 @@
 (use-package terraform-mode
   :ensure t)
 
+(use-package company-terraform
+  :ensure t)
+
 ;;; LSP mode
 
-(use-package lsp-mode
-  :hook (elixir-mode . lsp)
-  :commands lsp
-  :config
-  (setq lsp-log-io t)
-  (general-define-key
-   :states '(normal visual)
-   :keymaps 'override
-   :prefix "SPC"
-   "l"  '(:ignore t :which-key "LSP")
-   "lh" 'lsp-describe-thing-at-point
-   "ld" 'lsp-find-definition)
-  )
-
-;; ;; optionally
-(use-package lsp-ui :commands lsp-ui-mode)
-(use-package company-lsp :commands company-lsp)
-(use-package lsp-ivy :commands company-lsp)
+; (use-package lsp-mode
+;   :hook (elixir-mode . lsp)
+;   :commands lsp
+;   :config
+;   (setq lsp-log-io t)
+;   (general-define-key
+;    :states '(normal visual)
+;    :keymaps 'override
+;    :prefix "SPC"
+;    "l"  '(:ignore t :which-key "LSP")
+;    "lh" 'lsp-describe-thing-at-point
+;    "ld" 'lsp-find-definition)
+;   )
+;
+; ;; ;; optionally
+; (use-package lsp-ui :commands lsp-ui-mode)
+; (use-package company-lsp :commands company-lsp)
+; (use-package lsp-ivy :commands company-lsp)
 ;; (use-package helm-lsp :commands helm-lsp-workspace-symbol)
 ;; (use-package lsp-treemacs :commands lsp-treemacs-errors-list)
 ;; optionally if you want to use debugger
