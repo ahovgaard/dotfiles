@@ -1,16 +1,26 @@
 #!/usr/bin/env bash
 
 # Terminate already running bar instances
-killall -q polybar
+# killall -q polybar
 # If all your bars have ipc enabled, you can also use
-# polybar-msg cmd quit
+polybar-msg cmd quit
 
-# Launch bar1 and bar2
-#echo "---" | tee -a /tmp/polybar1.log /tmp/polybar2.log
-#polybar bar1 2>&1 | tee -a /tmp/polybar1.log & disown
-#polybar bar2 2>&1 | tee -a /tmp/polybar2.log & disown
+echo "---" | tee /tmp/polybar.log
 
-echo "---" | tee /tmp/polybar1.log
-polybar main 2>&1 | tee -a /tmp/polybar1.log & disown
+monitors=$(polybar --list-monitors)
+primary=$(echo "${monitors}" | grep primary | cut -d":" -f1)
+others=$(echo "${monitors}" | grep -v primary | cut -d":" -f1)
+
+echo "Monitors:"
+echo "${monitors}"
+echo "Primary: ${primary}, others: ${others}"
+
+echo "Launching main bar on ${primary}"
+MONITOR=${primary} polybar --reload main 2>&1 | tee -a /tmp/polybar.log & disown
+
+for m in ${others}; do
+    echo "Launching secondary bar on ${m}"
+    MONITOR=${m} polybar --reload secondary 2>&1 | tee -a /tmp/polybar.log & disown
+done
 
 echo "Bars launched..."
