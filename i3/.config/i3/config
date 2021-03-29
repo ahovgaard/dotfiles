@@ -210,6 +210,7 @@ for_window [ title="^DS PDF" ] border none floating enable
 
 exec_always --no-startup-id $HOME/.config/polybar/launch.sh
 
+exec --no-startup-id dunst
 exec blueman-applet
 exec nm-applet
 
