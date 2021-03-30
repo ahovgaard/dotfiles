@@ -199,7 +199,6 @@ bindsym XF86MonBrightnessDown exec "light -U 5"
 bindsym XF86TouchpadToggle exec ~/bin/toggle_touchpad.sh
 
 # toggle external monitors
-#bindsym XF86Display exec ~/bin/monitors.sh
 bindsym XF86Display exec "autorandr -c"
 
 # open org capture window in floating mode
@@ -214,6 +213,3 @@ exec_always --no-startup-id $HOME/.config/polybar/launch.sh
 exec --no-startup-id dunst
 exec blueman-applet
 exec nm-applet
-
-# switch to external monitors if connected
-exec monitors.sh
