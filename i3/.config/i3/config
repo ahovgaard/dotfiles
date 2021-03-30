@@ -213,3 +213,5 @@ exec_always --no-startup-id $HOME/.config/polybar/launch.sh
 exec --no-startup-id dunst
 exec blueman-applet
 exec nm-applet
+
+exec --no-startup-id "autorandr -c"
