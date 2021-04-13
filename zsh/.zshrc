@@ -88,6 +88,8 @@ export ERL_AFLAGS="-kernel shell_history enabled"
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
+[ -f ~/.zshrc.local.zsh ] && source ~/.zshrc.local.zsh
+
 # Fix for urxvt lines cut off on resize
 # https://bugs.launchpad.net/ubuntu/+source/rxvt-unicode/+bug/677425
 # https://superuser.com/questions/442589/xmonad-urxvt-issue-text-disappears-after-resizing
