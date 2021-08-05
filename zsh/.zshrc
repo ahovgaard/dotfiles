@@ -130,7 +130,7 @@ test -r /home/akh/.opam/opam-init/init.zsh && . /home/akh/.opam/opam-init/init.z
 #------------------------------
 
 set_title_pre () {
-  printf "\x1b]0;%s\x07" "$1";
+  printf "\x1b]0;%s - %s\x07" "$1" "$PWD";
 }
 
 set_title_post () {
