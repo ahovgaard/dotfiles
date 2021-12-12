@@ -121,8 +121,8 @@
        ;;csharp            ; unity, .NET, and mono shenanigans
        ;;data              ; config/data formats
        ;;(dart +flutter)   ; paint ui and not much else
-       (elixir +lsp)       ; erlang done right
        ;;dhall
+       (elixir +lsp)       ; erlang done right
        ;;elm               ; care for a cup of TEA?
        emacs-lisp          ; drown in parentheses
        erlang              ; an elegant language for a more civilized age
@@ -173,7 +173,7 @@
        ;;zig               ; C, but simpler
 
        :email
-       (mu4e +gmail)
+       ;;(mu4e +org +gmail)
        ;;notmuch
        ;;(wanderlust +gmail)
 
@@ -181,7 +181,7 @@
        ;;calendar
        ;;emms
        ;;everywhere        ; *leave* Emacs!? You must be joking
-       irc                 ; how neckbeards socialize
+       ;;irc               ; how neckbeards socialize
        ;;(rss +org)        ; emacs as an RSS reader
        ;;twitter           ; twitter client https://twitter.com/vnought
 
