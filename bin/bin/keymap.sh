@@ -9,7 +9,7 @@ else
     setxkbmap -option caps:escape
     setxkbmap -layout us -variant altgr-intl
 
-    if [ "$(hostname)" = 'zdk02-4g43' ]; then
+    if [ "$(cat /etc/hostname)" = 'zdk02-4g43' ]; then
         setxkbmap -option ctrl:menu_rctrl
         setxkbmap -option ctrl:swap_rwin_rctl
     fi
