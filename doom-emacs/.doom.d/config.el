@@ -77,6 +77,8 @@
 ;; Projects
 (setq projectile-project-search-path '("~/repos/" "~/code/"))
 
+;; Show cursor in treemacs buffer
+(setq treemacs-show-cursor t)
 
 ;; General key bindings
 (map! :leader "s g" #'counsel-git-grep)
