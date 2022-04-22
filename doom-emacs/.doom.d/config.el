@@ -85,7 +85,8 @@
 
 ;; vterm configuration
 (after! vterm
-  (evil-define-key 'insert vterm-mode-map (kbd "C-c") #'vterm--self-insert))
+  (evil-define-key 'insert vterm-mode-map (kbd "C-c") #'vterm--self-insert)
+  (remove-hook! 'vterm-mode-hook #'hide-mode-line-mode))
 
 (use-package! tree-sitter
   :config
