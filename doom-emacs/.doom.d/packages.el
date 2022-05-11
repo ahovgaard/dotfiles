@@ -51,3 +51,7 @@
 
 (package! monokai-theme)
 (package! protobuf-mode)
+
+;; tree-sitter
+(package! tree-sitter)
+(package! tree-sitter-langs)

@@ -83,7 +83,12 @@
 ;; General key bindings
 (map! :leader "s g" #'counsel-git-grep)
 
-
 ;; vterm configuration
 (after! vterm
   (evil-define-key 'insert vterm-mode-map (kbd "C-c") #'vterm--self-insert))
+
+(use-package! tree-sitter
+  :config
+  (require 'tree-sitter-langs)
+  (global-tree-sitter-mode)
+  (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode))
