@@ -7,3 +7,4 @@ TAGS
 .lsp-session-*
 /emacs/.cache/
 ghci_history
+flycheck_config.el
