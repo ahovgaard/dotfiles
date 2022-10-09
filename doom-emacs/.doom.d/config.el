@@ -87,9 +87,3 @@
 (after! vterm
   (evil-define-key 'insert vterm-mode-map (kbd "C-c") #'vterm--self-insert)
   (remove-hook! 'vterm-mode-hook #'hide-mode-line-mode))
-
-(use-package! tree-sitter
-  :config
-  (require 'tree-sitter-langs)
-  (global-tree-sitter-mode)
-  (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode))
