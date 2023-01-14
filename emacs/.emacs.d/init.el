@@ -152,12 +152,32 @@
   (setq evil-want-C-u-scroll t)
   (setq evil-want-C-i-jump t)
   :config
-  (evil-mode 1))
+  (evil-mode 1)
+  (evil-set-undo-system 'undo-redo))
 
 (use-package evil-collection
   :after evil
   :config
   (evil-collection-init))
+
+;; Undo/redo
+;; ---------------------------------------------------------------------
+
+;; Highlights undos by flashing to-be-deleted text before deleting.
+;; https://github.com/casouri/undo-hl
+(use-package undo-hl
+  :straight (undo-hl :type git :host github :repo "casouri/undo-hl")
+  :commands undo-hl-mode
+  :init
+  (add-hook 'prog-mode-hook #'undo-hl-mode)
+  (add-hook 'text-mode-hook #'undo-hl-mode))
+
+;; Visual undo. Displays the undo history as a tree.
+;; https://github.com/casouri/vundo
+(use-package vundo
+  :commands vundo
+  :config
+  (setq vundo-glyph-alist vundo-unicode-symbols))
 
 ;; Key bindings
 ;; ---------------------------------------------------------------------
