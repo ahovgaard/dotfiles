@@ -174,6 +174,25 @@ client.placeholder      $black    #0c0c0c   $white    $black      #0c0c0c
 
 client.background       $white
 
+# gaps
+gaps inner 5
+smart_gaps on
+
+set $mode_gaps Inner gaps: +|-|0 (local), Shift + +|-|0 (global)
+bindsym $mod+g mode "$mode_gaps"
+mode "$mode_gaps" {
+        bindsym plus  gaps inner current plus 5
+        bindsym minus gaps inner current minus 5
+        bindsym 0     gaps inner current set 0
+
+        bindsym Shift+plus  gaps inner all plus 5
+        bindsym Shift+minus gaps inner all minus 5
+        bindsym Shift+0     gaps inner all set 0
+
+        bindsym Return mode "$mode_gaps"
+        bindsym Escape mode "default"
+}
+
 # key bindings
 bindsym $mod+p exec rofi -show run
 bindsym $mod+slash exec rofi -show window
