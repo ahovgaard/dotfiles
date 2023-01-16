@@ -96,6 +96,16 @@ export ERL_AFLAGS="-kernel shell_history enabled"
 for (( i=1; i<=$LINES; i++ )); do echo; done; clear
 
 #------------------------------
+# emacs-libvterm integration
+#------------------------------
+
+if [[ "$INSIDE_EMACS" = 'vterm' ]] \
+    && [[ -n ${EMACS_VTERM_PATH} ]] \
+    && [[ -f ${EMACS_VTERM_PATH}/etc/emacs-vterm-zsh.sh ]]; then
+  source ${EMACS_VTERM_PATH}/etc/emacs-vterm-zsh.sh
+fi
+
+#------------------------------
 # Print bell character on long running commands
 #------------------------------
 
