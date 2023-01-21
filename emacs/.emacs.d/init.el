@@ -9,14 +9,14 @@
       (init-gc-cons-threshold (* 50 1000 1000)))
   (setq gc-cons-threshold init-gc-cons-threshold)
   (add-hook 'after-init-hook
-	    ;; Make gc pauses faster by decreasing the threshold.
-	    (lambda () (setq gc-cons-threshold normal-gc-cons-threshold))))
+            ;; Make gc pauses faster by decreasing the threshold.
+            (lambda () (setq gc-cons-threshold normal-gc-cons-threshold))))
 
 ;; Display emacs startup time and number of garbage collections.
 (add-hook 'emacs-startup-hook
-	  (lambda ()
-	    (message "Emacs ready in %s with %d garbage collections."
-		     (emacs-init-time "%.2f seconds") gcs-done)))
+          (lambda ()
+            (message "Emacs ready in %s with %d garbage collections."
+                     (emacs-init-time "%.2f seconds") gcs-done)))
 
 ;; Show an empty scratch buffer after startup
 (setq inhibit-startup-message t)
@@ -56,10 +56,16 @@
 ;; Save cursor location in files
 (save-place-mode 1)
 
+;; Enable Recentf mode to keep track of recently opened files.
+(recentf-mode 1)
+
 ;; Automatically add a newline at the end of a file when a file is
 ;; saved. The POSIX standard defines a "line" as ending in a newline
 ;; character.
 (setq require-final-newline t)
+
+;; Indent using spaces, instead of tabs, by default.
+(setq-default indent-tabs-mode nil)
 
 ;; Cleanup whitespace on save.
 (add-hook 'before-save-hook 'whitespace-cleanup)
@@ -89,9 +95,9 @@
       (bootstrap-version 6))
   (unless (file-exists-p bootstrap-file)
     (with-current-buffer
-	(url-retrieve-synchronously
-	 "https://raw.githubusercontent.com/radian-software/straight.el/develop/install.el"
-	 'silent 'inhibit-cookies)
+        (url-retrieve-synchronously
+         "https://raw.githubusercontent.com/radian-software/straight.el/develop/install.el"
+         'silent 'inhibit-cookies)
       (goto-char (point-max))
       (eval-print-last-sexp)))
   (load bootstrap-file nil 'nomessage))
@@ -123,8 +129,8 @@
   ;; (setq orderless-style-dispatchers '(+orderless-dispatch)
   ;;       orderless-component-separator #'orderless-escapable-split-on-space)
   (setq completion-styles '(orderless partial-completion basic)
-	completion-category-defaults nil
-	completion-category-overrides nil))
+        completion-category-defaults nil
+        completion-category-overrides nil))
 
 ;; Enable rich annotations using the Marginalia package
 (use-package marginalia
@@ -135,7 +141,7 @@
 
 (use-package embark
   :bind (:map minibuffer-mode-map
-	      ("C-c C-o" . embark-export)))
+              ("C-c C-o" . embark-export)))
 
 (use-package embark-consult)
 
@@ -146,7 +152,7 @@
 
 (use-package corfu
   :straight (corfu :files (:defaults "extensions/*")
-		   :includes (corfu-history corfu-popupinfo))
+                   :includes (corfu-history corfu-popupinfo))
   ;; Optional customizations
   :custom
   (corfu-cycle nil)                 ;; Disable cycling for `corfu-next/previous'
@@ -182,11 +188,11 @@
   (defun corfu-enable-always-in-minibuffer ()
     "Enable Corfu in the minibuffer if Vertico/Mct are not active."
     (unless (or (bound-and-true-p mct--active)
-		(bound-and-true-p vertico--input)
-		(eq (current-local-map) read-passwd-map))
+                (bound-and-true-p vertico--input)
+                (eq (current-local-map) read-passwd-map))
       (setq-local corfu-auto t)         ;; Enable auto completion
       (setq-local corfu-echo-delay nil  ;; Disable automatic echo and popup
-		  corfu-popupinfo-delay nil)
+                  corfu-popupinfo-delay nil)
       (corfu-mode 1)))
   (add-hook 'minibuffer-setup-hook #'corfu-enable-always-in-minibuffer 1)
 
@@ -204,7 +210,7 @@
   ;; Emacs 28: Hide commands in M-x which do not apply to the current mode.
   ;; Corfu commands are hidden, since they are not supposed to be used via M-x.
   (setq read-extended-command-predicate
-	#'command-completion-default-include-p)
+        #'command-completion-default-include-p)
 
   ;; Enable indentation+completion using the TAB key.
   ;; `completion-at-point' is often bound to M-TAB.
@@ -229,7 +235,7 @@
 
   (defun akh/lsp-mode-setup-completion ()
     (setf (alist-get 'styles (alist-get 'lsp-capf completion-category-defaults))
-	  '(orderless)))
+          '(orderless)))
 
   ;; Optionally configure the first word as flex filtered.
   (add-hook 'orderless-style-dispatchers #'my/orderless-dispatch-flex-first nil 'local)
@@ -238,11 +244,14 @@
   (setq-local completion-at-point-functions (list (cape-capf-buster #'lsp-completion-at-point)))
 
   :hook (;; replace XXX-mode with concrete major-mode(e. g. python-mode)
-	 (elixir-mode . lsp)
-	 ;;(XXX-mode . lsp)
-	 ;; if you want which-key integration
-	 (lsp-mode . lsp-enable-which-key-integration)
-	 (lsp-completion-mode . akh/lsp-mode-setup-completion)))
+         (elixir-mode . lsp)
+         ;;(XXX-mode . lsp)
+         ;; if you want which-key integration
+         (lsp-mode . lsp-enable-which-key-integration)
+         (lsp-completion-mode . akh/lsp-mode-setup-completion))
+
+  :config
+  (setq lsp-headerline-breadcrumb-enable nil))
 
 ;;(use-package lsp-ui
 ;;  :after lsp
@@ -313,12 +322,13 @@
 
 (akh/leader-key
   "." 'find-file
-  "," 'switch-to-buffer)
+  "," 'akh/switch-project-buffer)
 
 (akh/local-leader-key
   "x" 'execute-extended-command
   "f" 'find-file
-  "b" 'switch-to-buffer)
+  "b" 'akh/switch-project-buffer
+  "B" 'switch-to-buffer)
 
 (akh/leader-key
   "s"  '(:ignore t :which-key "search")
@@ -342,11 +352,14 @@
 
 (akh/leader-key
   "f"  '(:ignore t :which-key "file")
-  "fs" 'save-buffer)
+  "fs" 'save-buffer
+  "fr" 'consult-recent-file)
 
 (akh/leader-key
   "b"  '(:ignore t :which-key "buffer")
-  "bd" 'kill-current-buffer)
+  "bd" 'kill-current-buffer
+  "bb" 'akh/switch-project-buffer
+  "bB" 'switch-to-buffer)
 
 (akh/leader-key
   "t"  '(:ignore t :which-key "toggle")
@@ -391,14 +404,24 @@
   :init
   (projectile-mode)
   :config
-  (setq projectile-switch-project-action #'projectile-dired)
+  ;; Find file after switching projects.
+  ;; Another good option is `projectile-dired'.
+  (setq projectile-switch-project-action #'projectile-find-file)
   :bind-keymap
   ("C-c p" . projectile-command-map))
+
+(defun akh/switch-project-buffer ()
+  "Switch to a project buffer if in a project, otherwise switch to any buffer."
+  (interactive)
+  (if (projectile-project-p)
+      (call-interactively 'projectile-switch-to-buffer)
+    (call-interactively 'switch-to-buffer)))
 
 (akh/leader-key
   "p"  '(:ignore t :which-key "project")
   "pp" 'projectile-switch-project
   "pf" 'projectile-find-file
+  "pb" 'projectile-switch-to-buffer
   "pi" 'projectile-invalidate-cache)
 
 ;; Version control
@@ -410,7 +433,8 @@
 
 (akh/leader-key
   "g"  '(:ignore t :which-key "git")
-  "gg" 'magit-status)
+  "gg" 'magit-status
+  "gb" 'magit-blame-addition)
 
 (use-package forge)
 
@@ -437,7 +461,7 @@
   :init
   ;; Disble line numbers in the terminal buffer.
   (add-hook 'vterm-mode-hook
-	    (lambda () (display-line-numbers-mode -1)))
+            (lambda () (display-line-numbers-mode -1)))
   :config
   (setq vterm-max-scrollback 10000)
   (setq vterm-kill-buffer-on-exit t)

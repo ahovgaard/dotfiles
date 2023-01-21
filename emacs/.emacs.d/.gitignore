@@ -11,6 +11,7 @@
 /url/*
 /places
 /.cache
+/recentf
 
 # straight
 /straight/build-cache.el
