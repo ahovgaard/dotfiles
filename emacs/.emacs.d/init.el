@@ -424,6 +424,38 @@
   "pb" 'projectile-switch-to-buffer
   "pi" 'projectile-invalidate-cache)
 
+;; Workspaces
+;; ---------------------------------------------------------------------
+
+(use-package eyebrowse
+  :init
+  (eyebrowse-mode 1)
+  ;; (eyebrowse-setup-opinionated-keys)
+  :config
+  ;; Type of new workspace: Clone last workspace (default behavior).
+  (setq eyebrowse-new-workspace nil)
+  (let ((state 'normal)
+        (map eyebrowse-mode-map))
+  (evil-define-key state map (kbd "M-1") 'eyebrowse-switch-to-window-config-1)
+  (evil-define-key state map (kbd "M-2") 'eyebrowse-switch-to-window-config-2)
+  (evil-define-key state map (kbd "M-3") 'eyebrowse-switch-to-window-config-3)
+  (evil-define-key state map (kbd "M-4") 'eyebrowse-switch-to-window-config-4)
+  (evil-define-key state map (kbd "M-5") 'eyebrowse-switch-to-window-config-5)
+  (evil-define-key state map (kbd "M-6") 'eyebrowse-switch-to-window-config-6)
+  (evil-define-key state map (kbd "M-7") 'eyebrowse-switch-to-window-config-7)
+  (evil-define-key state map (kbd "M-8") 'eyebrowse-switch-to-window-config-8)
+  (evil-define-key state map (kbd "M-9") 'eyebrowse-switch-to-window-config-9)
+  (evil-define-key state map (kbd "M-0") 'eyebrowse-switch-to-window-config-0)
+  (evil-define-key state map (kbd "gt") 'eyebrowse-next-window-config)
+  (evil-define-key state map (kbd "gT") 'eyebrowse-prev-window-config))
+
+(akh/leader-key
+  "<tab>" '(:ignore t :which-key "workspace")
+  "<tab>n" 'eyebrowse-create-window-config
+  "<tab>r" 'eyebrowse-rename-window-config
+  "<tab>d" 'eyebrowse-close-window-config
+  "<tab>." 'eyebrowse-switch-to-window-config)
+
 ;; Version control
 ;; ---------------------------------------------------------------------
 
