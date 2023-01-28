@@ -31,10 +31,14 @@
 (blink-cursor-mode -1)
 
 ;; Enable highlighting of the current line
-(hl-line-mode 1)
+(global-hl-line-mode 1)
 
-;; Display line numbers in every buffer
+;; Display the column number in the mode line
 (column-number-mode 1)
+
+;; Display line numbers in every buffer (enables
+;; `Display-Line-Numbers' mode in all buffers).
+;; Disabled in certain mode hooks where not appropriate.
 (global-display-line-numbers-mode 1)
 
 ;; Font
@@ -73,6 +77,7 @@
 ;; Scroll one line at a time.
 (setq scroll-conservatively 1000)
 
+
 ;; Package management
 ;; ---------------------------------------------------------------------
 
@@ -108,6 +113,33 @@
 ;; Install packages by default in `use-package` forms,
 ;; without having to specify `:straight t`
 (setq straight-use-package-by-default t)
+
+
+;; Common packages
+;; ---------------------------------------------------------------------
+
+;; dash.el - modern list API for Emacs.
+(use-package dash)
+
+
+;; Evil
+;; ---------------------------------------------------------------------
+
+(use-package evil
+  :init
+  (setq evil-want-integration t)
+  (setq evil-want-keybinding nil)
+  (setq evil-want-C-u-scroll t)
+  (setq evil-want-C-i-jump t)
+  :config
+  (evil-mode 1)
+  (evil-set-undo-system 'undo-redo))
+
+(use-package evil-collection
+  :after evil
+  :config
+  (evil-collection-init))
+
 
 ;; Completion
 ;; ---------------------------------------------------------------------
@@ -216,6 +248,7 @@
   ;; `completion-at-point' is often bound to M-TAB.
   (setq tab-always-indent 'complete))
 
+
 ;; LSP
 ;; ---------------------------------------------------------------------
 
@@ -257,23 +290,6 @@
 ;;  :after lsp
 ;;  :commands lsp-ui-mode)
 
-;; Evil
-;; ---------------------------------------------------------------------
-
-(use-package evil
-  :init
-  (setq evil-want-integration t)
-  (setq evil-want-keybinding nil)
-  (setq evil-want-C-u-scroll t)
-  (setq evil-want-C-i-jump t)
-  :config
-  (evil-mode 1)
-  (evil-set-undo-system 'undo-redo))
-
-(use-package evil-collection
-  :after evil
-  :config
-  (evil-collection-init))
 
 ;; Undo/redo
 ;; ---------------------------------------------------------------------
@@ -293,6 +309,27 @@
   :commands vundo
   :config
   (setq vundo-glyph-alist vundo-unicode-symbols))
+
+
+;; Comments
+;; ---------------------------------------------------------------------
+
+(use-package evil-nerd-commenter
+  :config
+  (evil-global-set-key 'normal (kbd "g c") #'evilnc-comment-operator)
+  (evil-global-set-key 'visual (kbd "g c") #'evilnc-comment-operator))
+
+
+;; Helpful
+;; ---------------------------------------------------------------------
+
+(use-package helpful
+  :bind
+  ([remap describe-key]      . helpful-key)
+  ([remap describe-command]  . helpful-command)
+  ([remap describe-variable] . helpful-variable)
+  ([remap describe-function] . helpful-function))
+
 
 ;; Key bindings
 ;; ---------------------------------------------------------------------
@@ -371,6 +408,7 @@
   "cf" 'lsp-format-buffer
   )
 
+
 ;; Theme and UI
 ;; ---------------------------------------------------------------------
 
@@ -387,15 +425,6 @@
 (use-package doom-modeline
   :init (doom-modeline-mode 1))
 
-;; Helpful
-;; ---------------------------------------------------------------------
-
-(use-package helpful
-  :bind
-  ([remap describe-key]      . helpful-key)
-  ([remap describe-command]  . helpful-command)
-  ([remap describe-variable] . helpful-variable)
-  ([remap describe-function] . helpful-function))
 
 ;; Project interaction
 ;; ---------------------------------------------------------------------
@@ -424,37 +453,58 @@
   "pb" 'projectile-switch-to-buffer
   "pi" 'projectile-invalidate-cache)
 
-;; Workspaces
+
+;; Workspaces (tabs)
 ;; ---------------------------------------------------------------------
 
-(use-package eyebrowse
-  :init
-  (eyebrowse-mode 1)
-  ;; (eyebrowse-setup-opinionated-keys)
-  :config
-  ;; Type of new workspace: Clone last workspace (default behavior).
-  (setq eyebrowse-new-workspace nil)
-  (let ((state 'normal)
-        (map eyebrowse-mode-map))
-  (evil-define-key state map (kbd "M-1") 'eyebrowse-switch-to-window-config-1)
-  (evil-define-key state map (kbd "M-2") 'eyebrowse-switch-to-window-config-2)
-  (evil-define-key state map (kbd "M-3") 'eyebrowse-switch-to-window-config-3)
-  (evil-define-key state map (kbd "M-4") 'eyebrowse-switch-to-window-config-4)
-  (evil-define-key state map (kbd "M-5") 'eyebrowse-switch-to-window-config-5)
-  (evil-define-key state map (kbd "M-6") 'eyebrowse-switch-to-window-config-6)
-  (evil-define-key state map (kbd "M-7") 'eyebrowse-switch-to-window-config-7)
-  (evil-define-key state map (kbd "M-8") 'eyebrowse-switch-to-window-config-8)
-  (evil-define-key state map (kbd "M-9") 'eyebrowse-switch-to-window-config-9)
-  (evil-define-key state map (kbd "M-0") 'eyebrowse-switch-to-window-config-0)
-  (evil-define-key state map (kbd "gt") 'eyebrowse-next-window-config)
-  (evil-define-key state map (kbd "gT") 'eyebrowse-prev-window-config))
+;; (use-package eyebrowse
+;;   :init
+;;   (eyebrowse-mode 1)
+;;   ;; (eyebrowse-setup-opinionated-keys)
+;;   :config
+;;   ;; Type of new workspace: Clone last workspace (default behavior).
+;;   (setq eyebrowse-new-workspace nil)
+;;   (let ((state 'normal)
+;;         (map eyebrowse-mode-map))
+;;     (evil-define-key state map (kbd "M-1") 'eyebrowse-switch-to-window-config-1)
+;;     (evil-define-key state map (kbd "M-2") 'eyebrowse-switch-to-window-config-2)
+;;     (evil-define-key state map (kbd "M-3") 'eyebrowse-switch-to-window-config-3)
+;;     (evil-define-key state map (kbd "M-4") 'eyebrowse-switch-to-window-config-4)
+;;     (evil-define-key state map (kbd "M-5") 'eyebrowse-switch-to-window-config-5)
+;;     (evil-define-key state map (kbd "M-6") 'eyebrowse-switch-to-window-config-6)
+;;     (evil-define-key state map (kbd "M-7") 'eyebrowse-switch-to-window-config-7)
+;;     (evil-define-key state map (kbd "M-8") 'eyebrowse-switch-to-window-config-8)
+;;     (evil-define-key state map (kbd "M-9") 'eyebrowse-switch-to-window-config-9)
+;;     (evil-define-key state map (kbd "M-0") 'eyebrowse-switch-to-window-config-0)
+;;     (evil-define-key state map (kbd "gt") 'eyebrowse-next-window-config)
+;;     (evil-define-key state map (kbd "gT") 'eyebrowse-prev-window-config)))
+
+(setq tab-bar-show nil)
+
+(defun akh/print-tabs ()
+  "Prints the open tab-bar tabs to the minibuffer."
+  (interactive)
+  (let ((tabs (-map (lambda (tab)
+                      `(,(car tab) ,(alist-get 'name tab)))
+                    (tab-bar-tabs))))
+    (message
+     (string-join
+      (-map-indexed #'(lambda (index tab)
+                        (let ((str (format " [%d] %s " index (nth 1 tab))))
+                          (if (equal (car tab) 'current-tab)
+                              (propertize str 'face 'highlight)
+                            str)))
+                    tabs)
+      " "))))
 
 (akh/leader-key
   "<tab>" '(:ignore t :which-key "workspace")
-  "<tab>n" 'eyebrowse-create-window-config
-  "<tab>r" 'eyebrowse-rename-window-config
-  "<tab>d" 'eyebrowse-close-window-config
-  "<tab>." 'eyebrowse-switch-to-window-config)
+  "<tab>n" 'tab-new
+  "<tab>r" 'tab-rename
+  "<tab>d" 'tab-close
+  "<tab><tab>" 'akh/print-tabs
+  "<tab>." 'tab-bar-select-tab-by-name)
+
 
 ;; Version control
 ;; ---------------------------------------------------------------------
@@ -470,6 +520,7 @@
 
 (use-package forge)
 
+
 ;; Org-mode
 ;; ---------------------------------------------------------------------
 
@@ -478,11 +529,13 @@
   :config
   ;; characters to use for the ellipsis:
   ;; …, ⤵, ▼, ↴, ⬎, ⤷, and ⋱.
-  (setq org-ellipsis " ▼"))
+  (setq org-ellipsis " ▼")
+  (setq org-startup-indented t))
 
 (use-package org-superstar
   :after org
   :hook (org-mode . org-superstar-mode))
+
 
 ;; Terminal
 ;; ---------------------------------------------------------------------
@@ -499,13 +552,22 @@
   (setq vterm-kill-buffer-on-exit t)
   (evil-define-key 'insert vterm-mode-map (kbd "C-c") #'vterm--self-insert))
 
+(akh/leader-key
+ "o"  '(:ignore t :which-key "open")
+ "oT" 'vterm)
+
+
 ;; Dired
 ;; ---------------------------------------------------------------------
 
 (use-package dired
   :straight (:type built-in)
   :init
-  (setq dired-listing-switches "-alh"))
+  (setq dired-listing-switches "-alh")
+  :config
+  (add-hook 'dired-mode-hook
+            (lambda () (display-line-numbers-mode -1))))
+
 
 ;; Languages
 ;; ---------------------------------------------------------------------

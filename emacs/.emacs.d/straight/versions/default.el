@@ -18,6 +18,7 @@
  ("embark" . "8960e450ac3b1bb085d85c41fc5ae1080ad8f7bb")
  ("evil" . "8a05eb99c6ee60eb502a2c586fa2e771a513c417")
  ("evil-collection" . "b7a75062a600b1b1d2ba51a1e3ac1ec331d19fff")
+ ("evil-nerd-commenter" . "8c0f23d46a3927b9f83c1c2c4590be53d0b740db")
  ("f.el" . "af7d37c619010b576fd22b50c62c71ff33093f3c")
  ("forge" . "d752022c0a14bb55c57589f81b51c7e561c2e74f")
  ("general.el" . "9651024e7f40a8ac5c3f31f8675d3ebe2b667344")
