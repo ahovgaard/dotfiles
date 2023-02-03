@@ -5,6 +5,12 @@
 # If all your bars have ipc enabled, you can also use
 polybar-msg cmd quit
 
+SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+
+# Concatenate base config and host-specific config
+cat ${SCRIPT_DIR}/config.base.ini \
+    ${SCRIPT_DIR}/config.$(uname -n).ini > ${SCRIPT_DIR}/config.ini
+
 echo "---" | tee /tmp/polybar.log
 
 monitors=$(polybar --list-monitors)
