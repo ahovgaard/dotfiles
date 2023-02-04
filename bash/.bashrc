@@ -53,3 +53,4 @@ if [[ $(tty) = /dev/tty1 ]] && [[ -z "$DISPLAY" ]]; then
 fi
 
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
+. "$HOME/.cargo/env"

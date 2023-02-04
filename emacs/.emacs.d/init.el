@@ -359,7 +359,8 @@
 
 (akh/leader-key
   "." 'find-file
-  "," 'akh/switch-project-buffer)
+  "," 'akh/switch-project-buffer
+  "<SPC>" 'projectile-find-file)
 
 (akh/local-leader-key
   "x" 'execute-extended-command
@@ -451,7 +452,8 @@
   "pp" 'projectile-switch-project
   "pf" 'projectile-find-file
   "pb" 'projectile-switch-to-buffer
-  "pi" 'projectile-invalidate-cache)
+  "pi" 'projectile-invalidate-cache
+  "pk" 'projectile-kill-buffers)
 
 
 ;; Workspaces (tabs)

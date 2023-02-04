@@ -27,7 +27,7 @@ URxvt.keysym.M-Delete:    perl:matcher:list
 URxvt.colorUL:            #4682B4
 
 ! Font
-URxvt.font:               xft:DejaVu Sans Mono:pixelsize=13,\
+URxvt.font:               xft:DejaVu Sans Mono:pixelsize=14,\
                           xft:FontAwesome,\
                           xft:IPAGothic
 
@@ -68,6 +68,9 @@ URxvt*background:         #151515
 ! Cursor color
 URxvt*cursorColor:        #FF0000
 URxvt*cursorColor2:       #000000
+
+! DPI settings
+Xft.dpi:                  120
 
 ! ROFI Color theme
 rofi.color-normal:        #fdf6e3,#002b36,#eee8d5,#586e75,#eee8d5

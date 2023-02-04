@@ -45,7 +45,7 @@ xset -b
 
 # redshift
 killall redshift-gtk
-redshift-gtk &
+redshift-gtk -l 55.6761:12.5683 &
 
 if [ $(hostname) == 't520-arch' ]; then
   # set wallpaper
