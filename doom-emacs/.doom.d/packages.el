@@ -55,3 +55,5 @@
 ;; tree-sitter
 (package! tree-sitter)
 (package! tree-sitter-langs)
+
+(package! k8s-mode)
