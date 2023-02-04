@@ -37,6 +37,7 @@
  ("nongnu-elpa" . "0e54bf5f6d048bdb87ae648237dbadc2b2217b4b")
  ("orderless" . "847694e78c12d903d5e3f6cb365a5d3b984db537")
  ("org-superstar-mode" . "54c81c27dde2a6dc461bb064e79a8b2089093a2e")
+ ("plantuml-mode" . "ea45a13707abd2a70df183f1aec6447197fc9ccc")
  ("project" . "0fd90f7a0621c6be80ee0430842c73104395b6d5")
  ("projectile" . "e18ad4d6111eb9e975ccce028baf5e4bb786bfcf")
  ("rust-mode" . "22fff6a049402584e7120146c3db141c6f530bf6")

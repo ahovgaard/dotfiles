@@ -530,7 +530,13 @@
   ;; characters to use for the ellipsis:
   ;; …, ⤵, ▼, ↴, ⬎, ⤷, and ⋱.
   (setq org-ellipsis " ▼")
-  (setq org-startup-indented t))
+  (setq org-startup-indented t)
+  (setq org-plantuml-exec-mode 'plantuml)
+  (add-to-list 'org-src-lang-modes '("plantuml" . plantuml))
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   '((emacs-lisp . t)
+     (plantuml . t))))
 
 (use-package org-superstar
   :after org
@@ -585,3 +591,10 @@
    :keymaps 'elixir-mode-map
    :prefix "SPC"
    "cf" 'elixir-format))
+
+;; PlantUML
+;; https://plantuml.com/emacs
+;; https://orgmode.org/worg/org-contrib/babel/languages/ob-doc-plantuml.html
+(use-package plantuml-mode
+  :config
+  (setq plantuml-default-exec-mode 'executable))
