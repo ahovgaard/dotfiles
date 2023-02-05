@@ -595,6 +595,19 @@
   (add-hook 'prog-mode-hook #'rainbow-mode))
 
 
+;; Tree-sitter
+;; ---------------------------------------------------------------------
+
+;; Automatically install tree-sitter grammars and use tree-sitter
+;; major modes, with fallback to original major modes.
+;; https://github.com/renzmann/treesit-auto
+(use-package treesit-auto
+  :straight (treesit-auto :type git :host github :repo "renzmann/treesit-auto")
+  :config
+  (setq treesit-auto-install 'prompt)
+  (global-treesit-auto-mode))
+
+
 ;; Languages
 ;; ---------------------------------------------------------------------
 
