@@ -513,7 +513,16 @@
 
 (use-package magit
   :custom
-  (magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1))
+  (magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1)
+  :config
+  ;; NOTE: This might not perform well with many open buffers, need to
+  ;; evaluate.
+  (defun akh/magit-update-vc ()
+    "Update vc in all verson-controlled buffers when magit refreshes."
+    (dolist (buf (buffer-list))
+      (with-current-buffer buf
+        (vc-refresh-state))))
+  (add-hook 'magit-post-refresh-hook #'akh/magit-update-vc))
 
 (akh/leader-key
   "g"  '(:ignore t :which-key "git")
