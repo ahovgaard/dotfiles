@@ -234,3 +234,5 @@ exec blueman-applet
 exec nm-applet
 
 exec --no-startup-id "autorandr -c"
+
+include ./`hostname`.conf
