@@ -40,6 +40,7 @@
  ("plantuml-mode" . "ea45a13707abd2a70df183f1aec6447197fc9ccc")
  ("project" . "0fd90f7a0621c6be80ee0430842c73104395b6d5")
  ("projectile" . "e18ad4d6111eb9e975ccce028baf5e4bb786bfcf")
+ ("rainbow-mode" . "8e96388fb4d616a9dde23e712bad0d9cd048fbf0")
  ("rust-mode" . "22fff6a049402584e7120146c3db141c6f530bf6")
  ("rustic" . "87231e24cdb581998a149c9b2394f39b0822f102")
  ("s.el" . "e957dcb0677da18b2bb60ad867db5df5c35b5616")
