@@ -50,6 +50,7 @@
  ("themes" . "b5ff201f4bea4286e9ed015a2043cf2394182232")
  ("transient" . "239be53b01e003c5206087d850d9672a42dc4b32")
  ("treepy.el" . "7c4a0d21322506a4d4b2301b4274ec955b429b47")
+ ("treesit-auto" . "603de37a7ce2e7ad1698d3f26924b1ea518c6fa1")
  ("undo-hl" . "5110e9d41510832a8295e380842122150c9f2eae")
  ("use-package" . "bcf0984cf55b70fe6896c6a15f61df92b24f8ffd")
  ("vertico" . "e5dfaa60eebcbefdb4514f180e344e25fbcf43df")
