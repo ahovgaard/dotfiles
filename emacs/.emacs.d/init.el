@@ -577,6 +577,15 @@
             (lambda () (display-line-numbers-mode -1))))
 
 
+;; Miscellaneous
+;; ---------------------------------------------------------------------
+
+;; Highlight color codes, e.g., #AAFF77.
+(use-package rainbow-mode
+  :init
+  (add-hook 'prog-mode-hook #'rainbow-mode))
+
+
 ;; Languages
 ;; ---------------------------------------------------------------------
 
