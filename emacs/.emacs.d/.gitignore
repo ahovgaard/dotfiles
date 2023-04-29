@@ -14,6 +14,5 @@
 /recentf
 
 # straight
-/straight/build-cache.el
-/straight/build/
-/straight/repos/
+!/straight/versions/default.el
+/straight/*

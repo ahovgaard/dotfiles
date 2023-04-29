@@ -36,6 +36,10 @@
 ;; Display the column number in the mode line
 (column-number-mode 1)
 
+;; Don't pop up the *Warnings* buffer on warnings and errors from
+;; async native compilation.
+(setq native-comp-async-report-warnings-errors 'silent)
+
 ;; Display line numbers in every buffer (enables
 ;; `Display-Line-Numbers' mode in all buffers).
 ;; Disabled in certain mode hooks where not appropriate.
@@ -52,6 +56,7 @@
      'default nil :font akh/font-family :height akh/font-height)
   (warn "Font \"%s\" is not available." akh/font-family))
 
+;; Text scale step when using C-x C-{+,-,0}.
 (setq text-scale-mode-step 1.1)
 
 ;; Confirm when exiting emacs
@@ -406,8 +411,11 @@
 
 (akh/leader-key
   "c" '(:ignore t :which-key "code")
-  "cf" 'lsp-format-buffer
-  )
+  "cf" 'lsp-format-buffer)
+
+(akh/leader-key
+  "h"  '(:ignore t :which-key "help")
+  "ht" 'load-theme)
 
 
 ;; Theme and UI
@@ -416,7 +424,8 @@
 ;; Themes
 (use-package doom-themes
   :init
-  (load-theme 'doom-one t))
+  (load-theme 'doom-one t)
+  (setq custom-safe-themes t))
 
 ;; all-the-icons
 (use-package all-the-icons
@@ -593,19 +602,6 @@
 (use-package rainbow-mode
   :init
   (add-hook 'prog-mode-hook #'rainbow-mode))
-
-
-;; Tree-sitter
-;; ---------------------------------------------------------------------
-
-;; Automatically install tree-sitter grammars and use tree-sitter
-;; major modes, with fallback to original major modes.
-;; https://github.com/renzmann/treesit-auto
-(use-package treesit-auto
-  :straight (treesit-auto :type git :host github :repo "renzmann/treesit-auto")
-  :config
-  (setq treesit-auto-install 'prompt)
-  (global-treesit-auto-mode))
 
 
 ;; Languages
