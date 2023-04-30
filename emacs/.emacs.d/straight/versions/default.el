@@ -1,4 +1,5 @@
-(("all-the-icons.el" . "8a7e70da843d99a36ad3c2b9e19924dcf533e5a0")
+(("Emacs-wgrep" . "3132abd3750b8c87cbcf6942db952acfab5edccd")
+ ("all-the-icons.el" . "8a7e70da843d99a36ad3c2b9e19924dcf533e5a0")
  ("annalist.el" . "134fa3f0fb91a636a1c005c483516d4b64905a6d")
  ("cape" . "db3059af52718c7f55485ef183bdad3e40f58df9")
  ("closql" . "689c16f5360457accc571fd5bd947d06b30777cd")
