@@ -41,6 +41,10 @@
 ;; Disabled in certain mode hooks where not appropriate.
 (global-display-line-numbers-mode 1)
 
+;; Set minimum width for line number display to 3 to avoid the gutter
+;; changing size when scrolling past line 100.
+(setq-default display-line-numbers-width 3)
+
 ;; Don't pop up the *Warnings* buffer on warnings and errors from
 ;; async native compilation.
 (setq native-comp-async-report-warnings-errors 'silent)
@@ -127,14 +131,35 @@
 (use-package dash)
 
 
+;; Theme and UI
+;; ---------------------------------------------------------------------
+
+;; Themes
+(use-package doom-themes
+  :init
+  (load-theme 'doom-one t)
+  (setq custom-safe-themes t))
+
+;; all-the-icons
+(use-package all-the-icons
+  :if (display-graphic-p))
+
+;; Mode line
+(use-package doom-modeline
+  :init (doom-modeline-mode 1))
+
+
 ;; Evil
 ;; ---------------------------------------------------------------------
 
 (use-package evil
   :init
+  ;; Required by evil-collection
   (setq evil-want-integration t)
   (setq evil-want-keybinding nil)
+  ;; C-u should scroll up (like Vim).
   (setq evil-want-C-u-scroll t)
+  ;; C-i should jump forward in the jump list (like Vim).
   (setq evil-want-C-i-jump t)
   :config
   (evil-mode 1)
@@ -148,6 +173,37 @@
   (setq forge-add-default-bindings nil)
   :config
   (evil-collection-init))
+
+
+;; Undo/redo
+;; ---------------------------------------------------------------------
+
+;; Highlights undos by flashing to-be-deleted text before deleting.
+;; https://github.com/casouri/undo-hl
+(use-package undo-hl
+  :straight (undo-hl :type git :host github :repo "casouri/undo-hl")
+  :commands undo-hl-mode
+  :init
+  (add-hook 'prog-mode-hook #'undo-hl-mode)
+  (add-hook 'text-mode-hook #'undo-hl-mode))
+
+;; Visual undo. Displays the undo history as a tree.
+;; https://github.com/casouri/vundo
+(use-package vundo
+  :commands vundo
+  :config
+  (setq vundo-glyph-alist vundo-unicode-symbols))
+
+
+;; Helpful
+;; ---------------------------------------------------------------------
+
+(use-package helpful
+  :bind
+  ([remap describe-key]      . helpful-key)
+  ([remap describe-command]  . helpful-command)
+  ([remap describe-variable] . helpful-variable)
+  ([remap describe-function] . helpful-function))
 
 
 ;; Completion
@@ -300,26 +356,6 @@
 ;;  :commands lsp-ui-mode)
 
 
-;; Undo/redo
-;; ---------------------------------------------------------------------
-
-;; Highlights undos by flashing to-be-deleted text before deleting.
-;; https://github.com/casouri/undo-hl
-(use-package undo-hl
-  :straight (undo-hl :type git :host github :repo "casouri/undo-hl")
-  :commands undo-hl-mode
-  :init
-  (add-hook 'prog-mode-hook #'undo-hl-mode)
-  (add-hook 'text-mode-hook #'undo-hl-mode))
-
-;; Visual undo. Displays the undo history as a tree.
-;; https://github.com/casouri/vundo
-(use-package vundo
-  :commands vundo
-  :config
-  (setq vundo-glyph-alist vundo-unicode-symbols))
-
-
 ;; Comments
 ;; ---------------------------------------------------------------------
 
@@ -327,17 +363,6 @@
   :config
   (evil-global-set-key 'normal (kbd "g c") #'evilnc-comment-operator)
   (evil-global-set-key 'visual (kbd "g c") #'evilnc-comment-operator))
-
-
-;; Helpful
-;; ---------------------------------------------------------------------
-
-(use-package helpful
-  :bind
-  ([remap describe-key]      . helpful-key)
-  ([remap describe-command]  . helpful-command)
-  ([remap describe-variable] . helpful-variable)
-  ([remap describe-function] . helpful-function))
 
 
 ;; Key bindings
@@ -420,24 +445,6 @@
 (akh/leader-key
   "h"  '(:ignore t :which-key "help")
   "ht" 'load-theme)
-
-
-;; Theme and UI
-;; ---------------------------------------------------------------------
-
-;; Themes
-(use-package doom-themes
-  :init
-  (load-theme 'doom-one t)
-  (setq custom-safe-themes t))
-
-;; all-the-icons
-(use-package all-the-icons
-  :if (display-graphic-p))
-
-;; Mode line
-(use-package doom-modeline
-  :init (doom-modeline-mode 1))
 
 
 ;; Project interaction
@@ -607,6 +614,10 @@
   :init
   (add-hook 'prog-mode-hook #'rainbow-mode))
 
+;; wgrep.el - Writable grep buffer and apply the changes to files
+;; https://github.com/mhayashi1120/Emacs-wgrep
+
+(use-package wgrep)
 
 ;; Languages
 ;; ---------------------------------------------------------------------
