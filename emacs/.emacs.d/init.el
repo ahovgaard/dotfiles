@@ -36,14 +36,14 @@
 ;; Display the column number in the mode line
 (column-number-mode 1)
 
-;; Don't pop up the *Warnings* buffer on warnings and errors from
-;; async native compilation.
-(setq native-comp-async-report-warnings-errors 'silent)
-
 ;; Display line numbers in every buffer (enables
 ;; `Display-Line-Numbers' mode in all buffers).
 ;; Disabled in certain mode hooks where not appropriate.
 (global-display-line-numbers-mode 1)
+
+;; Don't pop up the *Warnings* buffer on warnings and errors from
+;; async native compilation.
+(setq native-comp-async-report-warnings-errors 'silent)
 
 ;; Font
 (defvar akh/font-family "Fira Code"
@@ -142,6 +142,10 @@
 
 (use-package evil-collection
   :after evil
+  :init
+  ;; Suppress message on starup, "Setting ‘forge-add-default-bindings’ to
+  ;; nil in ‘evil-collection-forge-setup’", by setting it to `nil` here.
+  (setq forge-add-default-bindings nil)
   :config
   (evil-collection-init))
 
