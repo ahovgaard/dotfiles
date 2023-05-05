@@ -20,6 +20,7 @@
  ("evil" . "23a20e364cb151d73373d886355508cb8a0d4539")
  ("evil-collection" . "5092f5e04cfd0a31b1c5c46cb6b792a9e917c728")
  ("evil-nerd-commenter" . "8c0f23d46a3927b9f83c1c2c4590be53d0b740db")
+ ("evil-visualstar" . "06c053d8f7381f91c53311b1234872ca96ced752")
  ("f.el" . "af7d37c619010b576fd22b50c62c71ff33093f3c")
  ("forge" . "d752022c0a14bb55c57589f81b51c7e561c2e74f")
  ("general.el" . "7ce8db297e3de258ec43802269438ac7f1918707")

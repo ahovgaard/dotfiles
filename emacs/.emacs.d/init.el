@@ -174,6 +174,12 @@
   :config
   (evil-collection-init))
 
+;; Support searching with * and # from visual selection.
+;; https://github.com/bling/evil-visualstar
+(use-package evil-visualstar
+  :after evil
+  :config
+  (global-evil-visualstar-mode))
 
 ;; Undo/redo
 ;; ---------------------------------------------------------------------
