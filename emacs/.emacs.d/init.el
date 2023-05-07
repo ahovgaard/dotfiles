@@ -253,20 +253,6 @@
 (use-package corfu
   :straight (corfu :files (:defaults "extensions/*")
                    :includes (corfu-history corfu-popupinfo))
-  ;; Optional customizations
-  :custom
-  (corfu-cycle nil)                 ;; Disable cycling for `corfu-next/previous'
-  (corfu-auto t)                    ;; Enable auto completion
-  ;; (corfu-separator ?\s)          ;; Orderless field separator
-  ;; (corfu-quit-at-boundary nil)   ;; Never quit at completion boundary
-  ;; (corfu-quit-no-match nil)      ;; Never quit, even if there is no match
-  ;; (corfu-preview-current nil)    ;; Disable current candidate preview
-  ;; (corfu-preselect 'prompt)      ;; Preselect the prompt
-  ;; (corfu-on-exact-match nil)     ;; Configure handling of exact matches
-  (corfu-scroll-margin 2)        ;; Use scroll margin
-
-  ;; (setq corfu-min-width 70)
-  ;; (setq corfu-max-width corfu-min-width)  ;; Always have the same width
 
   ;; Enable Corfu only for certain modes.
   ;; :hook ((prog-mode . corfu-mode)
@@ -282,6 +268,19 @@
   (corfu-popupinfo-mode)
 
   :config
+  (setq corfu-cycle nil)                  ;; Disable cycling for `corfu-next/previous'
+  (setq corfu-auto t)                     ;; Enable auto completion
+  ;; (setq corfu-separator ?\s)           ;; Orderless field separator
+  ;; (setq corfu-quit-at-boundary nil)    ;; Never quit at completion boundary
+  ;; (setq corfu-quit-no-match nil)       ;; Never quit, even if there is no match
+  ;; (setq corfu-preview-current nil)     ;; Disable current candidate preview
+  ;; (setq corfu-preselect 'prompt)       ;; Preselect the prompt
+  ;; (setq corfu-on-exact-match nil)      ;; Configure handling of exact matches
+  (setq corfu-scroll-margin 2)            ;; Use scroll margin
+
+  (setq corfu-min-width 60)
+  (setq corfu-max-width corfu-min-width)  ;; Always have the same width
+
   ;; Enable completion in the minibuffer, e.g., for commands like
   ;; `M-:' (`eval-expression') or `M-!' (`shell-command'), when other
   ;; completion UI is not active.
@@ -396,13 +395,13 @@
 
 (akh/leader-key
   "." 'find-file
-  "," 'akh/switch-project-buffer
+  "," 'switch-to-buffer
   "<SPC>" 'projectile-find-file)
 
 (akh/local-leader-key
   "x" 'execute-extended-command
   "f" 'find-file
-  "b" 'akh/switch-project-buffer
+  "b" 'switch-to-buffer
   "B" 'switch-to-buffer)
 
 (akh/leader-key
@@ -433,7 +432,7 @@
 (akh/leader-key
   "b"  '(:ignore t :which-key "buffer")
   "bd" 'kill-current-buffer
-  "bb" 'akh/switch-project-buffer
+  "bb" 'switch-to-buffer
   "bB" 'switch-to-buffer)
 
 (akh/leader-key
@@ -463,12 +462,12 @@
   :bind-keymap
   ("C-c p" . projectile-command-map))
 
-(defun akh/switch-project-buffer ()
-  "Switch to a project buffer if in a project, otherwise switch to any buffer."
-  (interactive)
-  (if (projectile-project-p)
-      (call-interactively 'projectile-switch-to-buffer)
-    (call-interactively 'switch-to-buffer)))
+;; (defun akh/switch-project-buffer ()
+;;   "Switch to a project buffer if in a project, otherwise switch to any buffer."
+;;   (interactive)
+;;   (if (projectile-project-p)
+;;       (call-interactively 'projectile-switch-to-buffer)
+;;     (call-interactively 'switch-to-buffer)))
 
 (akh/leader-key
   "p"  '(:ignore t :which-key "project")
@@ -634,7 +633,6 @@
 
 ;; wgrep.el - Writable grep buffer and apply the changes to files
 ;; https://github.com/mhayashi1120/Emacs-wgrep
-
 (use-package wgrep)
 
 ;; Languages
