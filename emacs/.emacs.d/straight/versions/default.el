@@ -4,7 +4,7 @@
  ("cape" . "db3059af52718c7f55485ef183bdad3e40f58df9")
  ("closql" . "689c16f5360457accc571fd5bd947d06b30777cd")
  ("compat" . "b3b18044f9ca99a53ade91794226d71968b3e14f")
- ("consult" . "aadb912e126a143c60e6ece92b163a7356bd4730")
+ ("consult" . "267b0c9d86e7f593d042a1669a03782ecac82a54")
  ("corfu" . "67175fd73be10d54ec64e2a06a2347baf7bbf97b")
  ("dash.el" . "96eaba028ac069ea0e5cc70de15b0229126a054a")
  ("doom-modeline" . "3612082bc5cba712c07860ce37865f938beb9002")
