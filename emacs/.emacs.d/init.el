@@ -49,16 +49,13 @@
 ;; async native compilation.
 (setq native-comp-async-report-warnings-errors 'silent)
 
-;; Font
-(defvar akh/font-family "Fira Code"
-  "The default font.")
-(defvar akh/font-height 110
-  "The default font height.")
-
-(if (member akh/font-family (font-family-list))
-    (set-face-attribute
-     'default nil :font akh/font-family :height akh/font-height)
-  (warn "Font \"%s\" is not available." akh/font-family))
+;; --- Font
+;; Reasonable options:
+;; - Fira Code
+;; - Cascadia Code
+;; - JetBrains Mono
+;; - DejaVu Sans Mono
+(set-frame-font "Cascadia Code 11" nil t)
 
 ;; Text scale step when using C-x C-{+,-,0}.
 (setq text-scale-mode-step 1.1)
