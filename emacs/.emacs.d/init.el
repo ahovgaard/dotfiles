@@ -557,6 +557,21 @@
 
 (use-package forge)
 
+;; Git gutter indicators
+;; https://ianyepan.github.io/posts/emacs-git-gutter/
+(use-package git-gutter
+  :hook (prog-mode . git-gutter-mode)
+  :config
+  ;; Default is 0, meaning update indicators on saving the file.
+  ;; (setq git-gutter:update-interval 0.02)
+  )
+
+(use-package git-gutter-fringe
+  :config
+  (define-fringe-bitmap 'git-gutter-fr:added [224] nil nil '(center repeated))
+  (define-fringe-bitmap 'git-gutter-fr:modified [224] nil nil '(center repeated))
+  (define-fringe-bitmap 'git-gutter-fr:deleted [128 192 224 240] nil nil 'bottom))
+
 
 ;; Org-mode
 ;; ---------------------------------------------------------------------
