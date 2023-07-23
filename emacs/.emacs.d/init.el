@@ -49,13 +49,8 @@
 ;; async native compilation.
 (setq native-comp-async-report-warnings-errors 'silent)
 
-;; --- Font
-;; Reasonable options:
-;; - Fira Code
-;; - Cascadia Code
-;; - JetBrains Mono
-;; - DejaVu Sans Mono
-(set-frame-font "Cascadia Code 11" nil t)
+;; Font
+(set-frame-font "DejaVu Sans Mono 11" nil t)
 
 ;; Text scale step when using C-x C-{+,-,0}.
 (setq text-scale-mode-step 1.1)
@@ -165,7 +160,7 @@
 (use-package evil-collection
   :after evil
   :init
-  ;; Suppress message on starup, "Setting ‘forge-add-default-bindings’ to
+  ;; Suppress message on startup, "Setting ‘forge-add-default-bindings’ to
   ;; nil in ‘evil-collection-forge-setup’", by setting it to `nil` here.
   (setq forge-add-default-bindings nil)
   :config
@@ -608,7 +603,8 @@
 
 (akh/leader-key
  "o"  '(:ignore t :which-key "open")
- "oT" 'vterm)
+ "oT" 'vterm
+ "ou" 'vundo)
 
 
 ;; Dired
@@ -626,7 +622,7 @@
 ;; Miscellaneous
 ;; ---------------------------------------------------------------------
 
-;; Highlight color codes, e.g., #AAFF77.
+;; Colorize color names in buffers, e.g., #AAFF77, MidnightBlue.
 (use-package rainbow-mode
   :init
   (add-hook 'prog-mode-hook #'rainbow-mode))
@@ -634,6 +630,7 @@
 ;; wgrep.el - Writable grep buffer and apply the changes to files
 ;; https://github.com/mhayashi1120/Emacs-wgrep
 (use-package wgrep)
+
 
 ;; Languages
 ;; ---------------------------------------------------------------------
