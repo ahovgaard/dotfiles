@@ -543,7 +543,9 @@
     (dolist (buf (buffer-list))
       (with-current-buffer buf
         (vc-refresh-state))))
-  (add-hook 'magit-post-refresh-hook #'akh/magit-update-vc))
+  (add-hook 'magit-post-refresh-hook #'akh/magit-update-vc)
+  (transient-append-suffix 'magit-fetch "-t"
+    '("-f" "Force" "--force")))
 
 (akh/leader-key
   "g"  '(:ignore t :which-key "git")
