@@ -132,9 +132,9 @@
   (load-theme 'doom-one t)
   (setq custom-safe-themes t))
 
-;; all-the-icons
-(use-package all-the-icons
-  :if (display-graphic-p))
+;; Required by `doom-modeline` to display icons.
+;; Run `M-x nerd-icons-install-fonts` to install the necessary fonts.
+(use-package nerd-icons)
 
 ;; Mode line
 (use-package doom-modeline
