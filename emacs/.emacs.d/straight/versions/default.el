@@ -63,5 +63,6 @@
  ("with-editor" . "a4853781835346aabf083d2d9cb87f656d01ccac")
  ("xref" . "420511e20187d0c6c8680c0e63ae8810f84dee00")
  ("xterm-color" . "2ad407c651e90fff2ea85d17bf074cee2c022912")
+ ("yaml-mode" . "13728b4b1b1bd33d3a754236a0f23e4c76d6ba91")
  ("yaml.el" . "ee86566af1ed4975531ab3aa4eb4dba770c227f6"))
 :gamma

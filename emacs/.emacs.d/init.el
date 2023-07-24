@@ -660,6 +660,9 @@
 ;; Protocol Buffers (protobuf)
 (use-package protobuf-mode)
 
+;; YAML
+(use-package yaml-mode)
+
 ;; PlantUML
 ;; https://plantuml.com/emacs
 ;; https://orgmode.org/worg/org-contrib/babel/languages/ob-doc-plantuml.html
