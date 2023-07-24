@@ -474,7 +474,8 @@
   "pf" 'projectile-find-file
   "pb" 'projectile-switch-to-buffer
   "pi" 'projectile-invalidate-cache
-  "pk" 'projectile-kill-buffers)
+  "pk" 'projectile-kill-buffers
+  "pd" 'projectile-remove-known-project)
 
 
 ;; Workspaces (tabs)
@@ -655,6 +656,9 @@
    :keymaps 'elixir-mode-map
    :prefix "SPC"
    "mf" 'elixir-format))
+
+;; Protocol Buffers (protobuf)
+(use-package protobuf-mode)
 
 ;; PlantUML
 ;; https://plantuml.com/emacs

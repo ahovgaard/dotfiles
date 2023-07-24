@@ -1,5 +1,4 @@
 (("Emacs-wgrep" . "3132abd3750b8c87cbcf6942db952acfab5edccd")
- ("all-the-icons.el" . "f491f39c21336d354e85bdb4cca281e0a0c2f880")
  ("annalist.el" . "134fa3f0fb91a636a1c005c483516d4b64905a6d")
  ("cape" . "5b28cd43f2efa19dbf5053f164cce622a4b5bdae")
  ("closql" . "85ac7b8a894a4e259439d79eb6bd6f5129770905")
@@ -46,6 +45,7 @@
  ("plantuml-mode" . "ea45a13707abd2a70df183f1aec6447197fc9ccc")
  ("project" . "27bfa9f0dafeb2b6c2110f8543a381fbdd380925")
  ("projectile" . "971cd5c4f25ff1f84ab7e8337ffc7f89f67a1b52")
+ ("protobuf" . "4f6fc33c5b89d34c3497c5ad6155a7f4a086b2be")
  ("rainbow-mode" . "8e96388fb4d616a9dde23e712bad0d9cd048fbf0")
  ("rust-mode" . "e443ccf2884028d3b6cc550ff20e7c92dadccb68")
  ("rustic" . "39423d1cf4fa054c36bf9577356451f4c06ee148")
