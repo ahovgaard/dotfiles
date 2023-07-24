@@ -78,6 +78,9 @@
 ;; Scroll one line at a time.
 (setq scroll-conservatively 1000)
 
+;; Backup
+(setq backup-directory-alist `(("." . "~/.emacs.d/backups")))
+
 
 ;; Package management
 ;; ---------------------------------------------------------------------
