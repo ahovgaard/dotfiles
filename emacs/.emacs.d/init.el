@@ -380,11 +380,12 @@
   (general-create-definer akh/leader-key
     :states '(normal visual emacs)
     :keymaps 'override
-    :prefix "SPC")
+    :prefix "SPC"
+    :non-normal-prefix "M-SPC")
 
   ;; Create a general.el definer macro using "," as loader key.
   (general-create-definer akh/local-leader-key
-    :states '(normal visual emacs)
+    :states '(normal visual)
     :keymaps 'override
     :prefix ","))
 
@@ -645,9 +646,10 @@
 (use-package elixir-mode
   :config
   (general-define-key
+   :states '(normal visual)
    :keymaps 'elixir-mode-map
    :prefix "SPC"
-   "cf" 'elixir-format))
+   "mf" 'elixir-format))
 
 ;; PlantUML
 ;; https://plantuml.com/emacs
