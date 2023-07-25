@@ -30,6 +30,7 @@
  ("gnu-elpa-mirror" . "be1351c478935b8348c19d3197cd5d84330c708d")
  ("goto-chg" . "278cd3e6d5107693aa2bb33189ca503f22f227d0")
  ("helpful" . "32cb28b50b3366ad35e2cb936367268ddeec745f")
+ ("hl-todo" . "b27cddf7373408681cc949c8ef829f87a01ed3f3")
  ("ht.el" . "1c49aad1c820c86f7ee35bf9fff8429502f60fef")
  ("hydra" . "317e1de33086637579a7aeb60f77ed0405bf359b")
  ("let-alist" . "021fc10df2e44faba4728d849ee767cf890aa51a")

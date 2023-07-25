@@ -176,6 +176,7 @@
   :config
   (global-evil-visualstar-mode))
 
+
 ;; Undo/redo
 ;; ---------------------------------------------------------------------
 
@@ -628,6 +629,10 @@
 
 ;; Miscellaneous
 ;; ---------------------------------------------------------------------
+
+;; Highlight TODO and similar keywords in comments and strings.
+(use-package hl-todo
+  :hook (prog-mode . hl-todo-mode))
 
 ;; Colorize color names in buffers, e.g., #AAFF77, MidnightBlue.
 (use-package rainbow-mode
