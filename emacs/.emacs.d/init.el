@@ -456,6 +456,12 @@
   "h"  '(:ignore t :which-key "help")
   "ht" 'load-theme)
 
+(akh/leader-key
+ "o"  '(:ignore t :which-key "open")
+ "oT" '(akh/vterm-here :which-key "Open terminal")
+ "ot" '(vterm-toggle :which-key "Toggle terminal")
+ "ou" 'vundo)
+
 
 ;; Project interaction
 ;; ---------------------------------------------------------------------
@@ -567,7 +573,7 @@ otherwise in default state."
         (evil-insert-state)))))
 
 (akh/leader-key
-  "g"  '(:ignore t :which-key "git")
+  "g" '(:ignore t :which-key "git")
   "gg" 'magit-status
   "gb" 'magit-blame-addition)
 
@@ -624,12 +630,15 @@ otherwise in default state."
   :config
   (setq vterm-max-scrollback 10000)
   (setq vterm-kill-buffer-on-exit t)
-  (evil-define-key 'insert vterm-mode-map (kbd "C-c") #'vterm--self-insert))
+  (evil-define-key 'insert vterm-mode-map (kbd "C-c") #'vterm--self-insert)
+  (evil-define-key 'insert vterm-mode-map (kbd "C-y") #'evil-collection-vterm-paste-after))
 
-(akh/leader-key
- "o"  '(:ignore t :which-key "open")
- "oT" 'vterm
- "ou" 'vundo)
+(use-package vterm-toggle)
+
+(defun akh/vterm-here ()
+  "Open a terminal buffer in the current window."
+  (interactive)
+  (vterm vterm-buffer-name))
 
 
 ;; Dired
