@@ -63,6 +63,7 @@
 
 ;; Enable Recentf mode to keep track of recently opened files.
 (recentf-mode 1)
+(setq recentf-max-saved-items 200)  ; default is 20
 
 ;; Automatically add a newline at the end of a file when a file is
 ;; saved. The POSIX standard defines a "line" as ending in a newline
@@ -78,7 +79,8 @@
 ;; Scroll one line at a time.
 (setq scroll-conservatively 1000)
 
-;; Backup
+;; Create backups for all files in the same directory (default is to
+;; create the backup in the same directory as the original file).
 (setq backup-directory-alist `(("." . "~/.emacs.d/backups")))
 
 
@@ -156,6 +158,8 @@
   (setq evil-want-C-u-scroll t)
   ;; C-i should jump forward in the jump list (like Vim).
   (setq evil-want-C-i-jump t)
+  ;; Make * and # searches use symbols instead of words.
+  (setq evil-symbol-word-search t)
   :config
   (evil-mode 1)
   (evil-set-undo-system 'undo-redo))
@@ -380,14 +384,14 @@
 
 (use-package general
   :config
-  ;; Create a general.el definer macro using "SPC" as loader key.
+  ;; Create a general.el definer macro using "SPC" as leader key.
   (general-create-definer akh/leader-key
     :states '(normal visual emacs)
     :keymaps 'override
     :prefix "SPC"
     :non-normal-prefix "M-SPC")
 
-  ;; Create a general.el definer macro using "," as loader key.
+  ;; Create a general.el definer macro using "," as leader key.
   (general-create-definer akh/local-leader-key
     :states '(normal visual)
     :keymaps 'override
@@ -415,6 +419,10 @@
   "wj" 'evil-window-down
   "wk" 'evil-window-up
   "wl" 'evil-window-right
+  "wH" 'evil-window-move-far-left
+  "wJ" 'evil-window-move-very-bottom
+  "wK" 'evil-window-move-very-top
+  "wL" 'evil-window-move-far-right
   "ws" 'evil-window-split
   "wv" 'evil-window-vsplit
   "wo" 'delete-other-windows
