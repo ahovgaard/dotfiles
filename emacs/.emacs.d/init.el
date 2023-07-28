@@ -212,6 +212,33 @@
   ([remap describe-function] . helpful-function))
 
 
+;; Key binding utilities: General, which-key, hydra
+;; ---------------------------------------------------------------------
+
+(use-package hydra)
+
+(use-package which-key
+  :init
+  (which-key-mode)
+  :config
+  (setq which-key-idle-delay 1.0))
+
+(use-package general
+  :config
+  ;; Create a general.el definer macro using "SPC" as leader key.
+  (general-create-definer akh/leader-key
+    :states '(normal visual emacs)
+    :keymaps 'override
+    :prefix "SPC"
+    :non-normal-prefix "M-SPC")
+
+  ;; Create a general.el definer macro using "," as leader key.
+  (general-create-definer akh/local-leader-key
+    :states '(normal visual)
+    :keymaps 'override
+    :prefix ","))
+
+
 ;; Completion
 ;; ---------------------------------------------------------------------
 
@@ -373,30 +400,6 @@
 ;; Key bindings
 ;; ---------------------------------------------------------------------
 
-(use-package hydra)
-
-;; which-key
-(use-package which-key
-  :init
-  (which-key-mode)
-  :config
-  (setq which-key-idle-delay 1.0))
-
-(use-package general
-  :config
-  ;; Create a general.el definer macro using "SPC" as leader key.
-  (general-create-definer akh/leader-key
-    :states '(normal visual emacs)
-    :keymaps 'override
-    :prefix "SPC"
-    :non-normal-prefix "M-SPC")
-
-  ;; Create a general.el definer macro using "," as leader key.
-  (general-create-definer akh/local-leader-key
-    :states '(normal visual)
-    :keymaps 'override
-    :prefix ","))
-
 (akh/leader-key
   "." 'find-file
   "," 'switch-to-buffer
@@ -491,58 +494,6 @@
   "pi" 'projectile-invalidate-cache
   "pk" 'projectile-kill-buffers
   "pd" 'projectile-remove-known-project)
-
-
-;; Workspaces (tabs)
-;; ---------------------------------------------------------------------
-
-;; (use-package eyebrowse
-;;   :init
-;;   (eyebrowse-mode 1)
-;;   ;; (eyebrowse-setup-opinionated-keys)
-;;   :config
-;;   ;; Type of new workspace: Clone last workspace (default behavior).
-;;   (setq eyebrowse-new-workspace nil)
-;;   (let ((state 'normal)
-;;         (map eyebrowse-mode-map))
-;;     (evil-define-key state map (kbd "M-1") 'eyebrowse-switch-to-window-config-1)
-;;     (evil-define-key state map (kbd "M-2") 'eyebrowse-switch-to-window-config-2)
-;;     (evil-define-key state map (kbd "M-3") 'eyebrowse-switch-to-window-config-3)
-;;     (evil-define-key state map (kbd "M-4") 'eyebrowse-switch-to-window-config-4)
-;;     (evil-define-key state map (kbd "M-5") 'eyebrowse-switch-to-window-config-5)
-;;     (evil-define-key state map (kbd "M-6") 'eyebrowse-switch-to-window-config-6)
-;;     (evil-define-key state map (kbd "M-7") 'eyebrowse-switch-to-window-config-7)
-;;     (evil-define-key state map (kbd "M-8") 'eyebrowse-switch-to-window-config-8)
-;;     (evil-define-key state map (kbd "M-9") 'eyebrowse-switch-to-window-config-9)
-;;     (evil-define-key state map (kbd "M-0") 'eyebrowse-switch-to-window-config-0)
-;;     (evil-define-key state map (kbd "gt") 'eyebrowse-next-window-config)
-;;     (evil-define-key state map (kbd "gT") 'eyebrowse-prev-window-config)))
-
-(setq tab-bar-show nil)
-
-(defun akh/print-tabs ()
-  "Prints the open tab-bar tabs to the minibuffer."
-  (interactive)
-  (let ((tabs (-map (lambda (tab)
-                      `(,(car tab) ,(alist-get 'name tab)))
-                    (tab-bar-tabs))))
-    (message
-     (string-join
-      (-map-indexed #'(lambda (index tab)
-                        (let ((str (format " [%d] %s " index (nth 1 tab))))
-                          (if (equal (car tab) 'current-tab)
-                              (propertize str 'face 'highlight)
-                            str)))
-                    tabs)
-      " "))))
-
-(akh/leader-key
-  "<tab>" '(:ignore t :which-key "workspace")
-  "<tab>n" 'tab-new
-  "<tab>r" 'tab-rename
-  "<tab>d" 'tab-close
-  "<tab><tab>" 'akh/print-tabs
-  "<tab>." 'tab-bar-select-tab-by-name)
 
 
 ;; Version control
@@ -693,6 +644,12 @@ otherwise in default state."
 
 ;; YAML
 (use-package yaml-mode)
+
+;; Dockerfile
+(use-package dockerfile-mode)
+
+;; Kubernetes
+(use-package k8s-mode)
 
 ;; PlantUML
 ;; https://plantuml.com/emacs
