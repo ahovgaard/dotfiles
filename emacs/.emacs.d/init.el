@@ -18,6 +18,11 @@
             (message "Emacs ready in %s with %d garbage collections."
                      (emacs-init-time "%.2f seconds") gcs-done)))
 
+;; Increase the maximum number of bytes to read from a subprocess in a
+;; single chunk. Based on `lsp-mode' performance recommandations:
+;; https://emacs-lsp.github.io/lsp-mode/page/performance/
+(setq read-process-output-max (* 1024 1024))  ;; 1 MiB
+
 ;; Show an empty scratch buffer after startup
 (setq inhibit-startup-message t)
 (setq initial-scratch-message "")
