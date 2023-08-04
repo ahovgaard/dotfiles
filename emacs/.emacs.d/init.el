@@ -662,3 +662,6 @@ otherwise in default state."
 (use-package plantuml-mode
   :config
   (setq plantuml-default-exec-mode 'executable))
+
+;; Nix
+(use-package nix-mode)
