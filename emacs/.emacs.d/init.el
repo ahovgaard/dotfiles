@@ -165,6 +165,8 @@
   (setq evil-want-C-i-jump t)
   ;; Make * and # searches use symbols instead of words.
   (setq evil-symbol-word-search t)
+  ;; When pasting in visual state, don't add the replaced text to the kill ring.
+  (setq evil-kill-on-visual-paste nil)
   :config
   (evil-mode 1)
   (evil-set-undo-system 'undo-redo))
@@ -216,6 +218,15 @@
   ([remap describe-variable] . helpful-variable)
   ([remap describe-function] . helpful-function))
 
+
+;; Execution paths
+;; ---------------------------------------------------------------------
+
+;; Make Emacs use the $PATH set up by the user's shell
+(use-package exec-path-from-shell
+  :init
+  (when (memq window-system '(mac ns x))
+    (exec-path-from-shell-initialize)))
 
 ;; Key binding utilities: General, which-key, hydra
 ;; ---------------------------------------------------------------------
@@ -419,7 +430,9 @@
 (akh/leader-key
   "s"  '(:ignore t :which-key "search")
   "ss" 'consult-line
-  "sg" 'consult-git-grep)
+  "sg" 'consult-git-grep
+  "sd" '(consult-ripgrep :which-key "consult-ripgrep project")
+  "sD" '((lambda () (interactive) (consult-ripgrep t)) :which-key "consult-ripgrep directory"))
 
 (akh/leader-key
   "w"  '(:ignore t :which-key "window")
@@ -483,13 +496,6 @@
   (setq projectile-switch-project-action #'projectile-find-file)
   :bind-keymap
   ("C-c p" . projectile-command-map))
-
-;; (defun akh/switch-project-buffer ()
-;;   "Switch to a project buffer if in a project, otherwise switch to any buffer."
-;;   (interactive)
-;;   (if (projectile-project-p)
-;;       (call-interactively 'projectile-switch-to-buffer)
-;;     (call-interactively 'switch-to-buffer)))
 
 (akh/leader-key
   "p"  '(:ignore t :which-key "project")
@@ -638,6 +644,8 @@ otherwise in default state."
 ;; Elixir
 (use-package elixir-mode
   :config
+  (setq lsp-elixir-suggest-specs nil)
+
   (general-define-key
    :states '(normal visual)
    :keymaps 'elixir-mode-map
@@ -665,3 +673,6 @@ otherwise in default state."
 
 ;; Nix
 (use-package nix-mode)
+
+;; Go
+(use-package go-mode)
