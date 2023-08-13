@@ -88,6 +88,10 @@
 ;; create the backup in the same directory as the original file).
 (setq backup-directory-alist `(("." . "~/.emacs.d/backups")))
 
+;; Store customization information in a separate file (not in the init file).
+(setq custom-file "~/.emacs.d/custom.el")
+(load custom-file t)
+
 
 ;; Package management
 ;; ---------------------------------------------------------------------
@@ -227,6 +231,7 @@
   :init
   (when (memq window-system '(mac ns x))
     (exec-path-from-shell-initialize)))
+
 
 ;; Key binding utilities: General, which-key, hydra
 ;; ---------------------------------------------------------------------
