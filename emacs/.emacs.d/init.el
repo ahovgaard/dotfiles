@@ -18,6 +18,11 @@
             (message "Emacs ready in %s with %d garbage collections."
                      (emacs-init-time "%.2f seconds") gcs-done)))
 
+;; Increase the maximum number of bytes to read from a subprocess in a
+;; single chunk. Based on `lsp-mode' performance recommandations:
+;; https://emacs-lsp.github.io/lsp-mode/page/performance/
+(setq read-process-output-max (* 1024 1024))  ;; 1 MiB
+
 ;; Show an empty scratch buffer after startup
 (setq inhibit-startup-message t)
 (setq initial-scratch-message "")
@@ -49,13 +54,8 @@
 ;; async native compilation.
 (setq native-comp-async-report-warnings-errors 'silent)
 
-;; --- Font
-;; Reasonable options:
-;; - Fira Code
-;; - Cascadia Code
-;; - JetBrains Mono
-;; - DejaVu Sans Mono
-(set-frame-font "Cascadia Code 11" nil t)
+;; Font
+(set-frame-font "DejaVu Sans Mono 11" nil t)
 
 ;; Text scale step when using C-x C-{+,-,0}.
 (setq text-scale-mode-step 1.1)
@@ -68,6 +68,7 @@
 
 ;; Enable Recentf mode to keep track of recently opened files.
 (recentf-mode 1)
+(setq recentf-max-saved-items 200)  ; default is 20
 
 ;; Automatically add a newline at the end of a file when a file is
 ;; saved. The POSIX standard defines a "line" as ending in a newline
@@ -82,6 +83,14 @@
 
 ;; Scroll one line at a time.
 (setq scroll-conservatively 1000)
+
+;; Create backups for all files in the same directory (default is to
+;; create the backup in the same directory as the original file).
+(setq backup-directory-alist `(("." . "~/.emacs.d/backups")))
+
+;; Store customization information in a separate file (not in the init file).
+(setq custom-file "~/.emacs.d/custom.el")
+(load custom-file t)
 
 
 ;; Package management
@@ -137,9 +146,9 @@
   (load-theme 'doom-one t)
   (setq custom-safe-themes t))
 
-;; all-the-icons
-(use-package all-the-icons
-  :if (display-graphic-p))
+;; Required by `doom-modeline` to display icons.
+;; Run `M-x nerd-icons-install-fonts` to install the necessary fonts.
+(use-package nerd-icons)
 
 ;; Mode line
 (use-package doom-modeline
@@ -158,6 +167,10 @@
   (setq evil-want-C-u-scroll t)
   ;; C-i should jump forward in the jump list (like Vim).
   (setq evil-want-C-i-jump t)
+  ;; Make * and # searches use symbols instead of words.
+  (setq evil-symbol-word-search t)
+  ;; When pasting in visual state, don't add the replaced text to the kill ring.
+  (setq evil-kill-on-visual-paste nil)
   :config
   (evil-mode 1)
   (evil-set-undo-system 'undo-redo))
@@ -165,7 +178,7 @@
 (use-package evil-collection
   :after evil
   :init
-  ;; Suppress message on starup, "Setting ‘forge-add-default-bindings’ to
+  ;; Suppress message on startup, "Setting ‘forge-add-default-bindings’ to
   ;; nil in ‘evil-collection-forge-setup’", by setting it to `nil` here.
   (setq forge-add-default-bindings nil)
   :config
@@ -177,6 +190,7 @@
   :after evil
   :config
   (global-evil-visualstar-mode))
+
 
 ;; Undo/redo
 ;; ---------------------------------------------------------------------
@@ -207,6 +221,43 @@
   ([remap describe-command]  . helpful-command)
   ([remap describe-variable] . helpful-variable)
   ([remap describe-function] . helpful-function))
+
+
+;; Execution paths
+;; ---------------------------------------------------------------------
+
+;; Make Emacs use the $PATH set up by the user's shell
+(use-package exec-path-from-shell
+  :init
+  (when (memq window-system '(mac ns x))
+    (exec-path-from-shell-initialize)))
+
+
+;; Key binding utilities: General, which-key, hydra
+;; ---------------------------------------------------------------------
+
+(use-package hydra)
+
+(use-package which-key
+  :init
+  (which-key-mode)
+  :config
+  (setq which-key-idle-delay 1.0))
+
+(use-package general
+  :config
+  ;; Create a general.el definer macro using "SPC" as leader key.
+  (general-create-definer akh/leader-key
+    :states '(normal visual emacs)
+    :keymaps 'override
+    :prefix "SPC"
+    :non-normal-prefix "M-SPC")
+
+  ;; Create a general.el definer macro using "," as leader key.
+  (general-create-definer akh/local-leader-key
+    :states '(normal visual)
+    :keymaps 'override
+    :prefix ","))
 
 
 ;; Completion
@@ -370,29 +421,6 @@
 ;; Key bindings
 ;; ---------------------------------------------------------------------
 
-(use-package hydra)
-
-;; which-key
-(use-package which-key
-  :init
-  (which-key-mode)
-  :config
-  (setq which-key-idle-delay 1.0))
-
-(use-package general
-  :config
-  ;; Create a general.el definer macro using "SPC" as loader key.
-  (general-create-definer akh/leader-key
-    :states '(normal visual emacs)
-    :keymaps 'override
-    :prefix "SPC")
-
-  ;; Create a general.el definer macro using "," as loader key.
-  (general-create-definer akh/local-leader-key
-    :states '(normal visual emacs)
-    :keymaps 'override
-    :prefix ","))
-
 (akh/leader-key
   "." 'find-file
   "," 'switch-to-buffer
@@ -407,7 +435,9 @@
 (akh/leader-key
   "s"  '(:ignore t :which-key "search")
   "ss" 'consult-line
-  "sg" 'consult-git-grep)
+  "sg" 'consult-git-grep
+  "sd" '(consult-ripgrep :which-key "consult-ripgrep project")
+  "sD" '((lambda () (interactive) (consult-ripgrep t)) :which-key "consult-ripgrep directory"))
 
 (akh/leader-key
   "w"  '(:ignore t :which-key "window")
@@ -415,6 +445,10 @@
   "wj" 'evil-window-down
   "wk" 'evil-window-up
   "wl" 'evil-window-right
+  "wH" 'evil-window-move-far-left
+  "wJ" 'evil-window-move-very-bottom
+  "wK" 'evil-window-move-very-top
+  "wL" 'evil-window-move-far-right
   "ws" 'evil-window-split
   "wv" 'evil-window-vsplit
   "wo" 'delete-other-windows
@@ -448,6 +482,12 @@
   "h"  '(:ignore t :which-key "help")
   "ht" 'load-theme)
 
+(akh/leader-key
+ "o"  '(:ignore t :which-key "open")
+ "oT" '(akh/vterm-here :which-key "Open terminal")
+ "ot" '(vterm-toggle :which-key "Toggle terminal")
+ "ou" 'vundo)
+
 
 ;; Project interaction
 ;; ---------------------------------------------------------------------
@@ -462,72 +502,14 @@
   :bind-keymap
   ("C-c p" . projectile-command-map))
 
-;; (defun akh/switch-project-buffer ()
-;;   "Switch to a project buffer if in a project, otherwise switch to any buffer."
-;;   (interactive)
-;;   (if (projectile-project-p)
-;;       (call-interactively 'projectile-switch-to-buffer)
-;;     (call-interactively 'switch-to-buffer)))
-
 (akh/leader-key
   "p"  '(:ignore t :which-key "project")
   "pp" 'projectile-switch-project
   "pf" 'projectile-find-file
   "pb" 'projectile-switch-to-buffer
   "pi" 'projectile-invalidate-cache
-  "pk" 'projectile-kill-buffers)
-
-
-;; Workspaces (tabs)
-;; ---------------------------------------------------------------------
-
-;; (use-package eyebrowse
-;;   :init
-;;   (eyebrowse-mode 1)
-;;   ;; (eyebrowse-setup-opinionated-keys)
-;;   :config
-;;   ;; Type of new workspace: Clone last workspace (default behavior).
-;;   (setq eyebrowse-new-workspace nil)
-;;   (let ((state 'normal)
-;;         (map eyebrowse-mode-map))
-;;     (evil-define-key state map (kbd "M-1") 'eyebrowse-switch-to-window-config-1)
-;;     (evil-define-key state map (kbd "M-2") 'eyebrowse-switch-to-window-config-2)
-;;     (evil-define-key state map (kbd "M-3") 'eyebrowse-switch-to-window-config-3)
-;;     (evil-define-key state map (kbd "M-4") 'eyebrowse-switch-to-window-config-4)
-;;     (evil-define-key state map (kbd "M-5") 'eyebrowse-switch-to-window-config-5)
-;;     (evil-define-key state map (kbd "M-6") 'eyebrowse-switch-to-window-config-6)
-;;     (evil-define-key state map (kbd "M-7") 'eyebrowse-switch-to-window-config-7)
-;;     (evil-define-key state map (kbd "M-8") 'eyebrowse-switch-to-window-config-8)
-;;     (evil-define-key state map (kbd "M-9") 'eyebrowse-switch-to-window-config-9)
-;;     (evil-define-key state map (kbd "M-0") 'eyebrowse-switch-to-window-config-0)
-;;     (evil-define-key state map (kbd "gt") 'eyebrowse-next-window-config)
-;;     (evil-define-key state map (kbd "gT") 'eyebrowse-prev-window-config)))
-
-(setq tab-bar-show nil)
-
-(defun akh/print-tabs ()
-  "Prints the open tab-bar tabs to the minibuffer."
-  (interactive)
-  (let ((tabs (-map (lambda (tab)
-                      `(,(car tab) ,(alist-get 'name tab)))
-                    (tab-bar-tabs))))
-    (message
-     (string-join
-      (-map-indexed #'(lambda (index tab)
-                        (let ((str (format " [%d] %s " index (nth 1 tab))))
-                          (if (equal (car tab) 'current-tab)
-                              (propertize str 'face 'highlight)
-                            str)))
-                    tabs)
-      " "))))
-
-(akh/leader-key
-  "<tab>" '(:ignore t :which-key "workspace")
-  "<tab>n" 'tab-new
-  "<tab>r" 'tab-rename
-  "<tab>d" 'tab-close
-  "<tab><tab>" 'akh/print-tabs
-  "<tab>." 'tab-bar-select-tab-by-name)
+  "pk" 'projectile-kill-buffers
+  "pd" 'projectile-remove-known-project)
 
 
 ;; Version control
@@ -544,10 +526,21 @@
     (dolist (buf (buffer-list))
       (with-current-buffer buf
         (vc-refresh-state))))
-  (add-hook 'magit-post-refresh-hook #'akh/magit-update-vc))
+  (add-hook 'magit-post-refresh-hook #'akh/magit-update-vc)
+  (transient-append-suffix 'magit-fetch "-t"
+    '("-f" "Force" "--force"))
+
+  (add-hook 'git-commit-setup-hook
+    (defun +vc-start-in-insert-state-maybe-h ()
+      "Start git-commit-mode in insert state if in a blank commit message,
+otherwise in default state."
+      (when (and (bound-and-true-p evil-mode)
+                 (not (evil-emacs-state-p))
+                 (bobp) (eolp))
+        (evil-insert-state)))))
 
 (akh/leader-key
-  "g"  '(:ignore t :which-key "git")
+  "g" '(:ignore t :which-key "git")
   "gg" 'magit-status
   "gb" 'magit-blame-addition)
 
@@ -604,11 +597,15 @@
   :config
   (setq vterm-max-scrollback 10000)
   (setq vterm-kill-buffer-on-exit t)
-  (evil-define-key 'insert vterm-mode-map (kbd "C-c") #'vterm--self-insert))
+  (evil-define-key 'insert vterm-mode-map (kbd "C-c") #'vterm--self-insert)
+  (evil-define-key 'insert vterm-mode-map (kbd "C-y") #'evil-collection-vterm-paste-after))
 
-(akh/leader-key
- "o"  '(:ignore t :which-key "open")
- "oT" 'vterm)
+(use-package vterm-toggle)
+
+(defun akh/vterm-here ()
+  "Open a terminal buffer in the current window."
+  (interactive)
+  (vterm vterm-buffer-name))
 
 
 ;; Dired
@@ -626,7 +623,11 @@
 ;; Miscellaneous
 ;; ---------------------------------------------------------------------
 
-;; Highlight color codes, e.g., #AAFF77.
+;; Highlight TODO and similar keywords in comments and strings.
+(use-package hl-todo
+  :hook (prog-mode . hl-todo-mode))
+
+;; Colorize color names in buffers, e.g., #AAFF77, MidnightBlue.
 (use-package rainbow-mode
   :init
   (add-hook 'prog-mode-hook #'rainbow-mode))
@@ -634,6 +635,7 @@
 ;; wgrep.el - Writable grep buffer and apply the changes to files
 ;; https://github.com/mhayashi1120/Emacs-wgrep
 (use-package wgrep)
+
 
 ;; Languages
 ;; ---------------------------------------------------------------------
@@ -647,10 +649,25 @@
 ;; Elixir
 (use-package elixir-mode
   :config
+  (setq lsp-elixir-suggest-specs nil)
+
   (general-define-key
+   :states '(normal visual)
    :keymaps 'elixir-mode-map
    :prefix "SPC"
-   "cf" 'elixir-format))
+   "mf" 'elixir-format))
+
+;; Protocol Buffers (protobuf)
+(use-package protobuf-mode)
+
+;; YAML
+(use-package yaml-mode)
+
+;; Dockerfile
+(use-package dockerfile-mode)
+
+;; Kubernetes
+(use-package k8s-mode)
 
 ;; PlantUML
 ;; https://plantuml.com/emacs
@@ -658,3 +675,9 @@
 (use-package plantuml-mode
   :config
   (setq plantuml-default-exec-mode 'executable))
+
+;; Nix
+(use-package nix-mode)
+
+;; Go
+(use-package go-mode)

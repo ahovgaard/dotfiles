@@ -57,7 +57,7 @@
 ;; they are implemented.
 
 
-;; org-mode configuration
+;; --- org-mode
 
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
@@ -86,6 +86,7 @@
 ;; vterm configuration
 (after! vterm
   (evil-define-key 'insert vterm-mode-map (kbd "C-c") #'vterm--self-insert)
+  (evil-define-key 'insert vterm-mode-map (kbd "C-y") #'evil-collection-vterm-paste-after)
   (remove-hook! 'vterm-mode-hook #'hide-mode-line-mode))
 
 (use-package! tree-sitter
@@ -97,3 +98,12 @@
 (map! :mode 'vterm-mode
       :nv "g k" #'vterm-previous-prompt
       :nv "g j" #'vterm-next-prompt)
+
+;; --- Magit
+
+;; Add the --force option to the `magit-fetch' transient
+;; https://magit.vc/manual/transient/Modifying-Existing-Transients.html
+(use-package! magit
+  :config
+  (transient-append-suffix 'magit-fetch "-t"
+    '("-f" "Force" "--force")))
