@@ -263,9 +263,17 @@
 ;; Completion
 ;; ---------------------------------------------------------------------
 
+;; VERTical Interactive COmpletion
 (use-package vertico
+  :straight (vertico :files (:defaults "extensions/*")
+                     :includes (vertico-multiform))
   :init
   (vertico-mode))
+
+;; Enable rich annotations using the Marginalia package
+(use-package marginalia
+  :init
+  (marginalia-mode))
 
 ;; Persist history over Emacs restarts. Vertico sorts by history position.
 (use-package savehist
@@ -274,21 +282,41 @@
   :config
   (add-to-list 'savehist-additional-variables 'corfu-history))
 
+;; A few more useful configurations...
+(use-package emacs
+  :init
+  ;; TAB cycle if there are only few candidates
+  ;; (setq completion-cycle-threshold 3)
+
+  ;; Emacs 28: Hide commands in M-x which do not apply to the current mode.
+  ;; Corfu commands are hidden, since they are not supposed to be used via M-x.
+  (setq read-extended-command-predicate
+        #'command-completion-default-include-p)
+
+  ;; Enable indentation+completion using the TAB key.
+  ;; `completion-at-point' is often bound to M-TAB.
+  (setq tab-always-indent 'complete))
+
 (use-package orderless
   :init
   ;; Configure a custom style dispatcher (see the Consult wiki)
   ;; (setq orderless-style-dispatchers '(+orderless-dispatch)
   ;;       orderless-component-separator #'orderless-escapable-split-on-space)
-  (setq completion-styles '(orderless partial-completion basic)
+  (setq completion-styles '(orderless basic)
         completion-category-defaults nil
-        completion-category-overrides nil))
+        completion-category-overrides '((file (styles partial-completion)))))
 
-;; Enable rich annotations using the Marginalia package
-(use-package marginalia
-  :init
-  (marginalia-mode))
-
-(use-package consult)
+;; Search and navigation commands based on the standard Emacs `completing-read'.
+;; Provides `consult-git-grep', `consult-imenu', `consult-line', etc.
+(use-package consult
+  :config
+  ;; Possible to get rid of the default initial string '#'
+  ;; (consult-customize
+  ;;  consult-git-grep :initial "")
+  ;; Configure lower delays for async commands, e.g., `consult-git-grep'.
+  (setq consult-async-refresh-delay 0.1
+        consult-async-input-throttle 0.2
+        consult-async-input-deounce 0.1))
 
 (use-package embark
   :bind (:map minibuffer-mode-map
@@ -346,25 +374,10 @@
       (corfu-mode 1)))
   (add-hook 'minibuffer-setup-hook #'corfu-enable-always-in-minibuffer 1)
 
-  (setq corfu-auto-prefix 2)
+  (setq corfu-auto-prefix 3)
   (setq corfu-popupinfo-delay 0)
   ;; (set-face-attribute 'corfu-current nil :inherit 'highlight :background nil :foreground nil))
   )
-
-;; A few more useful configurations...
-(use-package emacs
-  :init
-  ;; TAB cycle if there are only few candidates
-  ;; (setq completion-cycle-threshold 3)
-
-  ;; Emacs 28: Hide commands in M-x which do not apply to the current mode.
-  ;; Corfu commands are hidden, since they are not supposed to be used via M-x.
-  (setq read-extended-command-predicate
-        #'command-completion-default-include-p)
-
-  ;; Enable indentation+completion using the TAB key.
-  ;; `completion-at-point' is often bound to M-TAB.
-  (setq tab-always-indent 'complete))
 
 
 ;; LSP
@@ -404,9 +417,13 @@
   :config
   (setq lsp-headerline-breadcrumb-enable nil))
 
-;;(use-package lsp-ui
-;;  :after lsp
-;;  :commands lsp-ui-mode)
+(use-package lsp-ui
+  :config
+  (setq lsp-ui-doc-max-height 8
+        lsp-ui-doc-max-width 80         ; 150 (default) is too wide
+        lsp-ui-doc-delay 0.75           ; 0.2 (default) is too naggy
+        lsp-ui-doc-show-with-mouse nil  ; don't disappear on mouseover
+        lsp-ui-doc-position 'at-point))
 
 
 ;; Comments
@@ -573,6 +590,15 @@ otherwise in default state."
   (setq org-ellipsis " ▼")
   (setq org-startup-indented t)
   (setq org-plantuml-exec-mode 'plantuml)
+
+  ;; Capture
+  (setq org-default-notes-file (concat org-directory "/notes.org"))
+
+  (setq org-capture-templates
+        '(("t" "Todo" entry (file+headline org-default-notes-file "Inbox")
+           "* TODO %?\n%a")))
+
+  ;; Babel
   (add-to-list 'org-src-lang-modes '("plantuml" . plantuml))
   (org-babel-do-load-languages
    'org-babel-load-languages
@@ -636,6 +662,9 @@ otherwise in default state."
 ;; https://github.com/mhayashi1120/Emacs-wgrep
 (use-package wgrep)
 
+(add-hook 'grep-mode-hook
+            (lambda () (toggle-truncate-lines 1)))
+
 
 ;; Languages
 ;; ---------------------------------------------------------------------
@@ -645,6 +674,9 @@ otherwise in default state."
 
 ;; Markdown
 (use-package markdown-mode)
+
+;; Erlang
+(use-package erlang)
 
 ;; Elixir
 (use-package elixir-mode
@@ -665,6 +697,9 @@ otherwise in default state."
 
 ;; Dockerfile
 (use-package dockerfile-mode)
+
+;; Docker
+(use-package docker)
 
 ;; Kubernetes
 (use-package k8s-mode)
