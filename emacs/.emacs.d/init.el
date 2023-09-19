@@ -716,3 +716,9 @@ otherwise in default state."
 
 ;; Go
 (use-package go-mode)
+
+;; Python
+(use-package lsp-pyright
+  :hook (python-mode . (lambda ()
+                          (require 'lsp-pyright)
+                          (lsp))))  ; or lsp-deferred
