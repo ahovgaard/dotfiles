@@ -12,6 +12,8 @@
 /places
 /.cache
 /recentf
+/bookmarks
+/custom.el
 
 # straight
 !/straight/versions/default.el
