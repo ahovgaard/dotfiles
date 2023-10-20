@@ -682,6 +682,7 @@ otherwise in default state."
 (use-package elixir-mode
   :config
   (setq lsp-elixir-suggest-specs nil)
+  (setq lsp-elixir-ls-version "v0.17.1")
 
   (general-define-key
    :states '(normal visual)
