@@ -599,6 +599,10 @@ otherwise in default state."
         '(("t" "Todo" entry (file+headline org-default-notes-file "Inbox")
            "* TODO %?\n%a")))
 
+  ;; Enable snippets for structural blocks, e.g. `< s TAB` for
+  ;; `#+BEGIN_SRC' .. `#+END_SRC'.
+  (require 'org-tempo)
+
   ;; Babel
   (add-to-list 'org-src-lang-modes '("plantuml" . plantuml))
   (org-babel-do-load-languages
