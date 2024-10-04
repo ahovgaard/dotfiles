@@ -6,6 +6,7 @@
 /eln-cache/
 /history
 /forge-database.sqlite
+/forge-database-*.sqlite
 /projectile-bookmarks.eld
 /projectile.cache
 /url/*
@@ -14,6 +15,8 @@
 /recentf
 /bookmarks
 /custom.el
+/tutorial
+/multisession
 
 # straight
 !/straight/versions/default.el

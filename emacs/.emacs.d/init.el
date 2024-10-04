@@ -177,10 +177,6 @@
 
 (use-package evil-collection
   :after evil
-  :init
-  ;; Suppress message on startup, "Setting ‘forge-add-default-bindings’ to
-  ;; nil in ‘evil-collection-forge-setup’", by setting it to `nil` here.
-  (setq forge-add-default-bindings nil)
   :config
   (evil-collection-init))
 
@@ -561,8 +557,6 @@ otherwise in default state."
   "g" '(:ignore t :which-key "git")
   "gg" 'magit-status
   "gb" 'magit-blame-addition)
-
-(use-package forge)
 
 ;; Git gutter indicators
 ;; https://ianyepan.github.io/posts/emacs-git-gutter/
