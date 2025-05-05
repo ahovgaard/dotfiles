@@ -92,6 +92,12 @@
 (setq custom-file "~/.emacs.d/custom.el")
 (load custom-file t)
 
+;; Set default fill column.
+(setq-default fill-column 80)
+
+;; Always focus help window.
+(setq help-window-select t)
+
 
 ;; Package management
 ;; ---------------------------------------------------------------------
@@ -321,6 +327,8 @@
 
 (use-package embark-consult)
 
+(use-package consult-lsp)
+
 ;; Enhanced completion at point with Corfu and Cape.
 ;; https://github.com/minad/corfu
 
@@ -391,6 +399,8 @@
   :init
   (setq lsp-keymap-prefix "C-c l")
 
+  (setq lsp-file-watch-threshold 3000)
+
   (defun akh/orderless-dispatch-flex-first (_pattern index _total)
     (and (eq index 0) 'orderless-flex))
 
@@ -406,22 +416,50 @@
 
   :hook (;; replace XXX-mode with concrete major-mode(e. g. python-mode)
          (elixir-mode . lsp)
+         (c-mode . lsp)
          ;;(XXX-mode . lsp)
+
+         (lsp-mode . (lambda () (setq-local evil-lookup-func #'lsp-describe-thing-at-point)))
+
          ;; if you want which-key integration
          (lsp-mode . lsp-enable-which-key-integration)
          (lsp-completion-mode . akh/lsp-mode-setup-completion))
+
+  ;; :bind (("gd" . lsp-find-definitions)
+  ;;        ("gD" . lsp-find-references))
 
   :config
   (setq lsp-headerline-breadcrumb-enable nil))
 
 (use-package lsp-ui
   :config
-  (setq lsp-ui-doc-max-height 8
+  (setq lsp-ui-doc-enable t
+        lsp-ui-doc-max-height 8
         lsp-ui-doc-max-width 80         ; 150 (default) is too wide
         lsp-ui-doc-delay 0.75           ; 0.2 (default) is too naggy
         lsp-ui-doc-show-with-mouse nil  ; don't disappear on mouseover
-        lsp-ui-doc-position 'at-point))
+        lsp-ui-doc-position 'at-point)
 
+  ;; (general-define-key
+  ;;  :states '(normal visual)
+  ;;  ;; :keymaps 'elixir-mode-map
+  ;;  ;; :prefix "SPC"
+  ;;  "K" 'lsp-ui-doc-show
+  ;;  )
+
+  )
+
+;; lsp-describe-thing-at-point
+
+(defun akh/diagnostics (&rest arg)
+  "List diagnostics for the current buffer/project."
+  (interactive)
+  (cond ((bound-and-true-p lsp-mode)
+         (consult-lsp-diagnostics arg))
+        ((bound-and-true-p flymake-mode)
+         (consult-flymake))
+        (t
+         (user-error "No diagnostics backend detected."))))
 
 ;; Comments
 ;; ---------------------------------------------------------------------
@@ -448,7 +486,7 @@
 
 (akh/leader-key
   "s"  '(:ignore t :which-key "search")
-  "ss" 'consult-line
+  "ss" '((lambda () (interactive) (consult-line "" 0)) :which-key "consult-line")
   "sg" 'consult-git-grep
   "sd" '(consult-ripgrep :which-key "consult-ripgrep project")
   "sD" '((lambda () (interactive) (consult-ripgrep t)) :which-key "consult-ripgrep directory"))
@@ -481,7 +519,7 @@
   "b"  '(:ignore t :which-key "buffer")
   "bd" 'kill-current-buffer
   "bb" 'switch-to-buffer
-  "bB" 'switch-to-buffer)
+  "bB" 'ibuffer)
 
 (akh/leader-key
   "t"  '(:ignore t :which-key "toggle")
@@ -490,7 +528,8 @@
 
 (akh/leader-key
   "c" '(:ignore t :which-key "code")
-  "cf" 'lsp-format-buffer)
+  "cf" 'lsp-format-buffer
+  "cx" #'akh/diagnostics)
 
 (akh/leader-key
   "h"  '(:ignore t :which-key "help")
@@ -515,6 +554,12 @@
   (setq projectile-switch-project-action #'projectile-find-file)
   :bind-keymap
   ("C-c p" . projectile-command-map))
+
+;; (use-package ibuffer-projectile
+;;   :hook ('ibuffer-hook . (lambda ()
+;;                            (ibuffer-projectile-set-filter-groups)
+;;                            (unless (eq ibuffer-sorting-mode 'alphabetic)
+;;                              (ibuffer-do-sort-by-alphabetic)))))
 
 (akh/leader-key
   "p"  '(:ignore t :which-key "project")
@@ -573,6 +618,14 @@ otherwise in default state."
   (define-fringe-bitmap 'git-gutter-fr:modified [224] nil nil '(center repeated))
   (define-fringe-bitmap 'git-gutter-fr:deleted [128 192 224 240] nil nil 'bottom))
 
+(defun akh/git-copy-branch-name ()
+  (interactive)
+  (let ((branch (magit-get-current-branch)))
+    (if branch
+        (progn (kill-new branch)
+               (message "Copied branch name: %s" branch))
+      (user-error "There is no current branch"))))
+
 
 ;; Org-mode
 ;; ---------------------------------------------------------------------
@@ -596,6 +649,9 @@ otherwise in default state."
   ;; Enable snippets for structural blocks, e.g. `< s TAB` for
   ;; `#+BEGIN_SRC' .. `#+END_SRC'.
   (require 'org-tempo)
+
+  (add-hook 'org-mode-hook
+            (lambda () (setq fill-column 80)))
 
   ;; Babel
   (add-to-list 'org-src-lang-modes '("plantuml" . plantuml))
@@ -676,12 +732,15 @@ otherwise in default state."
 
 ;; Erlang
 (use-package erlang)
+  ;; :config
+  ;; (remove-hook 'before-save-hook 'whitespace-cleanup t))
 
 ;; Elixir
 (use-package elixir-mode
   :config
   (setq lsp-elixir-suggest-specs nil)
-  (setq lsp-elixir-ls-version "v0.17.1")
+  (setq lsp-elixir-ls-version "v0.24.0")
+  (setq lsp-elixir-fetch-deps nil)
 
   (general-define-key
    :states '(normal visual)
@@ -695,6 +754,13 @@ otherwise in default state."
 ;; YAML
 (use-package yaml-mode)
 
+;; JSON
+(add-hook 'js-json-mode-hook
+          (lambda ()
+            (make-local-variable 'js-indent-level)
+            (setq tab-width 2)
+            (setq js-indent-level 2)))
+
 ;; Dockerfile
 (use-package dockerfile-mode)
 
@@ -703,6 +769,9 @@ otherwise in default state."
 
 ;; Kubernetes
 (use-package k8s-mode)
+
+;; Mustache (template system)
+(use-package mustache-mode)
 
 ;; PlantUML
 ;; https://plantuml.com/emacs
@@ -715,10 +784,25 @@ otherwise in default state."
 (use-package nix-mode)
 
 ;; Go
-(use-package go-mode)
+(use-package go-mode
+  :config
+  (evil-add-command-properties #'godef-jump :jump t)
+  (add-hook 'go-mode-hook (lambda () (setq tab-width 4))))
 
 ;; Python
 (use-package lsp-pyright
   :hook (python-mode . (lambda ()
                           (require 'lsp-pyright)
                           (lsp))))  ; or lsp-deferred
+
+;; Starlark (Bazel)
+(use-package bazel)
+
+;; Lua
+(use-package lua-mode)
+
+;; HashiCorp Configuration Language (HCL)
+(use-package hcl-mode)
+
+;; Typescript
+(use-package typescript-mode)
