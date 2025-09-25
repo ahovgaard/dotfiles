@@ -329,6 +329,8 @@
 
 (use-package consult-lsp)
 
+(use-package consult-flycheck)
+
 ;; Enhanced completion at point with Corfu and Cape.
 ;; https://github.com/minad/corfu
 
@@ -383,6 +385,14 @@
   (setq corfu-popupinfo-delay 0)
   ;; (set-face-attribute 'corfu-current nil :inherit 'highlight :background nil :foreground nil))
   )
+
+
+;; Flycheck
+;; ---------------------------------------------------------------------
+
+(use-package flycheck
+  :init
+  (global-flycheck-mode 1))
 
 
 ;; LSP
@@ -456,6 +466,8 @@
   (interactive)
   (cond ((bound-and-true-p lsp-mode)
          (consult-lsp-diagnostics arg))
+        ((bound-and-true-p flycheck-mode)
+         (consult-flycheck))
         ((bound-and-true-p flymake-mode)
          (consult-flymake))
         (t
@@ -779,6 +791,9 @@ otherwise in default state."
 (use-package plantuml-mode
   :config
   (setq plantuml-default-exec-mode 'executable))
+
+;; Mermaid
+(use-package mermaid-mode)
 
 ;; Nix
 (use-package nix-mode)
