@@ -427,6 +427,8 @@
   ;; Optionally configure the cape-capf-buster.
   (setq-local completion-at-point-functions (list (cape-capf-buster #'lsp-completion-at-point)))
 
+  :bind-keymap ("C-c l" . lsp-command-map)
+
   :hook (;; replace XXX-mode with concrete major-mode(e. g. python-mode)
          (elixir-mode . lsp)
          (c-mode . lsp)
