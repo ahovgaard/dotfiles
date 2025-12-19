@@ -315,14 +315,14 @@
 ;; Search and navigation commands based on the standard Emacs `completing-read'.
 ;; Provides `consult-git-grep', `consult-imenu', `consult-line', etc.
 (use-package consult
-  :config
   ;; Possible to get rid of the default initial string '#'
   ;; (consult-customize
   ;;  consult-git-grep :initial "")
+  :custom
   ;; Configure lower delays for async commands, e.g., `consult-git-grep'.
-  (setq consult-async-refresh-delay 0.1
-        consult-async-input-throttle 0.2
-        consult-async-input-deounce 0.1))
+  (consult-async-refresh-delay 0.1)
+  (consult-async-input-throttle 0.2)
+  (consult-async-input-deounce 0.1))
 
 (use-package embark
   :bind (:map minibuffer-mode-map
@@ -656,6 +656,8 @@ otherwise in default state."
   (setq org-startup-indented t)
   (setq org-plantuml-exec-mode 'plantuml)
 
+  (setq org-todo-keywords '("TODO" "|" "DONE" "CANCELED"))
+
   ;; Capture
   (setq org-default-notes-file (concat org-directory "/notes.org"))
 
@@ -798,7 +800,11 @@ otherwise in default state."
   (setq plantuml-default-exec-mode 'executable))
 
 ;; Mermaid
-(use-package mermaid-mode)
+(use-package mermaid-mode
+  :custom
+  (mermaid-mmdc-location "docker")
+  (mermaid-flags (format "run --rm -u %s:%s -v /tmp:/tmp ghcr.io/mermaid-js/mermaid-cli/mermaid-cli:11.12.0"
+                         (user-uid) (group-gid))))
 
 ;; Nix
 (use-package nix-mode)
