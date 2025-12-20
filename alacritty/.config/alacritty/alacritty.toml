@@ -35,5 +35,7 @@ mods = "Control"
 [scrolling]
 history = 30000
 
-[shell]
-program = "/bin/zsh"
+[terminal]
+
+[terminal.shell]
+program = "/usr/bin/zsh"

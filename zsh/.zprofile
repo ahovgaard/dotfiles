@@ -15,6 +15,6 @@ fi
 export KUBECTX_IGNORE_FZF=1
 export QT_QPA_PLATFORMTHEME="qt5ct"
 
-if [ -z "$DISPLAY" ] && [ -n "$XDG_VTNR" ] && [ "$XDG_VTNR" -eq 1 ]; then
-  exec startx
+if [ -z "$WAYLAND_DISPLAY" ] && [ -n "$XDG_VTNR" ] && [ "$XDG_VTNR" -eq 1 ] ; then
+    exec sway --unsupported-gpu
 fi
