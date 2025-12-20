@@ -242,10 +242,15 @@
 ;; Tree-sitter
 ;; ---------------------------------------------------------------------
 
-(setq treesit-language-source-alist
-      '((dockerfile "https://github.com/camdencheek/tree-sitter-dockerfile" "v0.2.0")
-        (elixir     "https://github.com/elixir-lang/tree-sitter-elixir"     "v0.3.4")
-        (heex       "https://github.com/phoenixframework/tree-sitter-heex"  "v0.8.0")))
+;; Automatically prompt to install tree-sitter grammar and switch to the
+;; appropriate tree-sitter mode.
+;; https://github.com/renzmann/treesit-auto
+(use-package treesit-auto
+  :custom
+  (treesit-auto-install 'prompt)
+  :config
+  (treesit-auto-add-to-auto-mode-alist 'all)
+  (global-treesit-auto-mode))
 
 
 ;; Key binding utilities: General, which-key, hydra
