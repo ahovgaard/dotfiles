@@ -239,6 +239,15 @@
     (exec-path-from-shell-initialize)))
 
 
+;; Tree-sitter
+;; ---------------------------------------------------------------------
+
+(setq treesit-language-source-alist
+      '((dockerfile "https://github.com/camdencheek/tree-sitter-dockerfile" "v0.2.0")
+        (elixir     "https://github.com/elixir-lang/tree-sitter-elixir"     "v0.3.4")
+        (heex       "https://github.com/phoenixframework/tree-sitter-heex"  "v0.8.0")))
+
+
 ;; Key binding utilities: General, which-key, hydra
 ;; ---------------------------------------------------------------------
 
@@ -755,17 +764,23 @@ otherwise in default state."
   ;; (remove-hook 'before-save-hook 'whitespace-cleanup t))
 
 ;; Elixir
-(use-package elixir-mode
-  :config
-  (setq lsp-elixir-suggest-specs nil)
-  (setq lsp-elixir-ls-version "v0.24.0")
-  (setq lsp-elixir-fetch-deps nil)
+(use-package elixir-ts-mode
+  :straight (:type built-in)
+  :mode (("\\.ex\\'" . elixir-ts-mode)
+         ("\\.exs\\'" . elixir-ts-mode)
+         ("\\mix.lock\\'" . elixir-ts-mode)))
 
-  (general-define-key
-   :states '(normal visual)
-   :keymaps 'elixir-mode-map
-   :prefix "SPC"
-   "mf" 'elixir-format))
+;; (use-package elixir-mode
+;;   :config
+;;   (setq lsp-elixir-suggest-specs nil)
+;;   (setq lsp-elixir-ls-version "v0.24.0")
+;;   (setq lsp-elixir-fetch-deps nil)
+
+;;   (general-define-key
+;;    :states '(normal visual)
+;;    :keymaps 'elixir-mode-map
+;;    :prefix "SPC"
+;;    "mf" 'elixir-format))
 
 ;; Protocol Buffers (protobuf)
 (use-package protobuf-mode)
@@ -781,7 +796,9 @@ otherwise in default state."
             (setq js-indent-level 2)))
 
 ;; Dockerfile
-(use-package dockerfile-mode)
+(use-package dockerfile-ts-mode
+  :straight (:type built-in)
+  :mode "\\dockerfiles/.*\\'")
 
 ;; Docker
 (use-package docker)
