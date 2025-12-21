@@ -63,6 +63,9 @@
 ;; Confirm when exiting emacs
 (setq confirm-kill-emacs 'y-or-n-p)
 
+;; Use short "y or n" by default.
+(defalias 'yes-or-no-p 'y-or-n-p)
+
 ;; Save cursor location in files
 (save-place-mode 1)
 
@@ -103,7 +106,7 @@
 ;; ---------------------------------------------------------------------
 
 ;; Use the `straight.el` package manager instead of the built-in
-;; `package.el`, for more a reproducible configuration. `package.el`
+;; `package.el`, for a more reproducible configuration. `package.el`
 ;; is disabled in the early init file.
 ;;
 ;; https://github.com/radian-software/straight.el
@@ -131,12 +134,17 @@
       (eval-print-last-sexp)))
   (load bootstrap-file nil 'nomessage))
 
-;; Install use-package with straight.el
-(straight-use-package 'use-package)
-
-;; Install packages by default in `use-package` forms,
-;; without having to specify `:straight t`
 (setq straight-use-package-by-default t)
+
+(use-package straight
+  :custom
+  ;; Add project and flymake to the pseudo-packages variable so straight.el
+  ;; doesn't download a separate version than what eglot downloads.
+  ;; https://github.com/radian-software/straight.el/issues/1146
+  (straight-built-in-pseudo-packages '(emacs nadvice python image-mode project flymake))
+  ;; Install packages by default in `use-package` forms,
+  ;; without having to specify `:straight t`
+  (straight-use-package-by-default t))
 
 
 ;; Common packages
@@ -204,10 +212,7 @@
 ;; https://github.com/casouri/undo-hl
 (use-package undo-hl
   :straight (undo-hl :type git :host github :repo "casouri/undo-hl")
-  :commands undo-hl-mode
-  :init
-  (add-hook 'prog-mode-hook #'undo-hl-mode)
-  (add-hook 'text-mode-hook #'undo-hl-mode))
+  :hook ((prog-mode text-mode) . undo-hl-mode))
 
 ;; Visual undo. Displays the undo history as a tree.
 ;; https://github.com/casouri/vundo
@@ -278,6 +283,18 @@
     :states '(normal visual)
     :keymaps 'override
     :prefix ","))
+
+
+;; Navigation
+;; ---------------------------------------------------------------------
+
+;; Similar to expand-region, but uses tree-sitter for language-specific
+;; expansions.
+;; https://github.com/casouri/expreg
+(use-package expreg
+  :config
+  (evil-global-set-key 'visual (kbd "v") #'expreg-expand)
+  (evil-global-set-key 'visual (kbd "V") #'expreg-contract))
 
 
 ;; Completion
