@@ -258,6 +258,27 @@
   (global-treesit-auto-mode))
 
 
+;; LSP
+;; ---------------------------------------------------------------------
+
+(use-package eglot
+  :straight (:type built-in)  ;; use the built-in version of eglot
+  :custom
+  (eglot-autoshutdown t))
+
+(defun akh/diagnostics (&rest arg)
+  "List diagnostics for the current buffer/project."
+  (interactive)
+  (cond ((bound-and-true-p lsp-mode)
+         (consult-lsp-diagnostics arg))
+        ((bound-and-true-p flymake-mode)
+         (consult-flymake))
+        ((bound-and-true-p flycheck-mode)
+         (consult-flycheck))
+        (t
+         (user-error "No diagnostics backend detected."))))
+
+
 ;; Key binding utilities: General, which-key, hydra
 ;; ---------------------------------------------------------------------
 
@@ -319,29 +340,69 @@
   :config
   (add-to-list 'savehist-additional-variables 'corfu-history))
 
+;; Enhanced completion at point with Corfu and Cape.
+;; https://github.com/minad/corfu
+(use-package corfu
+  :straight (corfu :files (:defaults "extensions/*")
+                   :includes (corfu-history corfu-popupinfo))
+  :custom
+  (corfu-auto t)                     ;; Enable auto completion
+  (corfu-auto-delay 0.2)             ;; Delay for auto completion
+  (corfu-auto-prefix 3)              ;; Minimum length of prefix for auto completion
+  (corfu-cycle nil)                  ;; Disable cycling for `corfu-next/previous'
+  (corfu-scroll-margin 2)            ;; Use scroll margin
+  (corfu-min-width 60)               ;; Popup minimum width
+  (corfu-max-width corfu-min-width)  ;; Always have the same width
+
+  (corfu-popupinfo-delay 0.2)
+
+  :init
+  (global-corfu-mode)
+  (corfu-history-mode)
+  (corfu-popupinfo-mode)
+
+  :config
+  ;; Enable completion in the minibuffer, e.g., for commands like
+  ;; `M-:' (`eval-expression') or `M-!' (`shell-command'), when other
+  ;; completion UI is not active.
+  (defun corfu-enable-always-in-minibuffer ()
+    "Enable Corfu in the minibuffer if Vertico/Mct are not active."
+    (unless (or (bound-and-true-p mct--active)
+                (bound-and-true-p vertico--input)
+                (eq (current-local-map) read-passwd-map))
+      (setq-local corfu-auto t)         ;; Enable auto completion
+      (setq-local corfu-echo-delay nil  ;; Disable automatic echo and popup
+                  corfu-popupinfo-delay nil)
+      (corfu-mode 1)))
+  (add-hook 'minibuffer-setup-hook #'corfu-enable-always-in-minibuffer 1))
+
+(use-package cape
+  :config
+  ;; https://github.com/minad/corfu/wiki#configuring-corfu-for-eglot
+  (advice-add 'eglot-completion-at-point :around #'cape-wrap-buster))
+
 ;; A few more useful configurations...
 (use-package emacs
-  :init
+  :custom
   ;; TAB cycle if there are only few candidates
-  ;; (setq completion-cycle-threshold 3)
-
-  ;; Emacs 28: Hide commands in M-x which do not apply to the current mode.
-  ;; Corfu commands are hidden, since they are not supposed to be used via M-x.
-  (setq read-extended-command-predicate
-        #'command-completion-default-include-p)
+  ;; (completion-cycle-threshold 3)
 
   ;; Enable indentation+completion using the TAB key.
   ;; `completion-at-point' is often bound to M-TAB.
-  (setq tab-always-indent 'complete))
+  (tab-always-indent 'complete)
+
+  ;; Hide commands in M-x which do not apply to the current mode. Corfu
+  ;; commands are hidden, since they are not used via M-x.
+  (read-extended-command-predicate #'command-completion-default-include-p))
 
 (use-package orderless
-  :init
+  :custom
   ;; Configure a custom style dispatcher (see the Consult wiki)
-  ;; (setq orderless-style-dispatchers '(+orderless-dispatch)
-  ;;       orderless-component-separator #'orderless-escapable-split-on-space)
-  (setq completion-styles '(orderless basic)
-        completion-category-defaults nil
-        completion-category-overrides '((file (styles partial-completion)))))
+  ;; (orderless-style-dispatchers '(orderless-affix-dispatch))
+  ;; (orderless-component-separator #'orderless-escapable-split-on-space)
+  (completion-styles '(orderless basic))
+  (completion-category-overrides '((file (styles partial-completion))))
+  (completion-category-defaults nil)) ;; Disable defaults, use our settings
 
 ;; Search and navigation commands based on the standard Emacs `completing-read'.
 ;; Provides `consult-git-grep', `consult-imenu', `consult-line', etc.
@@ -365,151 +426,19 @@
 
 (use-package consult-flycheck)
 
-;; Enhanced completion at point with Corfu and Cape.
-;; https://github.com/minad/corfu
-
-(use-package cape)
-
-(use-package corfu
-  :straight (corfu :files (:defaults "extensions/*")
-                   :includes (corfu-history corfu-popupinfo))
-
-  ;; Enable Corfu only for certain modes.
-  ;; :hook ((prog-mode . corfu-mode)
-  ;;        (shell-mode . corfu-mode)
-  ;;        (eshell-mode . corfu-mode))
-
-  ;; Recommended: Enable Corfu globally.
-  ;; This is recommended since Dabbrev can be used globally (M-/).
-  ;; See also `corfu-excluded-modes'.
-  :init
-  (global-corfu-mode)
-  (corfu-history-mode)
-  (corfu-popupinfo-mode)
-
+(use-package kind-icon
+  :after corfu
   :config
-  (setq corfu-cycle nil)                  ;; Disable cycling for `corfu-next/previous'
-  (setq corfu-auto t)                     ;; Enable auto completion
-  ;; (setq corfu-separator ?\s)           ;; Orderless field separator
-  ;; (setq corfu-quit-at-boundary nil)    ;; Never quit at completion boundary
-  ;; (setq corfu-quit-no-match nil)       ;; Never quit, even if there is no match
-  ;; (setq corfu-preview-current nil)     ;; Disable current candidate preview
-  ;; (setq corfu-preselect 'prompt)       ;; Preselect the prompt
-  ;; (setq corfu-on-exact-match nil)      ;; Configure handling of exact matches
-  (setq corfu-scroll-margin 2)            ;; Use scroll margin
-
-  (setq corfu-min-width 60)
-  (setq corfu-max-width corfu-min-width)  ;; Always have the same width
-
-  ;; Enable completion in the minibuffer, e.g., for commands like
-  ;; `M-:' (`eval-expression') or `M-!' (`shell-command'), when other
-  ;; completion UI is not active.
-  (defun corfu-enable-always-in-minibuffer ()
-    "Enable Corfu in the minibuffer if Vertico/Mct are not active."
-    (unless (or (bound-and-true-p mct--active)
-                (bound-and-true-p vertico--input)
-                (eq (current-local-map) read-passwd-map))
-      (setq-local corfu-auto t)         ;; Enable auto completion
-      (setq-local corfu-echo-delay nil  ;; Disable automatic echo and popup
-                  corfu-popupinfo-delay nil)
-      (corfu-mode 1)))
-  (add-hook 'minibuffer-setup-hook #'corfu-enable-always-in-minibuffer 1)
-
-  (setq corfu-auto-prefix 3)
-  (setq corfu-popupinfo-delay 0)
-  ;; (set-face-attribute 'corfu-current nil :inherit 'highlight :background nil :foreground nil))
-  )
+  (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter))
 
 
 ;; Flycheck
 ;; ---------------------------------------------------------------------
 
-(use-package flycheck
-  :init
-  (global-flycheck-mode 1))
+;; (use-package flycheck
+;;   :init
+;;   (global-flycheck-mode 1))
 
-
-;; LSP
-;; ---------------------------------------------------------------------
-
-;; Configure Corfu and `lsp-mode` to work together.
-;; https://github.com/minad/corfu/wiki
-
-(use-package lsp-mode
-  :commands (lsp lsp-deferred)
-  :custom
-  (lsp-completion-provider :none)  ;; Use Corfu for LSP completion
-
-  :init
-  (setq lsp-keymap-prefix "C-c l")
-
-  (setq lsp-file-watch-threshold 3000)
-
-  (defun akh/orderless-dispatch-flex-first (_pattern index _total)
-    (and (eq index 0) 'orderless-flex))
-
-  (defun akh/lsp-mode-setup-completion ()
-    (setf (alist-get 'styles (alist-get 'lsp-capf completion-category-defaults))
-          '(orderless)))
-
-  ;; Optionally configure the first word as flex filtered.
-  (add-hook 'orderless-style-dispatchers #'my/orderless-dispatch-flex-first nil 'local)
-
-  ;; Optionally configure the cape-capf-buster.
-  (setq-local completion-at-point-functions (list (cape-capf-buster #'lsp-completion-at-point)))
-
-  :bind-keymap ("C-c l" . lsp-command-map)
-
-  :hook (;; replace XXX-mode with concrete major-mode(e. g. python-mode)
-         (elixir-mode . lsp)
-         (c-mode . lsp)
-         ;;(XXX-mode . lsp)
-
-         (lsp-mode . (lambda () (setq-local evil-lookup-func #'lsp-describe-thing-at-point)))
-
-         ;; if you want which-key integration
-         (lsp-mode . lsp-enable-which-key-integration)
-         (lsp-completion-mode . akh/lsp-mode-setup-completion))
-
-  ;; :bind (("gd" . lsp-find-definitions)
-  ;;        ("gD" . lsp-find-references))
-
-  :config
-  (setq lsp-headerline-breadcrumb-enable nil)
-  ;; https://github.com/emacs-lsp/lsp-mode/issues/3555
-  (advice-add #'lsp-completion-at-point :around #'cape-wrap-noninterruptible))
-
-(use-package lsp-ui
-  :config
-  (setq lsp-ui-doc-enable t
-        lsp-ui-doc-max-height 8
-        lsp-ui-doc-max-width 80         ; 150 (default) is too wide
-        lsp-ui-doc-delay 0.75           ; 0.2 (default) is too naggy
-        lsp-ui-doc-show-with-mouse nil  ; don't disappear on mouseover
-        lsp-ui-doc-position 'at-point)
-
-  ;; (general-define-key
-  ;;  :states '(normal visual)
-  ;;  ;; :keymaps 'elixir-mode-map
-  ;;  ;; :prefix "SPC"
-  ;;  "K" 'lsp-ui-doc-show
-  ;;  )
-
-  )
-
-;; lsp-describe-thing-at-point
-
-(defun akh/diagnostics (&rest arg)
-  "List diagnostics for the current buffer/project."
-  (interactive)
-  (cond ((bound-and-true-p lsp-mode)
-         (consult-lsp-diagnostics arg))
-        ((bound-and-true-p flycheck-mode)
-         (consult-flycheck))
-        ((bound-and-true-p flymake-mode)
-         (consult-flymake))
-        (t
-         (user-error "No diagnostics backend detected."))))
 
 ;; Comments
 ;; ---------------------------------------------------------------------
@@ -578,7 +507,7 @@
 
 (akh/leader-key
   "c" '(:ignore t :which-key "code")
-  "cf" 'lsp-format-buffer
+  "cf" 'eglot-format
   "cx" #'akh/diagnostics)
 
 (akh/leader-key
@@ -590,6 +519,11 @@
  "oT" '(akh/vterm-here :which-key "Open terminal")
  "ot" '(vterm-toggle :which-key "Toggle terminal")
  "ou" 'vundo)
+
+(akh/leader-key
+  "l"  '(:ignore t :which-key "lsp")
+  "lr" 'eglot-rename
+  "la" 'eglot-code-actions)
 
 
 ;; Project interaction
@@ -777,10 +711,18 @@ otherwise in default state."
 ;; ---------------------------------------------------------------------
 
 ;; Rust
-(use-package rustic)
+(use-package rust-mode
+  :ensure t
+  :init
+  ;; Derive rust-mode from tree-sitter mode rust-ts-mode.
+  (setq rust-mode-treesitter-derive t))
 
-;; Markdown
-(use-package markdown-mode)
+(use-package rustic
+  :ensure t
+  :after (rust-mode)
+  :custom
+  (rustic-analyzer-command '("rustup" "run" "stable" "rust-analyzer"))
+  (rustic-lsp-client 'eglot))
 
 ;; Erlang
 (use-package erlang)
@@ -792,7 +734,8 @@ otherwise in default state."
   :straight (:type built-in)
   :mode (("\\.ex\\'" . elixir-ts-mode)
          ("\\.exs\\'" . elixir-ts-mode)
-         ("\\mix.lock\\'" . elixir-ts-mode)))
+         ("\\mix.lock\\'" . elixir-ts-mode))
+  :hook (elixir-ts-mode . eglot-ensure))
 
 ;; (use-package elixir-mode
 ;;   :config
@@ -808,6 +751,9 @@ otherwise in default state."
 
 ;; Protocol Buffers (protobuf)
 (use-package protobuf-mode)
+
+;; Markdown
+(use-package markdown-mode)
 
 ;; YAML
 (use-package yaml-mode)
@@ -837,8 +783,8 @@ otherwise in default state."
 ;; https://plantuml.com/emacs
 ;; https://orgmode.org/worg/org-contrib/babel/languages/ob-doc-plantuml.html
 (use-package plantuml-mode
-  :config
-  (setq plantuml-default-exec-mode 'executable))
+  :custom
+  (plantuml-default-exec-mode 'executable))
 
 ;; Mermaid
 (use-package mermaid-mode
