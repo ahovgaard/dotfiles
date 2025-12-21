@@ -475,7 +475,9 @@
   ;;        ("gD" . lsp-find-references))
 
   :config
-  (setq lsp-headerline-breadcrumb-enable nil))
+  (setq lsp-headerline-breadcrumb-enable nil)
+  ;; https://github.com/emacs-lsp/lsp-mode/issues/3555
+  (advice-add #'lsp-completion-at-point :around #'cape-wrap-noninterruptible))
 
 (use-package lsp-ui
   :config
