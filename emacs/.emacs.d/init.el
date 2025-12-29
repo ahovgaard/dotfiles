@@ -55,7 +55,7 @@
 (setq native-comp-async-report-warnings-errors 'silent)
 
 ;; Font
-(set-frame-font "DejaVu Sans Mono 11" nil t)
+(set-frame-font "DejaVu Sans Mono 12" nil t)
 
 ;; Text scale step when using C-x C-{+,-,0}.
 (setq text-scale-mode-step 1.1)
@@ -264,7 +264,9 @@
 (use-package eglot
   :straight (:type built-in)  ;; use the built-in version of eglot
   :custom
-  (eglot-autoshutdown t))
+  (eglot-autoshutdown t)
+  :config
+  (add-hook 'eglot-managed-mode-hook (lambda () (eglot-inlay-hints-mode -1))))
 
 (defun akh/diagnostics (&rest arg)
   "List diagnostics for the current buffer/project."

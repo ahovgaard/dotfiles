@@ -19,6 +19,9 @@
 /tree-sitter
 /tutorial
 /multisession
+/projects
+/flycheck_init.el
+/elpa
 
 # straight
 !/straight/versions/default.el
