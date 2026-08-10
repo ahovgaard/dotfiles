@@ -265,6 +265,7 @@
   :straight (:type built-in)  ;; use the built-in version of eglot
   :custom
   (eglot-autoshutdown t)
+  (eglot-sync-connect 0)
   :config
   (add-hook 'eglot-managed-mode-hook (lambda () (eglot-inlay-hints-mode -1))))
 
@@ -667,6 +668,7 @@ otherwise in default state."
   (setq vterm-max-scrollback 10000)
   (setq vterm-kill-buffer-on-exit t)
   (evil-define-key 'insert vterm-mode-map (kbd "C-c") #'vterm--self-insert)
+  (evil-define-key 'insert vterm-mode-map (kbd "C-<escape>") #'vterm-send-escape)
   (evil-define-key 'insert vterm-mode-map (kbd "C-y") #'evil-collection-vterm-paste-after))
 
 (use-package vterm-toggle)

@@ -22,6 +22,7 @@
 /projects
 /flycheck_init.el
 /elpa
+/eshell
 
 # straight
 !/straight/versions/default.el
